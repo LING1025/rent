@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MyBatisCodeHelperDatasource">
+    <option name="projectProfile">
+      <ProjectProfile>
+        <option name="addSerializeUid" value="true" />
+        <option name="generateService" value="true" />
+        <option name="generateServiceInterface" value="true" />
+        <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
+        <option name="javaMapperPath" value="$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" />
+        <option name="javaModelPackage" value="com.funtl.myshop.plus.provider.domain" />
+        <option name="javaModelPath" value="$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="ums-admin-provider-api" />
+        <option name="lombokDataAnnotation" value="true" />
+        <option name="moduleNameToPackageAndPathMap">
+          <map>
+            <entry key="ums-admin-provider-api">
+              <value>
+                <UserPackageAndPathInfoByModule>
+                  <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
+                  <option name="javaMapperPath" value="$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" />
+                  <option name="javaModelPacakge" value="com.funtl.myshop.plus.provider.domain" />
+                  <option name="javaModelPath" value="$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" />
+                  <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.service" />
+                  <option name="javaServiceInterfacePath" value="$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" />
+                  <option name="javaServicePackage" value="com.funtl.myshop.plus.provider.service.impl" />
+                  <option name="javaServicePath" value="$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" />
+                  <option name="xmlPackage" value="mapper.xml" />
+                  <option name="xmlPath" value="D:\Work\rent\provider\ums-admin-provider-service\src\main\resources\mapper" />
+                </UserPackageAndPathInfoByModule>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="tableGenerateConfigs">
+          <map>
+            <entry key="dbo:User">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="User" />
+                  <option name="moduleName" value="ums-admin-provider-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="xmlMapperPackage" value="mapper.xml" />
+        <option name="xmlMapperPath" value="D:\Work\rent\provider\ums-admin-provider-service\src\main\resources\mapper" />
+      </ProjectProfile>
+    </option>
+  </component>
+</project>
