@@ -31,6 +31,12 @@ public class ProfileResourceServerConfiguration extends ResourceServerConfigurer
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/webjars/**",
+                        "/resources/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/profile/querys/**",
+                        "/v2/api-docs").permitAll()
                 .antMatchers("/**").hasAuthority("USER");
     }
 

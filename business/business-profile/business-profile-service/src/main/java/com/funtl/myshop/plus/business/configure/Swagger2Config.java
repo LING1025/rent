@@ -61,9 +61,9 @@ public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("格上租赁 APIs")
-//                .description("格上租赁api网关接口，http://127.0.0.1:8888")
+//                .description("格上租赁api网关接口，http://192.168.168.53")
                 .description("格上租赁api网关接口")
-                .termsOfServiceUrl("http://www.baidu.com")
+//                .termsOfServiceUrl("http://www.baidu.com")
                 .version("1.0")
                 .build();
     }

@@ -53,6 +53,7 @@ public class ProfileController {
      * @param profileParam
      * @return
      */
+    @ApiOperation(value = "更新个人信息")
     @PostMapping(value = "update")
     public ResponseResult<Void> update(@RequestBody ProfileParam profileParam) {
         User newUmsAdmin = new User();
@@ -75,6 +76,7 @@ public class ProfileController {
      * @param passwordParam
      * @return
      */
+    @ApiOperation(value = "修改密码")
     @PostMapping(value = "modify/password")
     public ResponseResult<Void> modifyPassword(@RequestBody PasswordParam passwordParam) {
         User umsAdmin = userService.get(passwordParam.getUsername());

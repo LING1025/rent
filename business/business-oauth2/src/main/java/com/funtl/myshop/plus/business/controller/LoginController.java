@@ -113,8 +113,8 @@ public class LoginController {
 
         // 封装并返回结果
         LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setName(authentication.getName());
-        loginInfo.setFaceUrl("");
+        loginInfo.setName(user.getUsername());
+        loginInfo.setFaceUrl(user.getFaceUrl());
         return new ResponseResult<LoginInfo>(ResponseResult.CodeStatus.OK, "获取用户信息", loginInfo);
     }
 
