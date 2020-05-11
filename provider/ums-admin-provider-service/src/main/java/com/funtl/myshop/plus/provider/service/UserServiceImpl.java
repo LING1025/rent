@@ -1,14 +1,16 @@
 package com.funtl.myshop.plus.provider.service;
 
 import com.funtl.myshop.plus.provider.domain.User;
+import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.annotation.Resource;
-import javax.persistence.Table;
 
 import com.funtl.myshop.plus.provider.mapper.UserMapper;
 import com.funtl.myshop.plus.provider.api.UserService;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 @Service(version = "1.0.0")
 public class UserServiceImpl implements UserService{
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Integer insert(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userMapper.insert(user);
+        return userMapper.insertUserList(user);
     }
 
     @Override
@@ -50,5 +52,19 @@ public class UserServiceImpl implements UserService{
         User umsAdmin = get(username);
         umsAdmin.setPassword(passwordEncoder.encode(password));
         return userMapper.updateByPrimaryKey(umsAdmin);
+    }
+
+    @Override
+    public User selectById(Integer userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public List<User> selectUserListDto(UserListQueryParam userListQueryParam) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("username",userListQueryParam.getUsername())
+                .andEqualTo("phone",userListQueryParam.getPhone())
+                .andEqualTo("status",userListQueryParam.getStatus());
+        return userMapper.selectByExample(example);
     }
 }

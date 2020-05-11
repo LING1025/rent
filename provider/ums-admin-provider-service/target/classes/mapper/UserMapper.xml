@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.User">
     <!--@mbg.generated-->
     <!--@Table [User]-->
-    <id column="userId" jdbcType="VARCHAR" property="userId" />
+    <id column="userId" jdbcType="INTEGER" property="userId" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="sex" jdbcType="BIT" property="sex" />
@@ -13,11 +13,20 @@
     <result column="balance" jdbcType="OTHER" property="balance" />
     <result column="isAdmin" jdbcType="BIT" property="isAdmin" />
     <result column="faceUrl" jdbcType="VARCHAR" property="faceUrl" />
+    <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    userId, passward, userName, sex, age, phone, balance, isAdmin, faceUrl
+    userId, passward, userName, sex, age, phone, balance, isAdmin, faceUrl,status
   </sql>
+  <insert id="insertUserList" useGeneratedKeys="true" keyProperty="userId" parameterType="com.funtl.myshop.plus.provider.domain.User">
+    insert into [User] (password, userName,
+    sex, age, phone, balance,
+    isAdmin, faceUrl,status)
+    values (#{password}, #{username},
+    #{sex}, #{age}, #{phone}, #{balance},
+    #{isAdmin}, #{faceUrl}, #{status})
+  </insert>
   <!--
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     &lt;!&ndash;@mbg.generated&ndash;&gt;

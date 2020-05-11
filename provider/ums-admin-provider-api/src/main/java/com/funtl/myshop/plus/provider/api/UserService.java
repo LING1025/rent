@@ -1,6 +1,9 @@
 package com.funtl.myshop.plus.provider.api;
 
 import com.funtl.myshop.plus.provider.domain.User;
+import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
+
+import java.util.List;
 
 public interface UserService{
     /**
@@ -32,4 +35,13 @@ public interface UserService{
      * @return
      */
     int modifyPassword(String username, String password);
+
+    User selectById(Integer userId);
+
+    /**
+     * 查询员工信息
+     * @param userListQueryParam
+     * @return
+     */
+    List<User> selectUserListDto(UserListQueryParam userListQueryParam);
 }

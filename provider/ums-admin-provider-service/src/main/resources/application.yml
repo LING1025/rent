@@ -32,11 +32,11 @@ spring:
 
 dubbo:
   scan:
-    base-packages: com.funtl.myshop.plus.provider.service #服务暴露与发现消费所在的package
-  registry: #注册中心配置，用于配置连接注册中心相关信息。
+    base-packages: com.funtl.myshop.plus.provider.service
+  registry:
     address: nacos://127.0.0.1
     port: 8848
-  protocol: #协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受。
+  protocol:
     name: dubbo
     port: -1
     serialization: kryo

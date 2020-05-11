@@ -10,14 +10,14 @@
         <module name="business-profile-feign" />
         <module name="gateway" />
         <module name="business-reg" />
-        <module name="business-oauth2" />
+        <module name="ums-admin-provider-api" />
         <module name="commons-dto" />
-        <module name="configuration-feign" />
         <module name="commons-provider" />
         <module name="ums-admin-provider-service" />
         <module name="commons-utils" />
+        <module name="business-oauth2" />
         <module name="business-profile-service" />
-        <module name="ums-admin-provider-api" />
+        <module name="configuration-feign" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

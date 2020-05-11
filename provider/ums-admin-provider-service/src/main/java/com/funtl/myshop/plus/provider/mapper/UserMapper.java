@@ -5,4 +5,5 @@ import com.funtl.myshop.plus.provider.domain.User;
 import tk.mybatis.mapper.MyMapper;
 
 public interface UserMapper extends MyMapper<User> {
+    Integer insertUserList(User user);
 }

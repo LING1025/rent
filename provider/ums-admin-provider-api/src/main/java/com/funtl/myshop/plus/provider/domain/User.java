@@ -15,7 +15,7 @@ public class User implements Serializable {
     @Id
     @Column(name = "userId")
     @GeneratedValue(generator = "JDBC")
-    private String userId;
+    private Integer userId;
 
     @Column(name = "password")
     private String password;
@@ -40,6 +40,9 @@ public class User implements Serializable {
 
     @Column(name = "faceUrl")
     private String faceUrl;
+
+    @Column(name = "status")
+    private Byte status;
 
     private static final long serialVersionUID = 1L;
 }
