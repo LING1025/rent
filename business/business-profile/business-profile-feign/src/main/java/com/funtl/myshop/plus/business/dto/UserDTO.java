@@ -3,6 +3,7 @@ package com.funtl.myshop.plus.business.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class UserDTO implements Serializable {
@@ -16,9 +17,11 @@ public class UserDTO implements Serializable {
 
     private String phone;
 
-    private Object balance;
+    private BigDecimal balance;
 
     private Integer isAdmin;
 
     private String faceUrl;
+
+    private Byte status;
 }

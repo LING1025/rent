@@ -44,4 +44,11 @@ public interface UserService{
      * @return
      */
     List<User> selectUserListDto(UserListQueryParam userListQueryParam);
+
+    /**
+     * 修改账户信息
+     * @param user
+     * @return
+     */
+    Integer updateUser(User user);
 }

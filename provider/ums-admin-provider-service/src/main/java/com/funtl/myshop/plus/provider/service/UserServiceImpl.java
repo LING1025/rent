@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import com.funtl.myshop.plus.provider.mapper.UserMapper;
 import com.funtl.myshop.plus.provider.api.UserService;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService{
         oldUser.setPhone(user.getPhone());
         oldUser.setAge(user.getAge());
         oldUser.setIsAdmin(user.getIsAdmin());
+        oldUser.setStatus(user.getStatus());
         return userMapper.updateByPrimaryKey(oldUser);
     }
 
@@ -62,9 +64,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> selectUserListDto(UserListQueryParam userListQueryParam) {
         Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("username",userListQueryParam.getUsername())
-                .andEqualTo("phone",userListQueryParam.getPhone())
+        Example.Criteria criteria = example.createCriteria()
+                .andEqualTo("isAdmin",userListQueryParam.getIsAdmin())
                 .andEqualTo("status",userListQueryParam.getStatus());
+        if(StringUtil.isNotEmpty(userListQueryParam.getUsername())){
+            criteria.andLike("username",String.format("%s%s%s","%",userListQueryParam.getUsername(),"%"));
+        }
         return userMapper.selectByExample(example);
+    }
+
+    @Override
+    public Integer updateUser(User user) {
+        return userMapper.updateByPrimaryKey(user);
     }
 }

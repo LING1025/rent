@@ -37,6 +37,8 @@ dubbo:
     name: dubbo
     port: -1
     serialization: kryo
+  provider:
+    timeout: 2500
 
 # 开启 Feign 的 OKHttp 方式
 feign:

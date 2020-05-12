@@ -1,4 +1,4 @@
-package com.funtl.myshop.plus.business.dto.params;
+package com.funtl.myshop.plus.business.dto;
 
 import lombok.Data;
 
@@ -6,10 +6,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class ProfileParam implements Serializable {
+public class UserParamDto implements Serializable {
     private Integer userId;
-
-    private String username;
 
     private Integer sex;
 
@@ -24,5 +22,4 @@ public class ProfileParam implements Serializable {
     private String faceUrl;
 
     private Byte status;
-
 }

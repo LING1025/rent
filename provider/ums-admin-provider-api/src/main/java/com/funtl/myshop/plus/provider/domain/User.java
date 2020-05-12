@@ -1,6 +1,8 @@
 package com.funtl.myshop.plus.provider.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -33,7 +35,7 @@ public class User implements Serializable {
     private String phone;
 
     @Column(name = "balance")
-    private Object balance;
+    private BigDecimal balance;
 
     @Column(name = "isAdmin")
     private Integer isAdmin;

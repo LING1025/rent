@@ -6,6 +6,7 @@ import com.funtl.myshop.plus.business.dto.params.ProfileParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.UserService;
 import com.funtl.myshop.plus.provider.domain.User;
+import com.funtl.myshop.plus.business.dto.UserParamDto;
 import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -105,14 +105,14 @@ public class ProfileController {
     @ApiOperation(value = "获取员工信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "phone", value = "手机号", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "isAdmin", value = "是否是管理员", required = false, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "status", value = "状态", required = false, dataType = "byte", paramType = "path")
     })
     @GetMapping(value = "query")
     public ResponseResult<List<User>> query(@RequestParam(name = "username", required = false) String username,
-                                            @RequestParam(name = "phone", required = false) String phone,
+                                            @RequestParam(name = "isAdmin", required = false) Integer isAdmin,
                                             @RequestParam(name = "status", required = false) Byte status) {
-        UserListQueryParam userListQueryParam = new UserListQueryParam(username, phone, status);
+        UserListQueryParam userListQueryParam = new UserListQueryParam(username, isAdmin, status);
         List<User> list = userService.selectUserListDto(userListQueryParam);
         if(list.size() == 0){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未查询到员工信息", null);
@@ -121,42 +121,42 @@ public class ProfileController {
     }
 
     /**
-     * 注册员工账号
+     * 新增员工账号
      * @param user
      * @return
      */
-    @ApiOperation(value = "注册员工账号")
+    @ApiOperation(value = "新增员工账号")
     @PostMapping(value = "insert")
     public ResponseResult<User> insert(@RequestBody User user) {
-        String message = validateReg(user);
-
-        // 通过验证
-        if (message == null) {
-            int result = userService.insert(user);
-
-            // 注册成功
-            if (result > 0) {
-                User admin = userService.get(user.getUsername());
-                return new ResponseResult<User>(HttpStatus.OK.value(), "用户注册成功", admin);
-            }
-        }
-
-        return new ResponseResult<User>(HttpStatus.NOT_ACCEPTABLE.value(), message != null ? message : "用户注册失败");
-    }
-
-    /**
-     * 注册信息验证
-     * @param user
-     * @return
-     */
-    private String validateReg(User user) {
         User admin = userService.get(user.getUsername());
 
         if (admin != null) {
-            return "用户名已存在，请重新输入";
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户名已存在，请重新输入", null);
         }
 
-        return null;
+        int result = userService.insert(user);
+
+        // 注册成功
+        if (result > 0) {
+            User addUser = userService.get(user.getUsername());
+            return new ResponseResult<User>(ResponseResult.CodeStatus.OK, "保存成功", addUser);
+        }
+        return new ResponseResult<User>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+    }
+
+    @ApiOperation(value = "修改账户信息")
+    @PutMapping(value = "updateUser")
+    public ResponseResult<String> updateUser(@RequestBody UserParamDto userParamDto) {
+        User user = userService.selectById(userParamDto.getUserId());
+        if (user == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未找到账户信息", null);
+        }
+        BeanUtils.copyProperties(userParamDto,user);
+        Integer i = userService.updateUser(user);
+        if(i == 1){
+            return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "修改失败", null);
     }
 
     public ResponseResult<User> patch(Byte status, Integer userId) {
