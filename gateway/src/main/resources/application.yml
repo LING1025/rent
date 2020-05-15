@@ -41,12 +41,18 @@ spring:
             - Path=/api/profile/**
           filters:
             - StripPrefix=1
+        - id: BUSINESS-USER
+          uri: lb://business-user
+          predicates:
+            - Path=/api/**
+          filters:
+            - StripPrefix=1
 #        - id: BUSINESS-REG
-#            uri: lb://business-reg
-#            predicates:
-#              - Path=/api/reg/**
-#            filters:
-#              - StripPrefix=1
+#          uri: lb://business-reg
+#          predicates:
+#            - Path=/api/reg/**
+#          filters:
+#            - StripPrefix=1
 
 server:
   port: 8888

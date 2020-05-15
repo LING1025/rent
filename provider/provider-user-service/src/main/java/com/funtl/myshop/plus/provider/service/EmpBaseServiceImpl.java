@@ -6,15 +6,16 @@ import com.funtl.myshop.plus.provider.dto.EmpListDto;
 import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.mapper.EmpBaseMapper;
 import com.funtl.myshop.plus.provider.api.EmpBaseService;
+import org.apache.dubbo.config.annotation.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
-@Service
+@Service(version = "1.0.0")
 public class EmpBaseServiceImpl implements EmpBaseService{
 
     @Resource

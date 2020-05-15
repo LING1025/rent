@@ -25,7 +25,7 @@ import java.util.List;
  * 个人信息管理
  */
 
-@Api(tags = "员工相关操作")
+@Api(tags = "个人信息管理相关操作")
 @RestController
 @RequestMapping(value = "profile")
 public class ProfileController {
