@@ -7,17 +7,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="business-profile-feign" />
-        <module name="gateway" />
-        <module name="business-reg" />
-        <module name="ums-admin-provider-api" />
-        <module name="commons-dto" />
+        <module name="business-user-feign" />
         <module name="commons-provider" />
+        <module name="gateway" />
+        <module name="commons-dto" />
+        <module name="ums-admin-provider-api" />
+        <module name="configuration-feign" />
+        <module name="business-profile-feign" />
+        <module name="provider-user-service" />
+        <module name="business-reg" />
         <module name="ums-admin-provider-service" />
         <module name="commons-utils" />
+        <module name="ums-admin-provider-api (1)" />
+        <module name="ums-admin-provider-service (1)" />
+        <module name="business-user-service" />
         <module name="business-oauth2" />
         <module name="business-profile-service" />
-        <module name="configuration-feign" />
+        <module name="provider-user-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,6 +33,9 @@
       <module name="business-profile-feign" target="1.8" />
       <module name="business-profile-service" target="1.8" />
       <module name="business-reg" target="1.8" />
+      <module name="business-user" target="1.8" />
+      <module name="business-user-feign" target="1.8" />
+      <module name="business-user-service" target="1.8" />
       <module name="commons" target="1.8" />
       <module name="commons-dto" target="1.8" />
       <module name="commons-provider" target="1.8" />
@@ -38,9 +47,13 @@
       <module name="gateway" target="1.8" />
       <module name="parent" target="1.8" />
       <module name="provider" target="1.8" />
+      <module name="provider-user-api" target="1.8" />
+      <module name="provider-user-service" target="1.8" />
       <module name="rent" target="1.8" />
       <module name="ums-admin-provider-api" target="1.8" />
+      <module name="ums-admin-provider-api (1)" target="1.8" />
       <module name="ums-admin-provider-service" target="1.8" />
+      <module name="ums-admin-provider-service (1)" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -49,14 +62,20 @@
       <module name="business-profile-feign" options="-parameters" />
       <module name="business-profile-service" options="-parameters" />
       <module name="business-reg" options="-parameters" />
+      <module name="business-user-feign" options="-parameters" />
+      <module name="business-user-service" options="-parameters" />
       <module name="commons-dto" options="-parameters" />
       <module name="commons-provider" options="-parameters" />
       <module name="commons-utils" options="-parameters" />
       <module name="configuration-feign" options="-parameters" />
       <module name="configuration-sentinel" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="provider-user-api" options="-parameters" />
+      <module name="provider-user-service" options="-parameters" />
       <module name="ums-admin-provider-api" options="-parameters" />
+      <module name="ums-admin-provider-api (1)" options="-parameters" />
       <module name="ums-admin-provider-service" options="-parameters" />
+      <module name="ums-admin-provider-service (1)" options="-parameters" />
     </option>
   </component>
 </project>

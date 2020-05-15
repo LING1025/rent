@@ -35,7 +35,7 @@ public class ProfileResourceServerConfiguration extends ResourceServerConfigurer
                         "/resources/**",
                         "/swagger-ui.html",
                         "/swagger-resources/**",
-                        "/profile/querys/**",
+//                        "/profile/querys/**",
                         "/v2/api-docs").permitAll()
                 .antMatchers("/**").hasAuthority("USER");
     }

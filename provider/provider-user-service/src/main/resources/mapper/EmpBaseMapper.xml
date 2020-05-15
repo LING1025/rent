@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.EmpBaseMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpBase">
+    <!--@mbg.generated-->
+    <!--@Table EmpBase-->
+    <id column="EmpBase_Auto" jdbcType="BIGINT" property="empBaseAuto" />
+    <result column="TradeItem_Auto" jdbcType="BIGINT" property="tradeItemAuto" />
+    <result column="Org_Auto" jdbcType="BIGINT" property="orgAuto" />
+    <result column="OrgName" jdbcType="VARCHAR" property="orgName" />
+    <result column="IncTitle_Auto" jdbcType="INTEGER" property="incTitleAuto" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="FName" jdbcType="VARCHAR" property="fName" />
+    <result column="UserName" jdbcType="VARCHAR" property="username" />
+    <result column="IsOn" jdbcType="INTEGER" property="isOn" />
+    <result column="Extension" jdbcType="VARCHAR" property="extension" />
+    <result column="IsBoss" jdbcType="INTEGER" property="isBoss" />
+    <result column="MDT" jdbcType="TIMESTAMP" property="mDT" />
+    <result column="MUser" jdbcType="INTEGER" property="mUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    EmpBase_Auto, TradeItem_Auto, Org_Auto, OrgName, IncTitle_Auto, Title, FName, UserName,
+    IsOn, Extension, IsBoss, MDT, MUser
+  </sql>
+
+  <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList"/>
+  <select id="selectEmpListDto" resultMap="queryEmpListDto">
+    SELECT
+    EmpBase_Auto,UserName,FName,OrgName,Title,IsOn,MDT,MUser
+    FROM
+    EmpBase
+    WHERE
+    1 = 1
+    <if test="param.fName != null and param.fName != ''">
+      AND FName LIKE '%${param.fName}%'
+    </if>
+    <if test="param.orgName != null and param.orgName != ''">
+      AND OrgName = #{param.orgName}
+    </if>
+  </select>
+</mapper>

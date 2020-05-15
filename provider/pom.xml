@@ -32,5 +32,7 @@
     <modules>
         <module>ums-admin-provider-api</module>
         <module>ums-admin-provider-service</module>
+        <module>provider-user-api</module>
+        <module>provider-user-service</module>
     </modules>
 </project>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.OrgMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.Org">
+    <!--@mbg.generated-->
+    <!--@Table Org-->
+    <id column="Org_Auto" jdbcType="BIGINT" property="orgAuto" />
+    <result column="DepCode" jdbcType="VARCHAR" property="depCode" />
+    <result column="SubCode" jdbcType="VARCHAR" property="subCode" />
+    <result column="DepName" jdbcType="VARCHAR" property="depName" />
+    <result column="Lev" jdbcType="INTEGER" property="lev" />
+    <result column="UpUnit" jdbcType="BIGINT" property="upUnit" />
+    <result column="AccCode" jdbcType="VARCHAR" property="accCode" />
+    <result column="IsSalesDep" jdbcType="INTEGER" property="isSalesDep" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Org_Auto, DepCode, SubCode, DepName, Lev, UpUnit, AccCode, IsSalesDep
+  </sql>
+</mapper>
