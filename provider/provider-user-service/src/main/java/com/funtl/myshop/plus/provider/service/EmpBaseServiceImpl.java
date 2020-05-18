@@ -28,4 +28,9 @@ public class EmpBaseServiceImpl implements EmpBaseService{
         PageInfo<EmpListDto> result = PageInfoUtils.pageInfo2PageInfoDTO(pageInfo,EmpListDto.class);
         return result;
     }
+
+    @Override
+    public Integer insert(EmpBase empBase) {
+        return empBaseMapper.insertSelective(empBase);
+    }
 }

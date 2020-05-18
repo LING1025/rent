@@ -2,6 +2,7 @@ package com.funtl.myshop.plus.provider.service;
 
 import javax.annotation.Resource;
 
+import com.funtl.myshop.plus.provider.domain.Org;
 import com.funtl.myshop.plus.provider.domain.OrgNameList;
 import com.funtl.myshop.plus.provider.mapper.OrgMapper;
 import com.funtl.myshop.plus.provider.api.OrgService;
@@ -18,5 +19,10 @@ public class OrgServiceImpl implements OrgService{
     @Override
     public List<OrgNameList> selectOrgName(String depName) {
         return orgMapper.selectOrgName(depName);
+    }
+
+    @Override
+    public Org selectById(Long orgAuto) {
+        return orgMapper.selectByPrimaryKey(orgAuto);
     }
 }

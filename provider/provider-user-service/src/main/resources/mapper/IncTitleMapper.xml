@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.IncTitleMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.IncTitle">
+    <!--@mbg.generated-->
+    <!--@Table IncTitle-->
+    <id column="IncTitle_Auto" jdbcType="INTEGER" property="incTitleAuto" />
+    <result column="Inc_Auto" jdbcType="INTEGER" property="incAuto" />
+    <result column="TitleName" jdbcType="VARCHAR" property="titleName" />
+    <result column="TitleLevel" jdbcType="INTEGER" property="titleLevel" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    IncTitle_Auto, Inc_Auto, TitleName, TitleLevel
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from IncTitle
+    where IncTitle_Auto = #{incTitleAuto,jdbcType=INTEGER}
+  </select>
+</mapper>

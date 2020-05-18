@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.api;
 
+import com.funtl.myshop.plus.provider.domain.AspnetRoles;
 import com.funtl.myshop.plus.provider.domain.RolesNameList;
 
 import java.util.List;
@@ -12,4 +13,10 @@ public interface AspnetRolesService{
      */
     List<RolesNameList> selectRoleName(String roleName);
 
+    /**
+     * 根据角色名获取角色信息
+     * @param roleName
+     * @return
+     */
+    AspnetRoles selectByRoleName(String roleName);
 }
