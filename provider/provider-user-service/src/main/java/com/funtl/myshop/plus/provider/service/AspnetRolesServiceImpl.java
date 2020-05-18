@@ -1,13 +1,22 @@
 package com.funtl.myshop.plus.provider.service;
 
-import org.springframework.stereotype.Service;
+import com.funtl.myshop.plus.provider.domain.RolesNameList;
+
 import javax.annotation.Resource;
 import com.funtl.myshop.plus.provider.mapper.AspnetRolesMapper;
 import com.funtl.myshop.plus.provider.api.AspnetRolesService;
-@Service
+import org.apache.dubbo.config.annotation.Service;
+
+import java.util.List;
+
+@Service(version = "1.0.0")
 public class AspnetRolesServiceImpl implements AspnetRolesService{
 
     @Resource
     private AspnetRolesMapper aspnetRolesMapper;
 
+    @Override
+    public List<RolesNameList> selectRoleName(String roleName) {
+        return aspnetRolesMapper.selectRoleName(roleName);
+    }
 }

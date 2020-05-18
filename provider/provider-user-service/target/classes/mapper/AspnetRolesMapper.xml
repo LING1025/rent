@@ -18,4 +18,14 @@
     RoleId, ApplicationId, RoleName, LoweredRoleName, Description, Roles_Auto, TitleLevel,
     Org_Auto
   </sql>
+
+  <resultMap id="queryRoleName" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.RolesNameList"/>
+    <select id="selectRoleName" resultMap="queryRoleName">
+      SELECT
+      RoleName
+      FROM
+      aspnet_Roles
+      WHERE
+      RoleName LIKE '%${roleName}%'
+    </select>
 </mapper>

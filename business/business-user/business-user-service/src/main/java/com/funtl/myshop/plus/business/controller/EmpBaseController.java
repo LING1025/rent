@@ -41,4 +41,6 @@ public class EmpBaseController {
         PageInfo<EmpListDto> pageInfo = empBaseService.selectEmpListDto(empQueryParam);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
     }
+
+
 }
