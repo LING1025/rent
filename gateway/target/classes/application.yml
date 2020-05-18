@@ -47,6 +47,12 @@ spring:
             - Path=/api/**
           filters:
             - StripPrefix=1
+        - id: BUSINESS-RENTAL
+          uri: lb://business-rental
+          predicates:
+            - Path=/api/rental/**
+          filters:
+            - StripPrefix=1
 #        - id: BUSINESS-REG
 #          uri: lb://business-reg
 #          predicates:

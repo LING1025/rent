@@ -2,15 +2,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+        </dependency>
+        <!--pagehelper-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+    </dependencies>
 
     <parent>
         <groupId>com.funtl.myshop.plus</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>provider</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>provider</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>provider-rental-api</artifactId>
+    <packaging>jar</packaging>
     <url>http://www.funtl.com</url>
     <inceptionYear>2018-Now</inceptionYear>
 
@@ -28,13 +44,4 @@
             <email>lee.lusifer@gmail.com</email>
         </developer>
     </developers>
-
-    <modules>
-        <module>ums-admin-provider-api</module>
-        <module>ums-admin-provider-service</module>
-        <module>provider-user-api</module>
-        <module>provider-user-service</module>
-        <module>provider-rental-api</module>
-        <module>provider-rental-service</module>
-    </modules>
 </project>

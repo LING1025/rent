@@ -74,6 +74,38 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="dbo:OrgGroup">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="OrgGroup_Auto" />
+                        <option name="javaProperty" value="orgGroupAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="OrgGroupName" />
+                        <option name="javaProperty" value="orgGroupName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Inc_Auto" />
+                        <option name="javaProperty" value="incAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="District" />
+                        <option name="javaProperty" value="district" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="OrgGroup_Auto" />
+                  <option name="javaModelName" value="OrgGroup" />
+                  <option name="moduleName" value="provider-user-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="dbo:User">
               <value>
                 <TableGenerateConfig>
@@ -112,6 +144,7 @@
             </entry>
           </map>
         </option>
+        <option name="useActualColumnNames" value="true" />
         <option name="xmlMapperPackage" value="mapper" />
         <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-user-service\src\main\resources" />
       </ProjectProfile>
