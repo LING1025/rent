@@ -22,7 +22,7 @@
   <resultMap id="queryRoleName" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.RolesNameList"/>
     <select id="selectRoleName" resultMap="queryRoleName">
       SELECT
-      RoleName
+      Roles_Auto,RoleName
       FROM
       aspnet_Roles
       WHERE

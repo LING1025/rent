@@ -16,5 +16,10 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         Integer i = aspnetUsersMapper.insertUseGeneratedKeys(aspnetUsers);
         return i == 1 ? aspnetUsers.getUserAuto() : 0;
     }
+
+    @Override
+    public Integer deleteById(Long userAuto) {
+        return aspnetUsersMapper.deleteByPrimaryKey(userAuto);
+    }
 }
 

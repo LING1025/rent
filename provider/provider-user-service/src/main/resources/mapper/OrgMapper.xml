@@ -21,7 +21,7 @@
   <resultMap id="queryOrgName" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.OrgNameList"/>
     <select id="selectOrgName" resultMap="queryOrgName">
       SELECT
-      DepName
+      Org_Auto,DepName
       FROM
       Org
       WHERE

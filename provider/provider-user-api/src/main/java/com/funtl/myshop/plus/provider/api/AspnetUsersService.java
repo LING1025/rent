@@ -10,5 +10,12 @@ public interface AspnetUsersService {
      * @return
      */
     Long insert(AspnetUsers aspnetUsers);
+
+    /**
+     * 根据主键删除数据
+     * @param userAuto
+     * @return
+     */
+    Integer deleteById(Long userAuto);
 }
 

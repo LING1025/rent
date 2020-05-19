@@ -112,6 +112,7 @@ public class EmpBaseController {
         empBase.setTradeItemAuto(0L);
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
+            aspnetUsersService.deleteById(i1);
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
         }
 

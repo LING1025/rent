@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Api(tags = "所属组相关操作")
 @RestController
-@RequestMapping(value = "orgGroup")
+@RequestMapping(value = "group")
 public class OrgGroupController{
     @Reference(version = "1.0.0")
     private OrgGroupService orgGroupService;
