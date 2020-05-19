@@ -12,8 +12,6 @@ import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.mapper.EmpBaseMapper;
 import com.funtl.myshop.plus.provider.api.EmpBaseService;
 import org.apache.dubbo.config.annotation.Service;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.StringUtil;
 
 @Service(version = "1.0.0")
 public class EmpBaseServiceImpl implements EmpBaseService{
@@ -30,7 +28,8 @@ public class EmpBaseServiceImpl implements EmpBaseService{
     }
 
     @Override
-    public Integer insert(EmpBase empBase) {
-        return empBaseMapper.insertSelective(empBase);
+    public Long insert(EmpBase empBase) {
+        Integer i = empBaseMapper.insertUseGeneratedKeys(empBase);
+        return i == 1 ? empBase.getEmpBaseAuto() : 0;
     }
 }

@@ -5,18 +5,17 @@ import com.funtl.myshop.plus.business.BusinessStatus;
 import com.funtl.myshop.plus.business.dto.EmpParamDto;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.*;
-import com.funtl.myshop.plus.provider.domain.AspnetRoles;
-import com.funtl.myshop.plus.provider.domain.IncTitle;
-import com.funtl.myshop.plus.provider.domain.Org;
-import com.funtl.myshop.plus.provider.domain.OrgGroup;
+import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.EmpListDto;
 import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * 员工信息
@@ -39,6 +38,18 @@ public class EmpBaseController {
 
     @Reference(version = "1.0.0")
     private AspnetRolesService aspnetRolesService;
+
+    @Reference(version = "1.0.0")
+    private AspnetUsersService aspnetUsersService;
+
+    @Reference(version = "1.0.0")
+    private Org2EmpService org2EmpService;
+
+    @Reference(version = "1.0.0")
+    private Roles2EmpService roles2EmpService;
+
+    @Reference(version = "1.0.0")
+    private Roles2OrgService roles2OrgService;
 
     @ApiOperation(value = " 根据员工姓名、部门查询员工信息")
     @ApiImplicitParams({
@@ -72,8 +83,66 @@ public class EmpBaseController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "职位不存在", null);
         }
         OrgGroup orgGroup = orgGroupService.selectByOrgGroupName(empParamDto.getOrgGroupName());
+        if(orgGroup == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "所属组不存在", null);
+        }
         AspnetRoles aspnetRoles = aspnetRolesService.selectByRoleName(empParamDto.getRoleName());
-        //todo:aspnet_UserInRoles\aspnet_UserInRolesLog\Roles2org\Roles2Emp\Org2Emp新增这些关系表，保存数据
+        if(aspnetRoles == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "角色不存在", null);
+        }
+
+        //aspnetUsers插入数据
+        AspnetUsers aspnetUsers = new AspnetUsers();
+        aspnetUsers.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
+        aspnetUsers.setUserId("8FEE10B0-8BF9-4A91-91EF-B28941B73AB9");
+        aspnetUsers.setIsAnonymous(false);
+        aspnetUsers.setLastActivityDate(new Date());
+        aspnetUsers.setUserName(empParamDto.getUsername());
+        aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
+        aspnetUsers.setExtn("");
+        Long i1 = aspnetUsersService.insert(aspnetUsers);
+        if(i1 == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+        }
+
+        //EmpBase插入数据
+        EmpBase empBase = new EmpBase();
+        BeanUtils.copyProperties(empParamDto,empBase);
+        empBase.setExtension("");
+        empBase.setTradeItemAuto(0L);
+        Long i2 = empBaseService.insert(empBase);
+        if(i2 == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+        }
+
+        //Org2Emp插入数据
+        Org2Emp org2Emp = new Org2Emp();
+        org2Emp.setOrgAuto(org.getOrgAuto());
+        org2Emp.setUserAuto(i1);
+        org2Emp.setACLType(0);
+        Integer i3 = org2EmpService.insert(org2Emp);
+        if(i3 == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+        }
+
+        //Roles2Emp插入数据
+        Roles2Emp roles2Emp = new Roles2Emp();
+        roles2Emp.setEmpBaseAuto(i2);
+        roles2Emp.setRoles_Auto(aspnetRoles.getRolesAuto());
+        Integer i4 = roles2EmpService.insert(roles2Emp);
+        if(i4 == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+        }
+
+        //Roles2Org插入数据
+        Roles2Org roles2Org = new Roles2Org();
+        roles2Org.setOrgAuto(org.getOrgAuto());
+        roles2Org.setRoles_Auto(aspnetRoles.getRolesAuto());
+        Integer i5 = roles2OrgService.insert(roles2Org);
+        if(i5 == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+        }
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "保存成功", null);
     }
 

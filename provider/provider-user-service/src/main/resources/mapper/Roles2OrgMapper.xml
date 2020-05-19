@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.Roles2OrgMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.Roles2Org">
+    <!--@mbg.generated-->
+    <!--@Table Roles2Org-->
+    <id column="Roles2Org_Auto" jdbcType="BIGINT" property="roles2OrgAuto" />
+    <result column="Org_Auto" jdbcType="BIGINT" property="orgAuto" />
+    <result column="Roles_Auto" jdbcType="BIGINT" property="roles_Auto" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Roles2Org_Auto, Org_Auto, Roles_Auto
+  </sql>
+</mapper>

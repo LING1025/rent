@@ -25,7 +25,7 @@ public class OrgGroupServiceImpl implements OrgGroupService{
     @Override
     public OrgGroup selectByOrgGroupName(String orgGroupName) {
         Example example = new Example(OrgGroup.class);
-        example.createCriteria().andEqualTo("OrgGroupName",orgGroupName);
+        example.createCriteria().andEqualTo("orgGroupName",orgGroupName);
         return orgGroupMapper.selectOneByExample(example);
     }
 }

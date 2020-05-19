@@ -19,6 +19,6 @@ public interface EmpBaseService{
      * @param empBase
      * @return
      */
-    Integer insert(EmpBase empBase);
+    Long insert(EmpBase empBase);
 
 }

@@ -6,8 +6,8 @@
     <!--@Table aspnet_Users-->
     <id column="UserId" jdbcType="OTHER" property="userId" />
     <result column="ApplicationId" jdbcType="OTHER" property="applicationId" />
-    <result column="UserName" jdbcType="VARCHAR" property="username" />
-    <result column="LoweredUserName" jdbcType="VARCHAR" property="loweredUsername" />
+    <result column="UserName" jdbcType="VARCHAR" property="userName" />
+    <result column="LoweredUserName" jdbcType="VARCHAR" property="loweredUserName" />
     <result column="MobileAlias" jdbcType="VARCHAR" property="mobileAlias" />
     <result column="IsAnonymous" jdbcType="BIT" property="isAnonymous" />
     <result column="LastActivityDate" jdbcType="TIMESTAMP" property="lastActivityDate" />

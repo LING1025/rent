@@ -106,6 +106,34 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="dbo:Org2Emp">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Org2Emp_Auto" />
+                        <option name="javaProperty" value="org2EmpAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="User_Auto" />
+                        <option name="javaProperty" value="userAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Org_Auto" />
+                        <option name="javaProperty" value="orgAuto" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="Org2Emp" />
+                  <option name="moduleName" value="provider-user-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="dbo:OrgGroup">
               <value>
                 <TableGenerateConfig>
@@ -131,6 +159,54 @@
                   </option>
                   <option name="generatedKey" value="OrgGroup_Auto" />
                   <option name="javaModelName" value="OrgGroup" />
+                  <option name="moduleName" value="provider-user-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="dbo:Roles2Emp">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Roles2Emp_Auto" />
+                        <option name="javaProperty" value="roles2EmpAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="EmpBase_Auto" />
+                        <option name="javaProperty" value="empBaseAuto" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="Roles2Emp_Auto" />
+                  <option name="javaModelName" value="Roles2Emp" />
+                  <option name="moduleName" value="provider-user-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="dbo:Roles2Org">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Roles2Org_Auto" />
+                        <option name="javaProperty" value="roles2OrgAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Org_Auto" />
+                        <option name="javaProperty" value="orgAuto" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="Roles2Org_Auto" />
+                  <option name="javaModelName" value="Roles2Org" />
                   <option name="moduleName" value="provider-user-api" />
                   <option name="sequenceColumn" value="" />
                   <option name="sequenceId" value="" />
@@ -165,12 +241,52 @@
             <entry key="dbo:aspnet_Users">
               <value>
                 <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="ApplicationId" />
+                        <option name="javaProperty" value="applicationId" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UserId" />
+                        <option name="javaProperty" value="userId" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UserName" />
+                        <option name="javaProperty" value="userName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="LoweredUserName" />
+                        <option name="javaProperty" value="loweredUserName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="MobileAlias" />
+                        <option name="javaProperty" value="mobileAlias" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="IsAnonymous" />
+                        <option name="javaProperty" value="isAnonymous" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="LastActivityDate" />
+                        <option name="javaProperty" value="lastActivityDate" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="User_Auto" />
+                        <option name="javaProperty" value="userAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="EXTN" />
+                        <option name="javaProperty" value="extn" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
                   <option name="generatedKey" value="" />
                   <option name="javaModelName" value="AspnetUsers" />
                   <option name="moduleName" value="provider-user-api" />
                   <option name="sequenceColumn" value="" />
                   <option name="sequenceId" value="" />
-                  <option name="useActualColumnName" value="false" />
+                  <option name="useActualColumnName" value="true" />
                 </TableGenerateConfig>
               </value>
             </entry>
