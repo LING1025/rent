@@ -6,9 +6,6 @@ import com.funtl.myshop.plus.business.dto.EmpParamDto;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.*;
 import com.funtl.myshop.plus.provider.domain.*;
-import com.funtl.myshop.plus.provider.dto.EmpListDto;
-import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
-import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
@@ -89,7 +86,7 @@ public class EmpBaseController {
         aspnetUsers.setExtn("");
         Long i1 = aspnetUsersService.insert(aspnetUsers);
         if(i1 == 0){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
         //EmpBase插入数据
@@ -101,7 +98,7 @@ public class EmpBaseController {
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             aspnetUsersService.deleteById(i1);
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
         //Org2Emp插入数据
@@ -113,7 +110,7 @@ public class EmpBaseController {
         if(i3 == 0){
             aspnetUsersService.deleteById(i1);
             empBaseService.deleteById(i2);
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
         //Roles2Emp插入数据
@@ -125,7 +122,7 @@ public class EmpBaseController {
             aspnetUsersService.deleteById(i1);
             empBaseService.deleteById(i2);
             org2EmpService.deleteById(i3);
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
         //Roles2Org插入数据
@@ -138,10 +135,59 @@ public class EmpBaseController {
             empBaseService.deleteById(i2);
             org2EmpService.deleteById(i3);
             roles2EmpService.deleteById(i4);
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+
         }
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "保存成功", null);
     }
 
+    @ApiOperation(value = "编辑员工")
+    @PutMapping(value = "update")
+    public ResponseResult<String> update(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto){
+        EmpBase empBase = empBaseService.selectById(empParamDto.getEmpBaseAuto());
+        if(empBase == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "员工不存在", null);
+        }
+        BeanUtils.copyProperties(empParamDto,empBase);
+        Integer i = empBaseService.update(empBase);
+        if (i == 0) {
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
+    }
+
+    public ResponseResult<EmpBase> patch(Integer isOn, Long empBaseAuto) {
+        EmpBase empBase = empBaseService.selectById(empBaseAuto);
+        if (empBase == null) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未查询到员工信息", null);
+        }
+        empBase.setIsBoss(isOn);
+        Integer i = empBaseService.update(empBase);
+        if (i == 0) {
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
+    }
+
+    @ApiOperation(value = "正常状态")
+    @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = true, dataType = "long", paramType = "path")
+    @PatchMapping("/start/{empBaseAuto}")
+    public ResponseResult<EmpBase> patchStart(@PathVariable(value = "empBaseAuto") Long empBaseAuto) {
+        return patch(1, empBaseAuto);
+    }
+
+    @ApiOperation(value = "停用状态")
+    @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = true, dataType = "long", paramType = "path")
+    @PatchMapping("/stop/{empBaseAuto}")
+    public ResponseResult<EmpBase> patchStop(@PathVariable(value = "empBaseAuto") Long empBaseAuto) {
+        return patch(0, empBaseAuto);
+    }
+
+    @ApiOperation(value = "删除")
+    @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = true, dataType = "long", paramType = "path")
+    @DeleteMapping("/delete/{empBaseAuto}")
+    public ResponseResult<EmpBase> delete(@PathVariable(value = "empBaseAuto") Long empBaseAuto) {
+        return patch(2, empBaseAuto);
+    }
 }

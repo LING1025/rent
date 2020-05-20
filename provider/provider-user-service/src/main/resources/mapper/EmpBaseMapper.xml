@@ -38,5 +38,6 @@
     <if test="param.orgName != null and param.orgName != ''">
       AND OrgName = #{param.orgName}
     </if>
+    AND IsOn != 2
   </select>
 </mapper>

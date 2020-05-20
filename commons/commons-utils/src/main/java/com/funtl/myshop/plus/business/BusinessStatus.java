@@ -58,6 +58,17 @@ public enum BusinessStatus {
     TOKEN_EXPIRED(50014, "令牌已过期"),
 
     /**
+     * 修改失败
+     */
+    UPDATE_FAILURE(6, "修改失败"),
+
+    /**
+     * 保存失败
+     */
+    SAVE_FAILURE(7, "保存失败"),
+
+
+    /**
      * 参数不正确
      */
     PARAM_ERROR(1, "参数错误");

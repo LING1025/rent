@@ -28,4 +28,18 @@ public interface EmpBaseService{
      */
     Integer deleteById(Long empBaseAuto);
 
+    /**
+     * 修改员工数据
+     * @param empBase
+     * @return
+     */
+    Integer update(EmpBase empBase);
+
+    /**
+     * 根据主键获取员工数据
+     * @param empBaseAuto
+     * @return
+     */
+    EmpBase selectById(Long empBaseAuto);
+
 }

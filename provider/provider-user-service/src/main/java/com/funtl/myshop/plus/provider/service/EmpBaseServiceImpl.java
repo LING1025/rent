@@ -37,4 +37,14 @@ public class EmpBaseServiceImpl implements EmpBaseService{
     public Integer deleteById(Long empBaseAuto) {
         return empBaseMapper.deleteByPrimaryKey(empBaseAuto);
     }
+
+    @Override
+    public Integer update(EmpBase empBase) {
+        return empBaseMapper.updateByPrimaryKeySelective(empBase);
+    }
+
+    @Override
+    public EmpBase selectById(Long empBaseAuto) {
+        return empBaseMapper.selectByPrimaryKey(empBaseAuto);
+    }
 }
