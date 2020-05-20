@@ -17,8 +17,8 @@ public class EmpParamDto implements Serializable {
     @ApiModelProperty(value = "部门id")
     private Long orgAuto;
 
-    @ApiModelProperty(value = "部门名称")
-    private String orgName;
+    /*@ApiModelProperty(value = "部门名称")
+    private String orgName;*/
 
     @ApiModelProperty(value = "职位表id")
     private Integer incTitleAuto;

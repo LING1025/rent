@@ -14,7 +14,13 @@ public class Org2EmpServiceImpl implements Org2EmpService{
 
 
     @Override
-    public Integer insert(Org2Emp org2Emp) {
-        return org2EmpMapper.insertSelective(org2Emp);
+    public Long insert(Org2Emp org2Emp) {
+        Integer i = org2EmpMapper.insertUseGeneratedKeys(org2Emp);
+        return i == 1 ? org2Emp.getOrg2EmpAuto() : 0;
+    }
+
+    @Override
+    public Integer deleteById(Long org2EmpAuto) {
+        return org2EmpMapper.deleteByPrimaryKey(org2EmpAuto);
     }
 }

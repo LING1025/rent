@@ -32,4 +32,9 @@ public class EmpBaseServiceImpl implements EmpBaseService{
         Integer i = empBaseMapper.insertUseGeneratedKeys(empBase);
         return i == 1 ? empBase.getEmpBaseAuto() : 0;
     }
+
+    @Override
+    public Integer deleteById(Long empBaseAuto) {
+        return empBaseMapper.deleteByPrimaryKey(empBaseAuto);
+    }
 }

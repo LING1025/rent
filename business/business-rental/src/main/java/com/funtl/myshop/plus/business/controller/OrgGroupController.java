@@ -24,11 +24,5 @@ public class OrgGroupController{
     @Reference(version = "1.0.0")
     private OrgGroupService orgGroupService;
 
-    @ApiOperation(value = " 获取所属组名称")
-    @ApiImplicitParam(name = "orgGroupName", value = "所属组名称", required = false, dataType = "string", paramType = "path")
-    @GetMapping(value = "query")
-    public ResponseResult<List<OrgGroupNameList>> query(@RequestParam(name = "orgGroupName",required = false) String orgGroupName){
-        List<OrgGroupNameList> lists = orgGroupService.selectOrgGroupName(orgGroupName);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", lists);
-    }
+
 }

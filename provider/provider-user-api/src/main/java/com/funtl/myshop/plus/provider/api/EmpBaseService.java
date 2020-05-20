@@ -21,4 +21,11 @@ public interface EmpBaseService{
      */
     Long insert(EmpBase empBase);
 
+    /**
+     * 根据主键删除员工数据
+     * @param empBaseAuto
+     * @return
+     */
+    Integer deleteById(Long empBaseAuto);
+
 }

@@ -13,7 +13,13 @@ public class Roles2EmpServiceImpl implements Roles2EmpService{
     private Roles2EmpMapper roles2EmpMapper;
 
     @Override
-    public Integer insert(Roles2Emp roles2Emp) {
-        return roles2EmpMapper.insertSelective(roles2Emp);
+    public Long insert(Roles2Emp roles2Emp) {
+        Integer i = roles2EmpMapper.insertUseGeneratedKeys(roles2Emp);
+        return i == 1 ? roles2Emp.getRoles2EmpAuto() : 0;
+    }
+
+    @Override
+    public Integer deleteById(Long roles2EmpAuto) {
+        return roles2EmpMapper.deleteByPrimaryKey(roles2EmpAuto);
     }
 }

@@ -7,6 +7,13 @@ public interface Roles2EmpService{
      * @param roles2Emp
      * @return
      */
-    Integer insert(Roles2Emp roles2Emp);
+    Long insert(Roles2Emp roles2Emp);
+
+    /**
+     * 根据主键删除员工角色绑定数据
+     * @param roles2EmpAuto
+     * @return
+     */
+    Integer deleteById(Long roles2EmpAuto);
 
 }

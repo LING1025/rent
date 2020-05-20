@@ -24,11 +24,5 @@ public class OrgController {
     @Reference(version = "1.0.0")
     private OrgService orgService;
 
-    @ApiOperation(value = " 获取部门名称")
-    @ApiImplicitParam(name = "depName", value = "部门名称", required = false, dataType = "string", paramType = "path")
-    @GetMapping(value = "query")
-    public ResponseResult<List<OrgNameList>> query(@RequestParam(name = "depName",required = false) String depName){
-        List<OrgNameList> lists = orgService.selectOrgName(depName);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", lists);
-    }
+
 }

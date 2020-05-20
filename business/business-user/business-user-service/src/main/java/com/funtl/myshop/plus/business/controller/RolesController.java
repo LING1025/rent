@@ -24,11 +24,5 @@ public class RolesController {
     @Reference(version = "1.0.0")
     private AspnetRolesService aspnetRolesService;
 
-    @ApiOperation(value = " 获取角色名称")
-    @ApiImplicitParam(name = "roleName", value = "角色名称", required = false, dataType = "string", paramType = "path")
-    @GetMapping(value = "query")
-    public ResponseResult<List<RolesNameList>> query(@RequestParam(name = "roleName",required = false) String roleName){
-        List<RolesNameList> lists = aspnetRolesService.selectRoleName(roleName);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", lists);
-    }
+
 }

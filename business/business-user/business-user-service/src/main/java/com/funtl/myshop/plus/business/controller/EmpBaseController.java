@@ -51,44 +51,31 @@ public class EmpBaseController {
     @Reference(version = "1.0.0")
     private Roles2OrgService roles2OrgService;
 
-    @ApiOperation(value = " 根据员工姓名、部门查询员工信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "fName", value = "员工姓名", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "orgName", value = "部门名称", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "pageNum", value = "页码", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "pageSize", value = "笔数", required = false, dataType = "int", paramType = "path")
-          })
-    @GetMapping(value = "query")
-    public ResponseResult<PageInfo<EmpListDto>> query(@RequestParam(name = "fName",required = false) String fName,
-                                                      @RequestParam(name = "orgName",required = false) String orgName,
-                                                      @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
-                                                      @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
-        EmpQueryParam empQueryParam = new EmpQueryParam(orgName,fName,pageNum,pageSize);
-        PageInfo<EmpListDto> pageInfo = empBaseService.selectEmpListDto(empQueryParam);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
-    }
-
     @ApiOperation(value = "新建员工")
     @PostMapping(value = "insert")
     public ResponseResult<String> insert(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto){
         if(empParamDto.getEmpBaseAuto() != 0){
             throw new BusinessException(BusinessStatus.PARAM_ERROR);
         }
+
         Org org = orgService.selectById(empParamDto.getOrgAuto());
         if(org == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "部门不存在", null);
         }
+
         IncTitle incTitle = incTitleService.selectById(empParamDto.getIncTitleAuto());
         if(incTitle == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "职位不存在", null);
         }
-        OrgGroup orgGroup = orgGroupService.selectByOrgGroupName(empParamDto.getOrgGroupName());
-        if(orgGroup == null){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "所属组不存在", null);
-        }
+
         AspnetRoles aspnetRoles = aspnetRolesService.selectByRoleName(empParamDto.getRoleName());
         if(aspnetRoles == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "角色不存在", null);
+        }
+
+        OrgGroup orgGroup = orgGroupService.selectByOrgGroupName(empParamDto.getOrgGroupName());
+        if(orgGroup == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "所属组不存在", null);
         }
 
         //aspnetUsers插入数据
@@ -110,6 +97,7 @@ public class EmpBaseController {
         BeanUtils.copyProperties(empParamDto,empBase);
         empBase.setExtension("");
         empBase.setTradeItemAuto(0L);
+        empBase.setOrgName(org.getDepName());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             aspnetUsersService.deleteById(i1);
@@ -121,8 +109,10 @@ public class EmpBaseController {
         org2Emp.setOrgAuto(org.getOrgAuto());
         org2Emp.setUserAuto(i1);
         org2Emp.setACLType(0);
-        Integer i3 = org2EmpService.insert(org2Emp);
+        Long i3 = org2EmpService.insert(org2Emp);
         if(i3 == 0){
+            aspnetUsersService.deleteById(i1);
+            empBaseService.deleteById(i2);
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
         }
 
@@ -130,8 +120,11 @@ public class EmpBaseController {
         Roles2Emp roles2Emp = new Roles2Emp();
         roles2Emp.setEmpBaseAuto(i2);
         roles2Emp.setRoles_Auto(aspnetRoles.getRolesAuto());
-        Integer i4 = roles2EmpService.insert(roles2Emp);
+        Long i4 = roles2EmpService.insert(roles2Emp);
         if(i4 == 0){
+            aspnetUsersService.deleteById(i1);
+            empBaseService.deleteById(i2);
+            org2EmpService.deleteById(i3);
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
         }
 
@@ -141,6 +134,10 @@ public class EmpBaseController {
         roles2Org.setRoles_Auto(aspnetRoles.getRolesAuto());
         Integer i5 = roles2OrgService.insert(roles2Org);
         if(i5 == 0){
+            aspnetUsersService.deleteById(i1);
+            empBaseService.deleteById(i2);
+            org2EmpService.deleteById(i3);
+            roles2EmpService.deleteById(i4);
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "保存失败", null);
         }
 
