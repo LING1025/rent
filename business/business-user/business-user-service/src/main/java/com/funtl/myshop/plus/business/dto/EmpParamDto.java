@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ApiModel(value = "员工数据")
@@ -41,8 +42,8 @@ public class EmpParamDto implements Serializable {
     @ApiModelProperty(value = "所属组")
     private String orgGroupName;
 
-    @ApiModelProperty(value = "角色名")
-    private String roleName;
+    @ApiModelProperty(value = "角色名集合")
+    private List<String> roleNames;
 
     /*@ApiModelProperty(value = "分机")
     private String mobilePIN;

@@ -6,13 +6,16 @@ import com.funtl.myshop.plus.business.dto.EmpParamDto;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.*;
 import com.funtl.myshop.plus.provider.domain.*;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 员工信息
@@ -65,14 +68,14 @@ public class EmpBaseController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "职位不存在", null);
         }
 
-        AspnetRoles aspnetRoles = aspnetRolesService.selectByRoleName(empParamDto.getRoleName());
-        if(aspnetRoles == null){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "角色不存在", null);
-        }
-
         OrgGroup orgGroup = orgGroupService.selectByOrgGroupName(empParamDto.getOrgGroupName());
         if(orgGroup == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "所属组不存在", null);
+        }
+
+        EmpBase eb = empBaseService.selectUsername(empParamDto.getUsername());
+        if(eb != null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户名已存在，请重新命名", null);
         }
 
         //aspnetUsers插入数据
@@ -113,30 +116,37 @@ public class EmpBaseController {
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
-        //Roles2Emp插入数据
-        Roles2Emp roles2Emp = new Roles2Emp();
-        roles2Emp.setEmpBaseAuto(i2);
-        roles2Emp.setRoles_Auto(aspnetRoles.getRolesAuto());
-        Long i4 = roles2EmpService.insert(roles2Emp);
-        if(i4 == 0){
-            aspnetUsersService.deleteById(i1);
-            empBaseService.deleteById(i2);
-            org2EmpService.deleteById(i3);
-            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
-        }
+        for (String role : empParamDto.getRoleNames()
+             ) {
+            AspnetRoles aspnetRoles = aspnetRolesService.selectByRoleName(role);
+            if(aspnetRoles == null){
+                aspnetUsersService.deleteById(i1);
+                empBaseService.deleteById(i2);
+                return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "角色'"+role+"'不存在", null);
+            }
+            //Roles2Emp插入数据
+            Roles2Emp roles2Emp = new Roles2Emp();
+            roles2Emp.setEmpBaseAuto(i2);
+            roles2Emp.setRoles_Auto(aspnetRoles.getRolesAuto());
+            Long i4 = roles2EmpService.insert(roles2Emp);
+            if(i4 == 0){
+                aspnetUsersService.deleteById(i1);
+                empBaseService.deleteById(i2);
+                throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+            }
 
-        //Roles2Org插入数据
-        Roles2Org roles2Org = new Roles2Org();
-        roles2Org.setOrgAuto(org.getOrgAuto());
-        roles2Org.setRoles_Auto(aspnetRoles.getRolesAuto());
-        Integer i5 = roles2OrgService.insert(roles2Org);
-        if(i5 == 0){
-            aspnetUsersService.deleteById(i1);
-            empBaseService.deleteById(i2);
-            org2EmpService.deleteById(i3);
-            roles2EmpService.deleteById(i4);
-            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+            //Roles2Org插入数据
+            Roles2Org roles2Org = new Roles2Org();
+            roles2Org.setOrgAuto(org.getOrgAuto());
+            roles2Org.setRoles_Auto(aspnetRoles.getRolesAuto());
+            Integer i5 = roles2OrgService.insert(roles2Org);
+            if(i5 == 0){
+                aspnetUsersService.deleteById(i1);
+                empBaseService.deleteById(i2);
+                roles2EmpService.deleteById(i4);
+                throw new BusinessException(BusinessStatus.SAVE_FAILURE);
 
+            }
         }
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "保存成功", null);
@@ -149,6 +159,15 @@ public class EmpBaseController {
         if(empBase == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "员工不存在", null);
         }
+
+        //判断是否修改了用户名
+        if(!empBase.getUsername().equals(empParamDto.getUsername())){
+            EmpBase eb = empBaseService.selectUsername(empParamDto.getUsername());
+            if(eb != null){
+                return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户名已存在，请重新命名", null);
+            }
+        }
+
         BeanUtils.copyProperties(empParamDto,empBase);
         Integer i = empBaseService.update(empBase);
         if (i == 0) {
@@ -162,7 +181,7 @@ public class EmpBaseController {
         if (empBase == null) {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未查询到员工信息", null);
         }
-        empBase.setIsBoss(isOn);
+        empBase.setIsOn(isOn);
         Integer i = empBaseService.update(empBase);
         if (i == 0) {
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
@@ -170,18 +189,19 @@ public class EmpBaseController {
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
     }
 
-    @ApiOperation(value = "正常状态")
-    @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = true, dataType = "long", paramType = "path")
-    @PatchMapping("/start/{empBaseAuto}")
-    public ResponseResult<EmpBase> patchStart(@PathVariable(value = "empBaseAuto") Long empBaseAuto) {
-        return patch(1, empBaseAuto);
-    }
 
     @ApiOperation(value = "停用状态")
     @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = true, dataType = "long", paramType = "path")
     @PatchMapping("/stop/{empBaseAuto}")
     public ResponseResult<EmpBase> patchStop(@PathVariable(value = "empBaseAuto") Long empBaseAuto) {
         return patch(0, empBaseAuto);
+    }
+
+    @ApiOperation(value = "正常状态")
+    @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = true, dataType = "long", paramType = "path")
+    @PatchMapping("/start/{empBaseAuto}")
+    public ResponseResult<EmpBase> patchStart(@PathVariable(value = "empBaseAuto") Long empBaseAuto) {
+        return patch(1, empBaseAuto);
     }
 
     @ApiOperation(value = "删除")

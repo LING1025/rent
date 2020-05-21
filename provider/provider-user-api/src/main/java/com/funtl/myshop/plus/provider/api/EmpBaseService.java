@@ -42,4 +42,11 @@ public interface EmpBaseService{
      */
     EmpBase selectById(Long empBaseAuto);
 
+    /**
+     * 判断用户名是否存在
+     * @param username
+     * @return
+     */
+    EmpBase selectUsername(String username);
+
 }

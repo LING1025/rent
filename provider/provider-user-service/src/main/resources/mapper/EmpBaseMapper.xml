@@ -39,5 +39,6 @@
       AND OrgName = #{param.orgName}
     </if>
     AND IsOn != 2
+    ORDER BY EmpBase_Auto DESC
   </select>
 </mapper>
