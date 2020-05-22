@@ -44,4 +44,10 @@ public class EmpListDto implements Serializable {
     private Date mDT;
 
     private Integer mUser;
+
+    private Integer isBoss;
+
+    private Long orgAuto;
+
+    private Integer incTitleAuto;
 }

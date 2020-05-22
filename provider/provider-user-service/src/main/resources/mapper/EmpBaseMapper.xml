@@ -27,7 +27,7 @@
   <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList"/>
   <select id="selectEmpListDto" resultMap="queryEmpListDto">
     SELECT
-    EmpBase_Auto,UserName,FName,OrgName,Title,IsOn,MDT,MUser
+    EmpBase_Auto,UserName,FName,OrgName,Title,IsOn,MDT,MUser,IsBoss,Org_Auto
     FROM
     EmpBase
     WHERE
