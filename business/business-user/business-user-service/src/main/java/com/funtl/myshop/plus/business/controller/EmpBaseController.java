@@ -98,6 +98,8 @@ public class EmpBaseController {
         empBase.setExtension("");
         empBase.setTradeItemAuto(0L);
         empBase.setOrgName(org.getDepName());
+        empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
+        empBase.setOrgGroupName(orgGroup.getOrgGroupName());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             aspnetUsersService.deleteById(i1);
@@ -116,7 +118,7 @@ public class EmpBaseController {
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
-        for (String role : empParamDto.getRoleNames()
+        for (String role : empParamDto.getRoles()
              ) {
             AspnetRoles aspnetRoles = aspnetRolesService.selectByRoleName(role);
             if(aspnetRoles == null){

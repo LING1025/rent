@@ -43,7 +43,7 @@ public class EmpParamDto implements Serializable {
     private String orgGroupName;
 
     @ApiModelProperty(value = "角色名集合")
-    private List<String> roleNames;
+    private List<String> roles;
 
     /*@ApiModelProperty(value = "分机")
     private String mobilePIN;

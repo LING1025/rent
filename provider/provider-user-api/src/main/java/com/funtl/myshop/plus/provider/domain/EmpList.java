@@ -2,8 +2,11 @@ package com.funtl.myshop.plus.provider.domain;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class EmpList implements Serializable {
@@ -46,4 +49,19 @@ public class EmpList implements Serializable {
     private Long orgAuto;
 
     private Integer incTitleAuto;
+
+    /**
+     * 角色集合
+     */
+    private List<EmpRoleName> roles;
+
+    /**
+     * 组id
+     */
+    private Long orgGroupAuto;
+
+    /**
+     * 组名称
+     */
+    private String orgGroupName;
 }

@@ -84,5 +84,17 @@ public class EmpBase implements Serializable {
     @Column(name = "MUser")
     private Integer mUser;
 
+    /**
+     * 组id
+     */
+    @Column(name = "OrgGroup_Auto")
+    private Long orgGroupAuto;
+
+    /**
+     * 组名称
+     */
+    @Column(name = "OrgGroupName")
+    private String orgGroupName;
+
     private static final long serialVersionUID = 1L;
 }

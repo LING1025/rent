@@ -1,9 +1,11 @@
 package com.funtl.myshop.plus.provider.dto;
 
+import com.funtl.myshop.plus.provider.domain.EmpRoleName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 返回属性
@@ -50,4 +52,19 @@ public class EmpListDto implements Serializable {
     private Long orgAuto;
 
     private Integer incTitleAuto;
+
+    /**
+     * 角色集合
+     */
+    private List<EmpRoleName> roles;
+
+    /**
+     * 组id
+     */
+    private Long orgGroupAuto;
+
+    /**
+     * 组名称
+     */
+    private String orgGroupName;
 }

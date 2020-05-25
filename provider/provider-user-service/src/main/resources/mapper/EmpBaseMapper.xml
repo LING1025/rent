@@ -17,19 +17,32 @@
     <result column="IsBoss" jdbcType="INTEGER" property="isBoss" />
     <result column="MDT" jdbcType="TIMESTAMP" property="mDT" />
     <result column="MUser" jdbcType="INTEGER" property="mUser" />
+    <result column="OrgGroup_Auto" jdbcType="BIGINT" property="orgGroupAuto" />
+    <result column="OrgGroupName" jdbcType="VARCHAR" property="orgGroupName" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     EmpBase_Auto, TradeItem_Auto, Org_Auto, OrgName, IncTitle_Auto, Title, FName, UserName,
-    IsOn, Extension, IsBoss, MDT, MUser
+    IsOn, Extension, IsBoss, MDT, MUser,OrgGroup_Auto,OrgGroupName
   </sql>
 
-  <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList"/>
+  <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList">
+    <collection property="roles" ofType="com.funtl.myshop.plus.provider.domain.EmpRoleName">
+      <result column="RoleName" jdbcType="VARCHAR" property="roleName" />
+    </collection>
+  </resultMap>
+  <!--    多表查询：一对多-->
   <select id="selectEmpListDto" resultMap="queryEmpListDto">
     SELECT
-    EmpBase_Auto,UserName,FName,OrgName,Title,IsOn,MDT,MUser,IsBoss,Org_Auto
+    eb.EmpBase_Auto,eb.UserName,eb.FName,
+    eb.OrgName,eb.Title,eb.IsOn,eb.MDT,
+    eb.MUser,eb.IsBoss,eb.Org_Auto,
+    eb.IncTitle_Auto,eb.OrgGroup_Auto,eb.OrgGroupName,
+    ar.RoleName
     FROM
-    EmpBase
+    EmpBase AS eb
+    LEFT JOIN Roles2Emp AS re ON eb.EmpBase_Auto = re.EmpBase_Auto
+    LEFT JOIN aspnet_Roles AS ar ON re.Roles_Auto = ar.Roles_Auto
     WHERE
     1 = 1
     <if test="param.fName != null and param.fName != ''">
