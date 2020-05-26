@@ -13,6 +13,9 @@ import com.funtl.myshop.plus.provider.mapper.EmpBaseMapper;
 import com.funtl.myshop.plus.provider.api.EmpBaseService;
 import org.apache.dubbo.config.annotation.Service;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.StringUtil;
+
+import java.util.List;
 
 @Service(version = "1.0.0")
 public class EmpBaseServiceImpl implements EmpBaseService{
@@ -54,5 +57,14 @@ public class EmpBaseServiceImpl implements EmpBaseService{
         Example example = new Example(EmpBase.class);
         example.createCriteria().andEqualTo("username",username);
         return empBaseMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<EmpBase> selectByfName(String fName) {
+        Example example = new Example(EmpBase.class);
+        if(StringUtil.isNotEmpty(fName)){
+            example.createCriteria().andLike("fName",String.format("%s%s%s","%",fName,"%"));
+        }
+        return empBaseMapper.selectByExample(example);
     }
 }

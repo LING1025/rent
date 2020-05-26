@@ -5,6 +5,8 @@ import com.funtl.myshop.plus.provider.dto.EmpListDto;
 import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface EmpBaseService{
 
     /**
@@ -48,5 +50,12 @@ public interface EmpBaseService{
      * @return
      */
     EmpBase selectUsername(String username);
+
+    /**
+     * 根据员工姓名获取员工信息
+     * @param fName
+     * @return
+     */
+    List<EmpBase> selectByfName(String fName);
 
 }
