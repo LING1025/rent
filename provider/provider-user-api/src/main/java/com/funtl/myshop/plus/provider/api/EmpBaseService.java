@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.api;
 
+import com.funtl.myshop.plus.provider.domain.EmpAgentList;
 import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.dto.EmpListDto;
 import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
@@ -57,5 +58,12 @@ public interface EmpBaseService{
      * @return
      */
     List<EmpBase> selectByfName(String fName);
+
+    /**
+     * 根据员工姓名获取员工代理信息
+     * @param fName
+     * @return
+     */
+    List<EmpAgentList> selectEmpAgent(String fName);
 
 }

@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.service;
 
 import com.funtl.myshop.plus.commons.utils.PageInfoUtils;
+import com.funtl.myshop.plus.provider.domain.EmpAgentList;
 import com.funtl.myshop.plus.provider.domain.EmpList;
 import com.funtl.myshop.plus.provider.dto.EmpListDto;
 import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
@@ -66,5 +67,10 @@ public class EmpBaseServiceImpl implements EmpBaseService{
             example.createCriteria().andLike("fName",String.format("%s%s%s","%",fName,"%"));
         }
         return empBaseMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<EmpAgentList> selectEmpAgent(String fName) {
+        return empBaseMapper.selectEmpAgent(fName);
     }
 }

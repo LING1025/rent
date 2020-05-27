@@ -55,4 +55,17 @@
     AND eb.IsOn != 2
     ORDER BY eb.EmpBase_Auto DESC
   </select>
+
+  <resultMap id="queryEmpAgent" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpAgentList"/>
+    <select id="selectEmpAgent" resultMap="queryEmpAgent">
+      SELECT
+      EmpBase_Auto, Org_Auto, OrgName, FName
+      FROM
+      EmpBase
+      WHERE
+      1 = 1
+      <if test="fName != null">
+        AND FName LIKE '%${fName}%'
+      </if>
+    </select>
 </mapper>

@@ -2,9 +2,7 @@ package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.*;
-import com.funtl.myshop.plus.provider.domain.OrgGroupNameList;
-import com.funtl.myshop.plus.provider.domain.OrgNameList;
-import com.funtl.myshop.plus.provider.domain.RolesNameList;
+import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.EmpListDto;
 import com.funtl.myshop.plus.provider.dto.EmpQueryParam;
 import com.github.pagehelper.PageInfo;
@@ -13,10 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,7 +37,7 @@ public class EmpBaseQueryController {
     @Reference(version = "1.0.0")
     private AspnetRolesService aspnetRolesService;
 
-    @ApiOperation(value = " 根据员工姓名、部门查询员工信息")
+    @ApiOperation(value = " 根据员工姓名、部门获取员工信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "fName", value = "员工姓名", required = false, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "orgName", value = "部门名称", required = false, dataType = "string", paramType = "path"),
@@ -57,6 +52,14 @@ public class EmpBaseQueryController {
         EmpQueryParam empQueryParam = new EmpQueryParam(orgName,fName,pageNum,pageSize);
         PageInfo<EmpListDto> pageInfo = empBaseService.selectEmpListDto(empQueryParam);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
+    }
+
+    @ApiOperation(value = " 根据员工姓名d获取员工代理信息")
+    @ApiImplicitParam(name = "fName", value = "员工姓名", required = true, dataType = "string", paramType = "path")
+    @GetMapping(value = "queryByFName")
+    public ResponseResult<List<EmpAgentList>> queryByFName(@RequestParam(name = "fName",required = false) String fName) {
+        List<EmpAgentList> lists = empBaseService.selectEmpAgent(fName);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", lists);
     }
 
     @ApiOperation(value = " 获取部门名称")
