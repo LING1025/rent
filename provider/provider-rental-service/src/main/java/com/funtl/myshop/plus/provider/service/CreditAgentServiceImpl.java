@@ -35,4 +35,20 @@ public class CreditAgentServiceImpl implements CreditAgentService{
         return result;
     }
 
+    @Override
+    public Long insert(CreditAgent creditAgent) {
+        Integer i = creditAgentMapper.insertUseGeneratedKeys(creditAgent);
+        return i == 1 ? creditAgent.getCreditAgentAuto() : 0;
+    }
+
+    @Override
+    public Integer update(CreditAgent creditAgent) {
+        return creditAgentMapper.updateByPrimaryKeySelective(creditAgent);
+    }
+
+    @Override
+    public CreditAgent selectById(Long creditAgentAuto) {
+        return creditAgentMapper.selectByPrimaryKey(creditAgentAuto);
+    }
+
 }

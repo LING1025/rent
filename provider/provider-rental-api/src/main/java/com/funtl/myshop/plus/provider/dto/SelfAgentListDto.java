@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -44,5 +45,6 @@ public class SelfAgentListDto implements Serializable {
     /**
      * 代理截止日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date agentCDate;
 }

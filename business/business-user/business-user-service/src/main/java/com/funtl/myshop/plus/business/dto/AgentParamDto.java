@@ -1,52 +1,56 @@
-package com.funtl.myshop.plus.provider.domain;
+package com.funtl.myshop.plus.business.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class SelfAgentList implements Serializable {
+@ApiModel(value = "代理人数据")
+public class AgentParamDto implements Serializable {
     /**
      * 代理人绑定表id
      */
+    @ApiModelProperty(value = "代理人绑定表id")
     private Long creditAgentAuto;
 
     /**
      * 本人
      */
+    @ApiModelProperty(value = "本人id")
     private Long selfUser;
-    private String selfName;
 
     /**
      * 本人单位
      */
+    @ApiModelProperty(value = "本人单位id")
     private Long selfUSerDept;
-    private String selfDept;
 
     /**
      * 代理人
      */
+    @ApiModelProperty(value = "代理人id")
     private Long agentUser;
-    private String agentName;
 
     /**
      * 代理人部门
      */
+    @ApiModelProperty(value = "代理人部门id")
     private Long agentUserDept;
-    private String agentDept;
 
     /**
      * 是否有效 0 停用  1正常 2删除
      */
+    @ApiModelProperty(value = "是否有效 0 停用  1正常 2删除")
     private Byte isOn;
 
     /**
      * 代理截止日期
      */
+    @ApiModelProperty(value = "代理截止日期")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date agentCDate;
 }

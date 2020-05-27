@@ -13,5 +13,6 @@
     <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: com.github.pagehelper:pagehelper:5.1.2" level="project" />
     <orderEntry type="library" name="Maven: com.github.jsqlparser:jsqlparser:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
   </component>
 </module>

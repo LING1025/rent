@@ -26,4 +26,24 @@ public interface CreditAgentService{
     PageInfo<SelfAgentListDto> selectAgent(Long agentUser, Integer pageNum, Integer pageSize);
 
 
+    /**
+     * 新建代理人设置
+     * @param creditAgent
+     * @return
+     */
+    Long insert(CreditAgent creditAgent);
+
+    /**
+     * 编辑代理人设置
+     * @param creditAgent
+     * @return
+     */
+    Integer update(CreditAgent creditAgent);
+
+    /**
+     * 根据主键获取代理人设置数据
+     * @param creditAgentAuto
+     * @return
+     */
+    CreditAgent selectById(Long creditAgentAuto);
 }

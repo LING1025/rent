@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Api(tags = "代理人设置查询相关操作")
 @RestController
-@RequestMapping(value = "agentQuery")
+@RequestMapping(value = "query")
 public class AgentQueryController {
     @Reference(version = "1.0.0")
     private CreditAgentService creditAgentService;
