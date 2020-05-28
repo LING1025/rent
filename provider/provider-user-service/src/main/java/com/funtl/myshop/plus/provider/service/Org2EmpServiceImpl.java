@@ -5,6 +5,7 @@ import com.funtl.myshop.plus.provider.mapper.Org2EmpMapper;
 import com.funtl.myshop.plus.provider.domain.Org2Emp;
 import com.funtl.myshop.plus.provider.api.Org2EmpService;
 import org.apache.dubbo.config.annotation.Service;
+import tk.mybatis.mapper.entity.Example;
 
 @Service(version = "1.0.0")
 public class Org2EmpServiceImpl implements Org2EmpService{
@@ -23,4 +24,10 @@ public class Org2EmpServiceImpl implements Org2EmpService{
     public Integer deleteById(Long org2EmpAuto) {
         return org2EmpMapper.deleteByPrimaryKey(org2EmpAuto);
     }
+
+    @Override
+    public Integer update(Org2Emp org2Emp) {
+        return org2EmpMapper.updateByPrimaryKeySelective(org2Emp);
+    }
+
 }

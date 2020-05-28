@@ -12,10 +12,24 @@ public interface AspnetUsersService {
     Long insert(AspnetUsers aspnetUsers);
 
     /**
-     * 根据主键删除数据
+     * 根据userAuto删除数据
      * @param userAuto
      * @return
      */
     Integer deleteById(Long userAuto);
+
+    /**
+     * 编辑用户数据
+     * @param aspnetUsers
+     * @return
+     */
+    Integer update(AspnetUsers aspnetUsers);
+
+    /**
+     * 根据userAuto获取用户数据
+     * @param userAuto
+     * @return
+     */
+    AspnetUsers selectById(Long userAuto);
 }
 

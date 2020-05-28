@@ -98,8 +98,6 @@ public class EmpBaseController {
         empBase.setExtension("");
         empBase.setTradeItemAuto(0L);
         empBase.setOrgName(org.getDepName());
-        empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
-        empBase.setOrgGroupName(orgGroup.getOrgGroupName());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             aspnetUsersService.deleteById(i1);
@@ -162,6 +160,21 @@ public class EmpBaseController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "员工不存在", null);
         }
 
+        Org org = orgService.selectById(empParamDto.getOrgAuto());
+        if(org == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "部门不存在", null);
+        }
+
+        IncTitle incTitle = incTitleService.selectById(empParamDto.getIncTitleAuto());
+        if(incTitle == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "职位不存在", null);
+        }
+
+        OrgGroup orgGroup = orgGroupService.selectByOrgGroupName(empParamDto.getOrgGroupName());
+        if(orgGroup == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "所属组不存在", null);
+        }
+
         //判断是否修改了用户名
         if(!empBase.getUsername().equals(empParamDto.getUsername())){
             EmpBase eb = empBaseService.selectUsername(empParamDto.getUsername());
@@ -171,6 +184,9 @@ public class EmpBaseController {
         }
 
         BeanUtils.copyProperties(empParamDto,empBase);
+        empBase.setExtension("");
+        empBase.setTradeItemAuto(0L);
+        empBase.setOrgName(org.getDepName());
         Integer i = empBaseService.update(empBase);
         if (i == 0) {
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);

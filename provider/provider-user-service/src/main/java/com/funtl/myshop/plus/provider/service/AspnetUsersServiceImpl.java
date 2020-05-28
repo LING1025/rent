@@ -21,5 +21,15 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
     public Integer deleteById(Long userAuto) {
         return aspnetUsersMapper.deleteByPrimaryKey(userAuto);
     }
+
+    @Override
+    public Integer update(AspnetUsers aspnetUsers) {
+        return aspnetUsersMapper.updateByPrimaryKeySelective(aspnetUsers);
+    }
+
+    @Override
+    public AspnetUsers selectById(Long userAuto) {
+        return aspnetUsersMapper.selectByPrimaryKey(userAuto);
+    }
 }
 

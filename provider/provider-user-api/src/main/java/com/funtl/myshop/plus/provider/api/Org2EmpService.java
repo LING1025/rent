@@ -17,4 +17,6 @@ public interface Org2EmpService{
      */
     Integer deleteById(Long org2EmpAuto);
 
+    Integer update(Org2Emp org2Emp);
+
 }
