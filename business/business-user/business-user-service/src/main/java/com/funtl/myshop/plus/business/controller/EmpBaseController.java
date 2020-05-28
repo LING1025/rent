@@ -97,7 +97,10 @@ public class EmpBaseController {
         BeanUtils.copyProperties(empParamDto,empBase);
         empBase.setExtension("");
         empBase.setTradeItemAuto(0L);
+        empBase.setOrgAuto(org.getOrgAuto());
         empBase.setOrgName(org.getDepName());
+        empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
+        empBase.setOrgGroupName(orgGroup.getOrgGroupName());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             aspnetUsersService.deleteById(i1);
@@ -186,7 +189,10 @@ public class EmpBaseController {
         BeanUtils.copyProperties(empParamDto,empBase);
         empBase.setExtension("");
         empBase.setTradeItemAuto(0L);
+        empBase.setOrgAuto(org.getOrgAuto());
         empBase.setOrgName(org.getDepName());
+        empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
+        empBase.setOrgGroupName(orgGroup.getOrgGroupName());
         Integer i = empBaseService.update(empBase);
         if (i == 0) {
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
