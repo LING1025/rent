@@ -54,12 +54,12 @@ public class EmpBaseQueryController {
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
     }
 
-    @ApiOperation(value = " 根据员工姓名d获取员工代理信息")
-    @ApiImplicitParam(name = "fName", value = "员工姓名", required = true, dataType = "string", paramType = "path")
-    @GetMapping(value = "queryByFName")
-    public ResponseResult<List<EmpAgentList>> queryByFName(@RequestParam(name = "fName",required = false) String fName) {
-        List<EmpAgentList> lists = empBaseService.selectEmpAgent(fName);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", lists);
+    @ApiOperation(value = " 根据员工id获取员工代理信息")
+    @ApiImplicitParam(name = "empBaseAuto", value = "员工id", required = false, dataType = "long", paramType = "path")
+    @GetMapping(value = "queryByEmpBaseAuto")
+    public ResponseResult<List<EmpAgentList>> queryByEmpBaseAuto(@RequestParam(name = "empBaseAuto",required = false) Long empBaseAuto) {
+        List<EmpAgentList> empAgentList = empBaseService.selectEmpAgent(empBaseAuto);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", empAgentList);
     }
 
     @ApiOperation(value = " 获取部门名称")

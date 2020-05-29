@@ -12,5 +12,5 @@ import java.util.List;
 public interface EmpBaseMapper extends MyMapper<EmpBase> {
     List<EmpList> selectEmpListDto(@Param("param")EmpQueryParam empQueryParam);
 
-    List<EmpAgentList> selectEmpAgent(@Param("fName") String fName);
+    List<EmpAgentList> selectEmpAgent(@Param("empBaseAuto") Long empBaseAuto);
 }

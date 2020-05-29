@@ -61,16 +61,7 @@ public class EmpBaseServiceImpl implements EmpBaseService{
     }
 
     @Override
-    public List<EmpBase> selectByfName(String fName) {
-        Example example = new Example(EmpBase.class);
-        if(StringUtil.isNotEmpty(fName)){
-            example.createCriteria().andLike("fName",String.format("%s%s%s","%",fName,"%"));
-        }
-        return empBaseMapper.selectByExample(example);
-    }
-
-    @Override
-    public List<EmpAgentList> selectEmpAgent(String fName) {
-        return empBaseMapper.selectEmpAgent(fName);
+    public List<EmpAgentList> selectEmpAgent(Long empBaseAuto) {
+        return empBaseMapper.selectEmpAgent(empBaseAuto);
     }
 }

@@ -32,67 +32,58 @@ public class AgentQueryController {
     @Reference(version = "1.0.0")
     private EmpBaseService empBaseService;
 
-    @ApiOperation(value = " 根据本人姓名获取代理数据")
+    @ApiOperation(value = " 根据本人id获取代理数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "fName", value = "本人姓名", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "empBaseAuto", value = "本人id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "pageNum", value = "页码", required = false, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", value = "笔数", required = false, dataType = "int", paramType = "path")
     })
     @GetMapping(value = "queryBySelf")
-    public ResponseResult<PageInfo<SelfAgentListDto>> queryBySelf(@RequestParam(name = "fName",required = false) String fName,
-                                                                  @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
-                                                                  @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
-        List<EmpBase> list = empBaseService.selectByfName(fName);
-        if(list.size() > 0){
-            for(EmpBase empBase : list){
-                //本人姓名查询
-                PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectSelf(empBase.getEmpBaseAuto(), pageNum, pageSize);
-                for(SelfAgentListDto dto : pageInfo.getList()){
-                    if(dto != null){
-                        dto.setSelfName(empBase.getFName());
-                        dto.setSelfDept(empBase.getOrgName());
-                        EmpBase eb = empBaseService.selectById(dto.getAgentUser());
-                        if(eb != null){
-                            dto.setAgentName(eb.getFName());
-                            dto.setAgentDept(eb.getOrgName());
-                        }
-                    }
-                }
-                return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
+    public ResponseResult<PageInfo<SelfAgentListDto>> queryBySelf(@RequestParam(name = "empBaseAuto",required = false) Long empBaseAuto,
+                                                            @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
+                                                            @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
+        //本人姓名查询
+        PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectSelf(empBaseAuto, pageNum, pageSize);
+        for(SelfAgentListDto dto : pageInfo.getList()){
+            EmpBase empBase = empBaseService.selectById(dto.getSelfUser());
+            if (empBase != null){
+                dto.setSelfName(empBase.getFName());
+                dto.setSelfDept(empBase.getOrgName());
+            }
+            EmpBase eb = empBaseService.selectById(dto.getAgentUser());
+            if(eb != null){
+                dto.setAgentName(eb.getFName());
+                dto.setAgentDept(eb.getOrgName());
             }
         }
-        return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "该员工不存在", null);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
     }
 
-    @ApiOperation(value = " 根据代理人姓名获取代理数据")
+    @ApiOperation(value = " 根据代理人id获取代理数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "fName", value = "代理人姓名", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "empBaseAuto", value = "代理人id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "pageNum", value = "页码", required = false, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", value = "笔数", required = false, dataType = "int", paramType = "path")
     })
     @GetMapping(value = "queryByAgent")
-    public ResponseResult<PageInfo<SelfAgentListDto>> queryByAgent(@RequestParam(name = "fName",required = false) String fName,
-                                                                  @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
-                                                                  @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
-        List<EmpBase> list = empBaseService.selectByfName(fName);
-        if(list.size() > 0){
-            for(EmpBase empBase : list){
+    public ResponseResult<PageInfo<SelfAgentListDto>> queryByAgent(@RequestParam(name = "empBaseAuto",required = false) Long empBaseAuto,
+                                                                   @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
+                                                                   @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
                 //代理人姓名查询
-                PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectAgent(empBase.getEmpBaseAuto(), pageNum, pageSize);
+                PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectAgent(empBaseAuto, pageNum, pageSize);
                 for(SelfAgentListDto dto : pageInfo.getList()){
-                    if(dto != null){
+                    EmpBase empBase = empBaseService.selectById(dto.getAgentUser());
+                    if (empBase != null){
                         dto.setAgentName(empBase.getFName());
                         dto.setAgentDept(empBase.getOrgName());
-                        EmpBase eb = empBaseService.selectById(dto.getSelfUser());
-                        if(eb != null){
-                            dto.setSelfName(eb.getFName());
-                            dto.setSelfDept(eb.getOrgName());
-                        }
+                    }
+                    EmpBase eb = empBaseService.selectById(dto.getSelfUser());
+                    if(eb != null){
+                        dto.setSelfName(eb.getFName());
+                        dto.setSelfDept(eb.getOrgName());
                     }
                 }
                 return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
-            }
-        }
-        return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "该员工不存在", null);
     }
+
 }

@@ -64,8 +64,8 @@
       EmpBase
       WHERE
       1 = 1
-      <if test="fName != null">
-        AND FName LIKE '%${fName}%'
+      <if test="empBaseAuto != null">
+        AND EmpBase_Auto = #{empBaseAuto}
       </if>
     </select>
 </mapper>

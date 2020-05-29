@@ -53,17 +53,10 @@ public interface EmpBaseService{
     EmpBase selectUsername(String username);
 
     /**
-     * 根据员工姓名获取员工信息
-     * @param fName
+     * 根据员工id获取员工代理信息
+     * @param empBaseAuto
      * @return
      */
-    List<EmpBase> selectByfName(String fName);
-
-    /**
-     * 根据员工姓名获取员工代理信息
-     * @param fName
-     * @return
-     */
-    List<EmpAgentList> selectEmpAgent(String fName);
+    List<EmpAgentList> selectEmpAgent(Long empBaseAuto);
 
 }
