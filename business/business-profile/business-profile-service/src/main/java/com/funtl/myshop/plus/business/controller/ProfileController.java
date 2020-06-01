@@ -8,10 +8,7 @@ import com.funtl.myshop.plus.provider.api.UserService;
 import com.funtl.myshop.plus.provider.domain.User;
 import com.funtl.myshop.plus.business.dto.UserParamDto;
 import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -19,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -159,6 +157,22 @@ public class ProfileController {
         return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "修改失败", null);
     }
 
+    @ApiOperation(value = "重置密码")
+    @ApiImplicitParam(name = "username", value = "账号", required = true, dataType = "string", paramType = "path")
+    @PutMapping(value = "reset/{username}")
+    public ResponseResult<String> resetPwd(@PathVariable("username")String username) {
+        User user = userService.get(username);
+        if(user == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "账号不存在", null);
+        }
+        user.setPassword(passwordEncoder.encode("123456"));
+        Integer i = userService.updateUser(user);
+        if(i == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "重置密码失败", null);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "重置后密码:123456", null);
+    }
+
     public ResponseResult<User> patch(Byte status, Integer userId) {
         User user = userService.selectById(userId);
         if (user == null) {
@@ -184,13 +198,13 @@ public class ProfileController {
     @ApiImplicitParam(name = "userId", value = "员工id", required = true, dataType = "int", paramType = "path")
     @PatchMapping("/stop/{userId}")
     public ResponseResult<User> patchStop(@PathVariable(value = "userId") Integer userId) {
-        return patch((byte)2, userId);
+        return patch((byte)0, userId);
     }
 
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "userId", value = "员工id", required = true, dataType = "int", paramType = "path")
     @DeleteMapping("/delete/{userId}")
     public ResponseResult<User> delete(@PathVariable(value = "userId") Integer userId) {
-        return patch((byte)3, userId);
+        return patch((byte)2, userId);
     }
 }

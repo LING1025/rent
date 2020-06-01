@@ -27,133 +27,152 @@
     #{sex}, #{age}, #{phone}, #{balance},
     #{isAdmin}, #{faceUrl}, #{status})
   </insert>
-  <!--
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    &lt;!&ndash;@mbg.generated&ndash;&gt;
-    select
-    <include refid="Base_Column_List" />
-    from [User]
-    where userId = #{userid,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    &lt;!&ndash;@mbg.generated&ndash;&gt;
-    delete from [User]
-    where userId = #{userid,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.funtl.myshop.plus.provider.domain.User">
-    &lt;!&ndash;@mbg.generated&ndash;&gt;
-    insert into [User] (userId, passward, userName,
-      sex, age, phone, balance,
-      isAdmin, faceUrl)
-    values (#{userid,jdbcType=VARCHAR}, #{passward,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
-      #{sex,jdbcType=BIT}, #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{balance,jdbcType=OTHER},
-      #{isadmin,jdbcType=BIT}, #{faceurl,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.funtl.myshop.plus.provider.domain.User">
-    &lt;!&ndash;@mbg.generated&ndash;&gt;
-    insert into [User]
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userid != null">
-        userId,
+
+  <resultMap id="queryUser" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.User"/>
+    <select id="selectUserListDto" resultMap="queryUser">
+      SELECT
+      *
+      FROM
+      [User]
+      WHERE
+      1 = 1
+      <if test="param.username != null and param.username != ''">
+        AND username LIKE '%${param.username}%'
       </if>
-      <if test="passward != null">
-        passward,
+      <if test="param.isAdmin != null">
+        AND isAdmin = #{param.isAdmin}
       </if>
-      <if test="username != null">
-        userName,
+      <if test="param.status != null">
+        AND status = #{param.status}
       </if>
-      <if test="sex != null">
-        sex,
-      </if>
-      <if test="age != null">
-        age,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="balance != null">
-        balance,
-      </if>
-      <if test="isadmin != null">
-        isAdmin,
-      </if>
-      <if test="faceurl != null">
-        faceUrl,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userid != null">
-        #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="passward != null">
-        #{passward,jdbcType=VARCHAR},
-      </if>
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null">
-        #{sex,jdbcType=BIT},
-      </if>
-      <if test="age != null">
-        #{age,jdbcType=INTEGER},
-      </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="balance != null">
-        #{balance,jdbcType=OTHER},
-      </if>
-      <if test="isadmin != null">
-        #{isadmin,jdbcType=BIT},
-      </if>
-      <if test="faceurl != null">
-        #{faceurl,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.funtl.myshop.plus.provider.domain.User">
-    &lt;!&ndash;@mbg.generated&ndash;&gt;
-    update [User]
-    <set>
-      <if test="passward != null">
-        passward = #{passward,jdbcType=VARCHAR},
-      </if>
-      <if test="username != null">
+    </select>
+    <!--
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+      &lt;!&ndash;@mbg.generated&ndash;&gt;
+      select
+      <include refid="Base_Column_List" />
+      from [User]
+      where userId = #{userid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+      &lt;!&ndash;@mbg.generated&ndash;&gt;
+      delete from [User]
+      where userId = #{userid,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.funtl.myshop.plus.provider.domain.User">
+      &lt;!&ndash;@mbg.generated&ndash;&gt;
+      insert into [User] (userId, passward, userName,
+        sex, age, phone, balance,
+        isAdmin, faceUrl)
+      values (#{userid,jdbcType=VARCHAR}, #{passward,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+        #{sex,jdbcType=BIT}, #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{balance,jdbcType=OTHER},
+        #{isadmin,jdbcType=BIT}, #{faceurl,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.funtl.myshop.plus.provider.domain.User">
+      &lt;!&ndash;@mbg.generated&ndash;&gt;
+      insert into [User]
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="userid != null">
+          userId,
+        </if>
+        <if test="passward != null">
+          passward,
+        </if>
+        <if test="username != null">
+          userName,
+        </if>
+        <if test="sex != null">
+          sex,
+        </if>
+        <if test="age != null">
+          age,
+        </if>
+        <if test="phone != null">
+          phone,
+        </if>
+        <if test="balance != null">
+          balance,
+        </if>
+        <if test="isadmin != null">
+          isAdmin,
+        </if>
+        <if test="faceurl != null">
+          faceUrl,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="userid != null">
+          #{userid,jdbcType=VARCHAR},
+        </if>
+        <if test="passward != null">
+          #{passward,jdbcType=VARCHAR},
+        </if>
+        <if test="username != null">
+          #{username,jdbcType=VARCHAR},
+        </if>
+        <if test="sex != null">
+          #{sex,jdbcType=BIT},
+        </if>
+        <if test="age != null">
+          #{age,jdbcType=INTEGER},
+        </if>
+        <if test="phone != null">
+          #{phone,jdbcType=VARCHAR},
+        </if>
+        <if test="balance != null">
+          #{balance,jdbcType=OTHER},
+        </if>
+        <if test="isadmin != null">
+          #{isadmin,jdbcType=BIT},
+        </if>
+        <if test="faceurl != null">
+          #{faceurl,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.funtl.myshop.plus.provider.domain.User">
+      &lt;!&ndash;@mbg.generated&ndash;&gt;
+      update [User]
+      <set>
+        <if test="passward != null">
+          passward = #{passward,jdbcType=VARCHAR},
+        </if>
+        <if test="username != null">
+          userName = #{username,jdbcType=VARCHAR},
+        </if>
+        <if test="sex != null">
+          sex = #{sex,jdbcType=BIT},
+        </if>
+        <if test="age != null">
+          age = #{age,jdbcType=INTEGER},
+        </if>
+        <if test="phone != null">
+          phone = #{phone,jdbcType=VARCHAR},
+        </if>
+        <if test="balance != null">
+          balance = #{balance,jdbcType=OTHER},
+        </if>
+        <if test="isadmin != null">
+          isAdmin = #{isadmin,jdbcType=BIT},
+        </if>
+        <if test="faceurl != null">
+          faceUrl = #{faceurl,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where userId = #{userid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.funtl.myshop.plus.provider.domain.User">
+      &lt;!&ndash;@mbg.generated&ndash;&gt;
+      update [User]
+      set passward = #{passward,jdbcType=VARCHAR},
         userName = #{username,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null">
         sex = #{sex,jdbcType=BIT},
-      </if>
-      <if test="age != null">
         age = #{age,jdbcType=INTEGER},
-      </if>
-      <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="balance != null">
         balance = #{balance,jdbcType=OTHER},
-      </if>
-      <if test="isadmin != null">
         isAdmin = #{isadmin,jdbcType=BIT},
-      </if>
-      <if test="faceurl != null">
-        faceUrl = #{faceurl,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where userId = #{userid,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.funtl.myshop.plus.provider.domain.User">
-    &lt;!&ndash;@mbg.generated&ndash;&gt;
-    update [User]
-    set passward = #{passward,jdbcType=VARCHAR},
-      userName = #{username,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=BIT},
-      age = #{age,jdbcType=INTEGER},
-      phone = #{phone,jdbcType=VARCHAR},
-      balance = #{balance,jdbcType=OTHER},
-      isAdmin = #{isadmin,jdbcType=BIT},
-      faceUrl = #{faceurl,jdbcType=VARCHAR}
-    where userId = #{userid,jdbcType=VARCHAR}
-  </update>
-  -->
+        faceUrl = #{faceurl,jdbcType=VARCHAR}
+      where userId = #{userid,jdbcType=VARCHAR}
+    </update>
+    -->
 </mapper>

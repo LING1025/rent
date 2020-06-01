@@ -63,14 +63,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> selectUserListDto(UserListQueryParam userListQueryParam) {
-        Example example = new Example(User.class);
+        /*Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria()
                 .andEqualTo("isAdmin",userListQueryParam.getIsAdmin())
                 .andEqualTo("status",userListQueryParam.getStatus());
         if(StringUtil.isNotEmpty(userListQueryParam.getUsername())){
             criteria.andLike("username",String.format("%s%s%s","%",userListQueryParam.getUsername(),"%"));
         }
-        return userMapper.selectByExample(example);
+        return userMapper.selectByExample(example);*/
+        return userMapper.selectUserListDto(userListQueryParam);
     }
 
     @Override
