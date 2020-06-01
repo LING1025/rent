@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface AspnetRolesMapper extends MyMapper<AspnetRoles> {
     List<RolesNameList> selectRoleName(@Param("roleName") String roleName);
+
+    List<RolesNameList> selectByRolesId(@Param("param") List<Long> roleIds);
 }

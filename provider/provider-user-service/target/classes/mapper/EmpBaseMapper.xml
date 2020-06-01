@@ -19,16 +19,18 @@
     <result column="MUser" jdbcType="INTEGER" property="mUser" />
     <result column="OrgGroup_Auto" jdbcType="BIGINT" property="orgGroupAuto" />
     <result column="OrgGroupName" jdbcType="VARCHAR" property="orgGroupName" />
+    <!--<result column="Roles_Auto" jdbcType="BIGINT" property="rolesAuto" />
+    <result column="RoleName" jdbcType="VARCHAR" property="roleName" />-->
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     EmpBase_Auto, TradeItem_Auto, Org_Auto, OrgName, IncTitle_Auto, Title, FName, UserName,
-    IsOn, Extension, IsBoss, MDT, MUser,OrgGroup_Auto,OrgGroupName
+    IsOn, Extension, IsBoss, MDT, MUser,OrgGroup_Auto,OrgGroupName<!--,Roles_Auto,RoleName-->
   </sql>
 
   <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList">
     <collection property="roles" ofType="com.funtl.myshop.plus.provider.domain.EmpRoleName">
-      <result column="Roles_Auto" jdbcType="BIGINT" property="rolesAuto" />
+<!--      <result column="Roles_Auto" jdbcType="BIGINT" property="rolesAuto" />-->
       <result column="RoleName" jdbcType="VARCHAR" property="roleName" />
     </collection>
   </resultMap>
@@ -39,7 +41,7 @@
     eb.OrgName,eb.Title,eb.IsOn,eb.MDT,
     eb.MUser,eb.IsBoss,eb.Org_Auto,
     eb.IncTitle_Auto,eb.OrgGroup_Auto,eb.OrgGroupName,
-    ar.Roles_Auto,ar.RoleName
+   <!-- ar.Roles_Auto,-->ar.RoleName
     FROM
     EmpBase AS eb
     LEFT JOIN Roles2Emp AS re ON eb.EmpBase_Auto = re.EmpBase_Auto

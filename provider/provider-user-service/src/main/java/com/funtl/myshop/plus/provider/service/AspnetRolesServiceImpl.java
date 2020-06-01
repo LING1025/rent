@@ -28,4 +28,9 @@ public class AspnetRolesServiceImpl implements AspnetRolesService{
         example.createCriteria().andEqualTo("roleName",roleName);
         return aspnetRolesMapper.selectOneByExample(example);
     }
+
+    @Override
+    public List<RolesNameList> selectByRolesId(List<Long> roleIds) {
+        return aspnetRolesMapper.selectByRolesId(roleIds);
+    }
 }

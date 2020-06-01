@@ -1,6 +1,9 @@
 package com.funtl.myshop.plus.provider.api;
 
 import com.funtl.myshop.plus.provider.domain.Roles2Emp;
+
+import java.util.List;
+
 public interface Roles2EmpService{
     /**
      * 新增员工角色绑定数据
@@ -15,5 +18,12 @@ public interface Roles2EmpService{
      * @return
      */
     Integer deleteById(Long roles2EmpAuto);
+
+    /**
+     * 根据员工id删除员工角色绑定数据
+     * @param empBaseAuto
+     * @return
+     */
+    Integer deleteByEmpAuto(Long empBaseAuto);
 
 }

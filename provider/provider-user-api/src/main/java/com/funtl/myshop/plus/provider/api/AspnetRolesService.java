@@ -19,4 +19,11 @@ public interface AspnetRolesService{
      * @return
      */
     AspnetRoles selectByRoleName(String roleName);
+
+    /**
+     * 根据角色id集合获取角色信息
+     * @param roleIds
+     * @return
+     */
+    List<RolesNameList> selectByRolesId(List<Long> roleIds);
 }

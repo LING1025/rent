@@ -45,6 +45,9 @@ public class EmpParamDto implements Serializable {
     @ApiModelProperty(value = "角色名集合")
     private List<String> roles;
 
+    /*@ApiModelProperty(value = "角色id集合")
+    private List<Long> roleIds;*/
+
     /*@ApiModelProperty(value = "分机")
     private String mobilePIN;
 

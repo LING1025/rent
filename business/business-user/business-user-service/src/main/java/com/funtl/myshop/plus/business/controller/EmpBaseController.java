@@ -8,6 +8,7 @@ import com.funtl.myshop.plus.provider.api.*;
 import com.funtl.myshop.plus.provider.domain.*;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -137,19 +138,6 @@ public class EmpBaseController {
                 empBaseService.deleteById(i2);
                 throw new BusinessException(BusinessStatus.SAVE_FAILURE);
             }
-
-            //Roles2Org插入数据
-            Roles2Org roles2Org = new Roles2Org();
-            roles2Org.setOrgAuto(org.getOrgAuto());
-            roles2Org.setRoles_Auto(aspnetRoles.getRolesAuto());
-            Integer i5 = roles2OrgService.insert(roles2Org);
-            if(i5 == 0){
-                aspnetUsersService.deleteById(i1);
-                empBaseService.deleteById(i2);
-                roles2EmpService.deleteById(i4);
-                throw new BusinessException(BusinessStatus.SAVE_FAILURE);
-
-            }
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "保存成功", null);
     }
@@ -195,6 +183,24 @@ public class EmpBaseController {
         Integer i = empBaseService.update(empBase);
         if (i == 0) {
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+
+        roles2EmpService.deleteByEmpAuto(empBase.getEmpBaseAuto());
+        for (String role : empParamDto.getRoles()
+        ) {
+            AspnetRoles aspnetRoles = aspnetRolesService.selectByRoleName(role);
+            if(aspnetRoles == null){
+                return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "角色'"+role+"'不存在", null);
+            }
+
+            //Roles2Emp插入数据
+            Roles2Emp roles2Emp = new Roles2Emp();
+            roles2Emp.setRoles_Auto(aspnetRoles.getRolesAuto());
+            roles2Emp.setEmpBaseAuto(empBase.getEmpBaseAuto());
+            Long i4 = roles2EmpService.insert(roles2Emp);
+            if(i4 == 0){
+                throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+            }
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
     }

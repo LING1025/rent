@@ -5,6 +5,9 @@ import com.funtl.myshop.plus.provider.domain.Roles2Emp;
 import com.funtl.myshop.plus.provider.mapper.Roles2EmpMapper;
 import com.funtl.myshop.plus.provider.api.Roles2EmpService;
 import org.apache.dubbo.config.annotation.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 @Service(version = "1.0.0")
 public class Roles2EmpServiceImpl implements Roles2EmpService{
@@ -21,5 +24,12 @@ public class Roles2EmpServiceImpl implements Roles2EmpService{
     @Override
     public Integer deleteById(Long roles2EmpAuto) {
         return roles2EmpMapper.deleteByPrimaryKey(roles2EmpAuto);
+    }
+
+    @Override
+    public Integer deleteByEmpAuto(Long empBaseAuto) {
+        Example example = new Example(Roles2Emp.class);
+        example.createCriteria().andEqualTo("empBaseAuto",empBaseAuto);
+        return roles2EmpMapper.deleteByExample(example);
     }
 }

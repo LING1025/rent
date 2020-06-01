@@ -26,6 +26,21 @@
       FROM
       aspnet_Roles
       WHERE
-      RoleName LIKE '%${roleName}%'
+      1 = 1
+      <if test="roleName != null and roleName != ''">
+        AND RoleName LIKE '%${roleName}%'
+      </if>
     </select>
+    <select id="selectByRolesId" resultMap="queryRoleName">
+      SELECT
+      Roles_Auto,RoleName
+      FROM
+      aspnet_Roles
+      WHERE
+      1 = 1
+      AND Roles_Auto in
+      <foreach collection="param" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </select>
 </mapper>

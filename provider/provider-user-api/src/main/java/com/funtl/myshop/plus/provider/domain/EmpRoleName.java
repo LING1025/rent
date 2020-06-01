@@ -10,6 +10,6 @@ import java.io.Serializable;
 @RequiredArgsConstructor(staticName = "of")
 @Data
 public class EmpRoleName implements Serializable {
-    private Long rolesAuto;
+//    private Long rolesAuto;
     private String roleName;
 }
