@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.business.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -45,8 +46,11 @@ public class EmpParamDto implements Serializable {
     @ApiModelProperty(value = "角色名集合")
     private List<String> roles;
 
-    /*@ApiModelProperty(value = "角色id集合")
-    private List<Long> roleIds;*/
+    @JsonIgnore
+    private Date mDT;
+
+    @JsonIgnore
+    private Date cDT;
 
     /*@ApiModelProperty(value = "分机")
     private String mobilePIN;

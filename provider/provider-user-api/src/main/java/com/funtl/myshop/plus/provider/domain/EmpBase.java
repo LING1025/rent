@@ -78,6 +78,9 @@ public class EmpBase implements Serializable {
     @Column(name = "IsBoss")
     private Integer isBoss;
 
+    /**
+     * 修改日期
+     */
     @Column(name = "MDT")
     private Date mDT;
 
@@ -95,6 +98,12 @@ public class EmpBase implements Serializable {
      */
     @Column(name = "OrgGroupName")
     private String orgGroupName;
+
+    /**
+     * 创建日期
+     */
+    @Column(name = "CDT")
+    private Date cDT;
 
     /**
      * 角色id

@@ -19,13 +19,14 @@
     <result column="MUser" jdbcType="INTEGER" property="mUser" />
     <result column="OrgGroup_Auto" jdbcType="BIGINT" property="orgGroupAuto" />
     <result column="OrgGroupName" jdbcType="VARCHAR" property="orgGroupName" />
+    <result column="CDT" jdbcType="TIMESTAMP" property="cDT" />
     <!--<result column="Roles_Auto" jdbcType="BIGINT" property="rolesAuto" />
     <result column="RoleName" jdbcType="VARCHAR" property="roleName" />-->
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     EmpBase_Auto, TradeItem_Auto, Org_Auto, OrgName, IncTitle_Auto, Title, FName, UserName,
-    IsOn, Extension, IsBoss, MDT, MUser,OrgGroup_Auto,OrgGroupName<!--,Roles_Auto,RoleName-->
+    IsOn, Extension, IsBoss, MDT, MUser,OrgGroup_Auto,OrgGroupName,CDT<!--,Roles_Auto,RoleName-->
   </sql>
 
   <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList">
@@ -39,7 +40,7 @@
     SELECT
     eb.EmpBase_Auto,eb.UserName,eb.FName,
     eb.OrgName,eb.Title,eb.IsOn,eb.MDT,
-    eb.MUser,eb.IsBoss,eb.Org_Auto,
+    eb.CDT,eb.IsBoss,eb.Org_Auto,
     eb.IncTitle_Auto,eb.OrgGroup_Auto,eb.OrgGroupName,
    <!-- ar.Roles_Auto,-->ar.RoleName
     FROM

@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -40,9 +41,11 @@ public class EmpList implements Serializable {
      */
     private Integer isOn;
 
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date mDT;
 
-    private Integer mUser;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date cDT;
 
     private Integer isBoss;
 

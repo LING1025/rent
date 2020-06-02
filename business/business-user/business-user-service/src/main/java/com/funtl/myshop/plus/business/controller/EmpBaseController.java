@@ -79,6 +79,7 @@ public class EmpBaseController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户名已存在，请重新命名", null);
         }
 
+        //todo:把密码放这，登录权限表改这来
         //aspnetUsers插入数据
         AspnetUsers aspnetUsers = new AspnetUsers();
         aspnetUsers.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
@@ -102,6 +103,7 @@ public class EmpBaseController {
         empBase.setOrgName(org.getDepName());
         empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
         empBase.setOrgGroupName(orgGroup.getOrgGroupName());
+        empBase.setCDT(new Date());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             aspnetUsersService.deleteById(i1);
@@ -180,6 +182,7 @@ public class EmpBaseController {
         empBase.setOrgName(org.getDepName());
         empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
         empBase.setOrgGroupName(orgGroup.getOrgGroupName());
+        empBase.setMDT(new Date());
         Integer i = empBaseService.update(empBase);
         if (i == 0) {
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);

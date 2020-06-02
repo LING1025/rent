@@ -19,6 +19,9 @@ public class ITRequirement implements Serializable {
     @Column(name = "ITRequirement_Auto")
     private Long iTRequirementAuto;
 
+    /**
+     * 员工id
+     */
     @Column(name = "User_Auto")
     private Long userAuto;
 
@@ -100,12 +103,18 @@ public class ITRequirement implements Serializable {
     @Column(name = "CUser")
     private Long cUser;
 
+    /**
+     * 创建日期
+     */
     @Column(name = "CDT")
     private Date cDT;
 
     @Column(name = "MUser")
     private Long mUser;
 
+    /**
+     * 修改日期
+     */
     @Column(name = "MDT")
     private Date mDT;
 
@@ -154,6 +163,9 @@ public class ITRequirement implements Serializable {
     @Column(name = "IncType")
     private Integer incType;
 
+    /**
+     * 部门
+     */
     @Column(name = "OrgType")
     private Integer orgType;
 

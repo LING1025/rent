@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.funtl.myshop.plus.provider.domain.EmpRoleName;
 import lombok.Data;
 
@@ -44,9 +45,11 @@ public class EmpListDto implements Serializable {
      */
     private Integer isOn;
 
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date mDT;
 
-    private Integer mUser;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date cDT;
 
     private Integer isBoss;
 
