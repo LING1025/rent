@@ -7,9 +7,9 @@
         <option name="generateService" value="true" />
         <option name="generateServiceInterface" value="true" />
         <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-        <option name="javaMapperPath" value="$PROJECT_DIR$/provider/provider-rental-api/src/main/java" />
+        <option name="javaMapperPath" value="D:\Work\rent\provider\provider-rental-service" />
         <option name="javaModelPackage" value="com.funtl.myshop.plus.provider.domain" />
-        <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-rental-api/src/main/java" />
+        <option name="javaModelPath" value="D:\Work\rent\provider\provider-rental-api" />
         <option name="lastDatabaseCrudChooseModuleName" value="provider-rental-api" />
         <option name="lombokDataAnnotation" value="true" />
         <option name="moduleNameToPackageAndPathMap">
@@ -18,15 +18,15 @@
               <value>
                 <UserPackageAndPathInfoByModule>
                   <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-                  <option name="javaMapperPath" value="$PROJECT_DIR$/provider/provider-rental-api/src/main/java" />
+                  <option name="javaMapperPath" value="D:\Work\rent\provider\provider-rental-service" />
                   <option name="javaModelPacakge" value="com.funtl.myshop.plus.provider.domain" />
-                  <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-rental-api/src/main/java" />
+                  <option name="javaModelPath" value="D:\Work\rent\provider\provider-rental-api" />
                   <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.api" />
-                  <option name="javaServiceInterfacePath" value="$PROJECT_DIR$/provider/provider-rental-api/src/main/java" />
+                  <option name="javaServiceInterfacePath" value="D:\Work\rent\provider\provider-rental-api" />
                   <option name="javaServicePackage" value="com.funtl.myshop.plus.provider.service" />
-                  <option name="javaServicePath" value="$PROJECT_DIR$/provider/provider-rental-api/src/main/java" />
+                  <option name="javaServicePath" value="D:\Work\rent\provider\provider-rental-service" />
                   <option name="xmlPackage" value="mapper" />
-                  <option name="xmlPath" value="D:\Work\rent\provider\provider-rental-service\src\main\resources\mapper" />
+                  <option name="xmlPath" value="D:\Work\rent\provider\provider-rental-service\src\main\resources" />
                 </UserPackageAndPathInfoByModule>
               </value>
             </entry>
@@ -134,6 +134,142 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="dbo:ITRequirement">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="ITRequirement_Auto" />
+                        <option name="javaProperty" value="iTRequirementAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="User_Auto" />
+                        <option name="javaProperty" value="userAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="ExpectDT" />
+                        <option name="javaProperty" value="expectDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Type" />
+                        <option name="javaProperty" value="type" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Contents" />
+                        <option name="javaProperty" value="contents" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PlanHours" />
+                        <option name="javaProperty" value="planHours" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PlanStartDT" />
+                        <option name="javaProperty" value="planStartDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PlanEndDT" />
+                        <option name="javaProperty" value="planEndDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="RealHours" />
+                        <option name="javaProperty" value="realHours" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="RealStartDT" />
+                        <option name="javaProperty" value="realStartDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="RealEndDT" />
+                        <option name="javaProperty" value="realEndDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Handler" />
+                        <option name="javaProperty" value="handler" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="HandlerSign" />
+                        <option name="javaProperty" value="handlerSign" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="HandlerContents" />
+                        <option name="javaProperty" value="handlerContents" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Memo" />
+                        <option name="javaProperty" value="memo" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="CUser" />
+                        <option name="javaProperty" value="cUser" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="CDT" />
+                        <option name="javaProperty" value="cDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="MUser" />
+                        <option name="javaProperty" value="mUser" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="MDT" />
+                        <option name="javaProperty" value="mDT" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Status" />
+                        <option name="javaProperty" value="status" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FlowList" />
+                        <option name="javaProperty" value="flowList" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Mode" />
+                        <option name="javaProperty" value="mode" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Reason" />
+                        <option name="javaProperty" value="reason" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Degree" />
+                        <option name="javaProperty" value="degree" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="OperationType" />
+                        <option name="javaProperty" value="operationType" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Subject" />
+                        <option name="javaProperty" value="subject" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="IncType" />
+                        <option name="javaProperty" value="incType" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="OrgType" />
+                        <option name="javaProperty" value="orgType" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Num" />
+                        <option name="javaProperty" value="num" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Inc_Auto" />
+                        <option name="javaProperty" value="inc_Auto" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="ITRequirement_Auto" />
+                  <option name="javaModelName" value="ITRequirement" />
+                  <option name="moduleName" value="provider-rental-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="dbo:IncTitle">
               <value>
                 <TableGenerateConfig>
@@ -160,6 +296,46 @@
                   <option name="generatedKey" value="IncTitle_Auto" />
                   <option name="javaModelName" value="IncTitle" />
                   <option name="moduleName" value="provider-user-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="dbo:ItRequirementFile">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="ItRequirementFile_Auto" />
+                        <option name="javaProperty" value="itRequirementFileAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="ITRequirement_Auto" />
+                        <option name="javaProperty" value="iTRequirementAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FileName" />
+                        <option name="javaProperty" value="fileName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Status" />
+                        <option name="javaProperty" value="status" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="CUser" />
+                        <option name="javaProperty" value="cUser" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="CDT" />
+                        <option name="javaProperty" value="cDT" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="ItRequirementFile_Auto" />
+                  <option name="javaModelName" value="ItRequirementFile" />
+                  <option name="moduleName" value="provider-rental-api" />
                   <option name="sequenceColumn" value="" />
                   <option name="sequenceId" value="" />
                   <option name="useActualColumnName" value="true" />
@@ -366,7 +542,7 @@
         </option>
         <option name="useActualColumnNames" value="true" />
         <option name="xmlMapperPackage" value="mapper" />
-        <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-rental-service\src\main\resources\mapper" />
+        <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-rental-service\src\main\resources" />
       </ProjectProfile>
     </option>
   </component>
