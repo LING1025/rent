@@ -2,10 +2,12 @@ package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.business.dto.LoginInfo;
 import com.funtl.myshop.plus.business.dto.LoginParam;
+import com.funtl.myshop.plus.business.feign.ConsumerFeign;
 import com.funtl.myshop.plus.business.feign.ProfileFeign;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.commons.utils.MapperUtils;
 import com.funtl.myshop.plus.commons.utils.OkHttpClientUtil;
+import com.funtl.myshop.plus.provider.domain.AspnetUsers;
 import com.funtl.myshop.plus.provider.domain.User;
 import com.google.common.collect.Maps;
 import okhttp3.Response;
@@ -53,6 +55,8 @@ public class LoginController {
     @Resource
     private ProfileFeign profileFeign;
 
+    @Resource
+    private ConsumerFeign consumerFeign;
 
     /**
      * 登录
@@ -104,17 +108,17 @@ public class LoginController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 获取个人信息
-        String jsonString = profileFeign.info(authentication.getName());
-        User user = MapperUtils.json2pojoByTree(jsonString,"data",User.class);
-
-        if(user == null){
+//        String jsonString = profileFeign.info(authentication.getName());
+//        User user = MapperUtils.json2pojoByTree(jsonString,"data",User.class);
+        String jsonString = consumerFeign.info(authentication.getName());
+        AspnetUsers aspnetUsers = MapperUtils.json2pojoByTree(jsonString,"data",AspnetUsers.class);
+        if(aspnetUsers == null){
             return MapperUtils.json2pojo(jsonString, ResponseResult.class);
         }
 
         // 封装并返回结果
         LoginInfo loginInfo = new LoginInfo();
-        loginInfo.setName(user.getUsername());
-        loginInfo.setFaceUrl(user.getFaceUrl());
+        loginInfo.setName(aspnetUsers.getUsername());
         return new ResponseResult<LoginInfo>(ResponseResult.CodeStatus.OK, "获取用户信息", loginInfo);
     }
 

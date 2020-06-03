@@ -11,5 +11,5 @@ import java.io.Serializable;
 @Data
 public class LoginInfo implements Serializable {
     private String name;
-    private String faceUrl;
+//    private String faceUrl;
 }

@@ -1,11 +1,11 @@
-package com.funtl.myshop.plus.business.dto;
+package com.funtl.myshop.plus.business.dto.params;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class UsersDto implements Serializable {
+public class ConsumerParam implements Serializable {
     private Long userAuto;
     private String mobilePIN;
     private String email;

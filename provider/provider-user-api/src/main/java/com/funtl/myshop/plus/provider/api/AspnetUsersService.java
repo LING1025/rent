@@ -19,7 +19,7 @@ public interface AspnetUsersService {
      * @param aspnetUsers
      * @return
      */
-//    Integer updateUser(AspnetUsers aspnetUsers);
+    Integer updateUser(AspnetUsers aspnetUsers);
 
     /**
      * 修改密码

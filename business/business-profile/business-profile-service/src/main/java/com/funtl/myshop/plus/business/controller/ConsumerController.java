@@ -5,6 +5,7 @@ import com.funtl.myshop.plus.business.BusinessStatus;
 import com.funtl.myshop.plus.business.dto.UserParamDto;
 import com.funtl.myshop.plus.business.dto.UsersDto;
 import com.funtl.myshop.plus.business.dto.UsersParamDto;
+import com.funtl.myshop.plus.business.dto.params.ConsumerParam;
 import com.funtl.myshop.plus.business.dto.params.PasswordParam;
 import com.funtl.myshop.plus.business.dto.params.ProfileParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
@@ -52,6 +53,24 @@ public class ConsumerController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"用户不存在",null);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"获取个人信息",usersDto);
+    }
+
+    @ApiOperation(value = "更新个人信息")
+    @PostMapping(value = "update")
+    public ResponseResult<Void> update(@RequestBody ConsumerParam consumerParam) {
+        AspnetUsers newUmsAdmin = new AspnetUsers();
+        BeanUtils.copyProperties(consumerParam, newUmsAdmin);
+        Integer result = aspnetUsersService.updateUser(newUmsAdmin);
+
+        // 成功
+        if (result > 0) {
+            return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "更新个人信息成功");
+        }
+
+        // 失败
+        else {
+            return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "更新个人信息失败");
+        }
     }
 
     @ApiOperation(value = "修改密码")

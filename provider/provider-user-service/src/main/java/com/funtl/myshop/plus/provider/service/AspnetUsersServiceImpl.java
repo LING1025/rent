@@ -31,7 +31,7 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         return aspnetUsersMapper.selectOneByExample(example);
     }
 
-    /*@Override
+    @Override
     public Integer updateUser(AspnetUsers aspnetUsers) {
         // 获取原始用户信息
         AspnetUsers oldUser = get(aspnetUsers.getUsername());
@@ -40,7 +40,7 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         oldUser.setMobilePIN(aspnetUsers.getMobilePIN());
         oldUser.setIsOn(aspnetUsers.getIsOn());
         return aspnetUsersMapper.updateByPrimaryKey(oldUser);
-    }*/
+    }
 
     @Override
     public Integer modifyPassword(String username, String password) {
