@@ -79,21 +79,6 @@ public class EmpBaseController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户名已存在，请重新命名", null);
         }
 
-        //todo:把密码放这，登录权限表改这来
-        //aspnetUsers插入数据
-        AspnetUsers aspnetUsers = new AspnetUsers();
-        aspnetUsers.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
-        aspnetUsers.setUserId("8FEE10B0-8BF9-4A91-91EF-B28941B73AB9");
-        aspnetUsers.setIsAnonymous(false);
-        aspnetUsers.setLastActivityDate(new Date());
-        aspnetUsers.setUserName(empParamDto.getUsername());
-        aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
-        aspnetUsers.setExtn("");
-        Long i1 = aspnetUsersService.insert(aspnetUsers);
-        if(i1 == 0){
-            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
-        }
-
         //EmpBase插入数据
         EmpBase empBase = new EmpBase();
         BeanUtils.copyProperties(empParamDto,empBase);
@@ -104,14 +89,26 @@ public class EmpBaseController {
         empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
         empBase.setOrgGroupName(orgGroup.getOrgGroupName());
         empBase.setCDT(new Date());
+        empBase.setMDT(new Date());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
-            aspnetUsersService.deleteById(i1);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+        }
+
+        //aspnetUsers插入数据
+        AspnetUsers aspnetUsers = new AspnetUsers();
+        BeanUtils.copyProperties(empParamDto,aspnetUsers);
+        aspnetUsers.setUserName(empParamDto.getUsername());
+        aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
+        aspnetUsers.setEmpBaseAuto(i2);
+        Long i1 = aspnetUsersService.insert(aspnetUsers);
+        if(i1 == 0){
+            empBaseService.deleteById(i2);
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
         //Org2Emp插入数据
-        Org2Emp org2Emp = new Org2Emp();
+        /*Org2Emp org2Emp = new Org2Emp();
         org2Emp.setOrgAuto(org.getOrgAuto());
         org2Emp.setUserAuto(i1);
         org2Emp.setACLType(0);
@@ -120,7 +117,7 @@ public class EmpBaseController {
             aspnetUsersService.deleteById(i1);
             empBaseService.deleteById(i2);
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
-        }
+        }*/
 
         for (String role : empParamDto.getRoles()
              ) {
@@ -172,6 +169,14 @@ public class EmpBaseController {
             EmpBase eb = empBaseService.selectUsername(empParamDto.getUsername());
             if(eb != null){
                 return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户名已存在，请重新命名", null);
+            }
+            AspnetUsers aspnetUsers = aspnetUsersService.selectByEmpAuto(empBase.getEmpBaseAuto());
+            BeanUtils.copyProperties(empParamDto,aspnetUsers);
+            aspnetUsers.setUserName(empParamDto.getUsername());
+            aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
+            Integer i = aspnetUsersService.update(aspnetUsers);
+            if (i == 0){
+                throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
             }
         }
 

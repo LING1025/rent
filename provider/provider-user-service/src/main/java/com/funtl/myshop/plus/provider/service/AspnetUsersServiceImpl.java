@@ -3,6 +3,8 @@ package com.funtl.myshop.plus.provider.service;
 import com.funtl.myshop.plus.provider.api.AspnetUsersService;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;import com.funtl.myshop.plus.provider.mapper.AspnetUsersMapper;
 import org.apache.dubbo.config.annotation.Service;
+import tk.mybatis.mapper.entity.Example;
+
 import javax.annotation.Resource;
 
 @Service(version = "1.0.0")
@@ -30,6 +32,13 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
     @Override
     public AspnetUsers selectById(Long userAuto) {
         return aspnetUsersMapper.selectByPrimaryKey(userAuto);
+    }
+
+    @Override
+    public AspnetUsers selectByEmpAuto(Long empBaseAuto) {
+        Example example = new Example(AspnetUsers.class);
+        example.createCriteria().andEqualTo("empBaseAuto",empBaseAuto);
+        return aspnetUsersMapper.selectOneByExample(example);
     }
 }
 

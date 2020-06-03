@@ -30,6 +30,8 @@
   </sql>
 
   <resultMap id="queryEmpListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.EmpList">
+    <result column="MobilePIN" jdbcType="VARCHAR" property="mobilePIN" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
     <collection property="roles" ofType="com.funtl.myshop.plus.provider.domain.EmpRoleName">
 <!--      <result column="Roles_Auto" jdbcType="BIGINT" property="rolesAuto" />-->
       <result column="RoleName" jdbcType="VARCHAR" property="roleName" />
@@ -42,9 +44,10 @@
     eb.OrgName,eb.Title,eb.IsOn,eb.MDT,
     eb.CDT,eb.IsBoss,eb.Org_Auto,
     eb.IncTitle_Auto,eb.OrgGroup_Auto,eb.OrgGroupName,
-   <!-- ar.Roles_Auto,-->ar.RoleName
+   <!-- ar.Roles_Auto,-->ar.RoleName,au.MobilePIN,au.Email
     FROM
     EmpBase AS eb
+    LEFT JOIN aspnet_Users AS au ON eb.EmpBase_Auto = au.EmpBase_Auto
     LEFT JOIN Roles2Emp AS re ON eb.EmpBase_Auto = re.EmpBase_Auto
     LEFT JOIN aspnet_Roles AS ar ON re.Roles_Auto = ar.Roles_Auto
     WHERE

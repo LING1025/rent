@@ -67,4 +67,8 @@ public class EmpList implements Serializable {
      * 组名称
      */
     private String orgGroupName;
+
+    private String mobilePIN;
+
+    private String email;
 }

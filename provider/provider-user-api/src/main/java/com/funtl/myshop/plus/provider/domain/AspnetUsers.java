@@ -57,5 +57,17 @@ public class AspnetUsers implements Serializable {
     @Column(name = "IsEas")
     private Integer isEas;
 
+    @Column(name = "MobilePIN")
+    private String mobilePIN;
+
+    @Column(name = "Email")
+    private String email;
+
+    @Column(name = "Password")
+    private String password;
+
+    @Column(name = "EmpBase_Auto")
+    private Long empBaseAuto;
+
     private static final long serialVersionUID = 1L;
 }

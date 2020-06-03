@@ -52,9 +52,9 @@ public class EmpParamDto implements Serializable {
     @JsonIgnore
     private Date cDT;
 
-    /*@ApiModelProperty(value = "分机")
+    @ApiModelProperty(value = "分机")
     private String mobilePIN;
 
     @ApiModelProperty(value = "邮箱")
-    private String email;*/
+    private String email;
 }

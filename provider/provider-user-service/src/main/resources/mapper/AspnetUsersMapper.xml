@@ -14,10 +14,14 @@
     <result column="User_Auto" jdbcType="BIGINT" property="userAuto" />
     <result column="EXTN" jdbcType="VARCHAR" property="extn" />
     <result column="IsEas" jdbcType="INTEGER" property="isEas" />
+    <result column="MobilePIN" jdbcType="VARCHAR" property="mobilePIN" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="EmpBase_Auto" jdbcType="INTEGER" property="empBaseAuto" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     UserId, ApplicationId, UserName, LoweredUserName, MobileAlias, IsAnonymous, LastActivityDate,
-    User_Auto, EXTN, IsEas
+    User_Auto, EXTN, IsEas,MobilePIN,Email,Password,EmpBase_Auto
   </sql>
 </mapper>

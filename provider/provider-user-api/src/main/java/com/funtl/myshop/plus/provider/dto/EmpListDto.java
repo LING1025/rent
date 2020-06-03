@@ -71,4 +71,8 @@ public class EmpListDto implements Serializable {
      * 组名称
      */
     private String orgGroupName;
+
+    private String mobilePIN;
+
+    private String email;
 }
