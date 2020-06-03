@@ -64,7 +64,7 @@ public class EmpBase implements Serializable {
     private String username;
 
     /**
-    * 启用状态
+    * 启用状态0停用 1启用 2删除
     */
     @Column(name = "IsOn")
     private Integer isOn;

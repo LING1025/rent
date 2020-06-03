@@ -34,7 +34,7 @@ public class EmpParamDto implements Serializable {
     @ApiModelProperty(value = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "启用状态 0停用 1启用")
+    @ApiModelProperty(value = "启用状态0停用 1启用 2删除")
     private Integer isOn;
 
     @ApiModelProperty(value = "是否为主管 0否 1是")

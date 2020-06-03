@@ -58,6 +58,8 @@ public class EmpBaseController {
         if(empParamDto.getEmpBaseAuto() != 0){
             throw new BusinessException(BusinessStatus.PARAM_ERROR);
         }
+        empParamDto.setCDT(new Date());
+        empParamDto.setMDT(new Date());
 
         Org org = orgService.selectById(empParamDto.getOrgAuto());
         if(org == null){
@@ -88,8 +90,6 @@ public class EmpBaseController {
         empBase.setOrgName(org.getDepName());
         empBase.setOrgGroupAuto(orgGroup.getOrgGroupAuto());
         empBase.setOrgGroupName(orgGroup.getOrgGroupName());
-        empBase.setCDT(new Date());
-        empBase.setMDT(new Date());
         Long i2 = empBaseService.insert(empBase);
         if(i2 == 0){
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
@@ -98,7 +98,6 @@ public class EmpBaseController {
         //aspnetUsers插入数据
         AspnetUsers aspnetUsers = new AspnetUsers();
         BeanUtils.copyProperties(empParamDto,aspnetUsers);
-        aspnetUsers.setUserName(empParamDto.getUsername());
         aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
         aspnetUsers.setEmpBaseAuto(i2);
         Long i1 = aspnetUsersService.insert(aspnetUsers);
@@ -144,6 +143,8 @@ public class EmpBaseController {
     @ApiOperation(value = "编辑员工")
     @PutMapping(value = "update")
     public ResponseResult<String> update(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto){
+        empParamDto.setCDT(new Date());
+        empParamDto.setMDT(new Date());
         EmpBase empBase = empBaseService.selectById(empParamDto.getEmpBaseAuto());
         if(empBase == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "员工不存在", null);
@@ -172,7 +173,6 @@ public class EmpBaseController {
             }
             AspnetUsers aspnetUsers = aspnetUsersService.selectByEmpAuto(empBase.getEmpBaseAuto());
             BeanUtils.copyProperties(empParamDto,aspnetUsers);
-            aspnetUsers.setUserName(empParamDto.getUsername());
             aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
             Integer i = aspnetUsersService.update(aspnetUsers);
             if (i == 0){

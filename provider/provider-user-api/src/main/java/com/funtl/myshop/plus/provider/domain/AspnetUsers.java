@@ -24,7 +24,7 @@ public class AspnetUsers implements Serializable {
      * 用户名
      */
     @Column(name = "UserName")
-    private String userName;
+    private String username;
 
     /**
      * 小写用户名
@@ -57,17 +57,47 @@ public class AspnetUsers implements Serializable {
     @Column(name = "IsEas")
     private Integer isEas;
 
+    /**
+     * 分机
+     */
     @Column(name = "MobilePIN")
     private String mobilePIN;
 
+    /**
+     * 邮箱
+     */
     @Column(name = "Email")
     private String email;
 
+    /**
+     * 密码
+     */
     @Column(name = "Password")
     private String password;
 
+    /**
+     * 员工id
+     */
     @Column(name = "EmpBase_Auto")
     private Long empBaseAuto;
+
+    /**
+     * 启用状态0停用 1启用 2删除
+     */
+    @Column(name = "IsOn")
+    private Integer isOn;
+
+    /**
+     * 修改日期
+     */
+    @Column(name = "MDT")
+    private Date mDT;
+
+    /**
+     * 创建日期
+     */
+    @Column(name = "CDT")
+    private Date cDT;
 
     private static final long serialVersionUID = 1L;
 }
