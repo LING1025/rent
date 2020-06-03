@@ -5,7 +5,7 @@ import com.funtl.myshop.plus.provider.api.AspnetUsersService;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
 import com.funtl.myshop.plus.provider.domain.UserList;
 import com.funtl.myshop.plus.provider.dto.UserListDto;
-import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
+import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
 import com.funtl.myshop.plus.provider.mapper.AspnetUsersMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -31,7 +31,7 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         return aspnetUsersMapper.selectOneByExample(example);
     }
 
-    @Override
+    /*@Override
     public Integer updateUser(AspnetUsers aspnetUsers) {
         // 获取原始用户信息
         AspnetUsers oldUser = get(aspnetUsers.getUsername());
@@ -40,7 +40,7 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         oldUser.setMobilePIN(aspnetUsers.getMobilePIN());
         oldUser.setIsOn(aspnetUsers.getIsOn());
         return aspnetUsersMapper.updateByPrimaryKey(oldUser);
-    }
+    }*/
 
     @Override
     public Integer modifyPassword(String username, String password) {
@@ -50,9 +50,9 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
     }
 
     @Override
-    public PageInfo<UserListDto> selectUserListDto(UserListQueryParam userListQueryParam) {
-        PageHelper.startPage(userListQueryParam.getPageNum(),userListQueryParam.getPageSize());
-        PageInfo<UserList> pageInfo = new PageInfo<>(aspnetUsersMapper.selectUserListDto(userListQueryParam));
+    public PageInfo<UserListDto> selectUserListDto(UserListQueryParams userListQueryParams) {
+        PageHelper.startPage(userListQueryParams.getPageNum(),userListQueryParams.getPageSize());
+        PageInfo<UserList> pageInfo = new PageInfo<>(aspnetUsersMapper.selectUserListDto(userListQueryParams));
         PageInfo<UserListDto> result = PageInfoUtils.pageInfo2PageInfoDTO(pageInfo,UserListDto.class);
         return result;
     }

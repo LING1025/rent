@@ -2,7 +2,7 @@ package com.funtl.myshop.plus.provider.api;
 
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
 import com.funtl.myshop.plus.provider.dto.UserListDto;
-import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
+import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
 import com.github.pagehelper.PageInfo;
 
 public interface AspnetUsersService {
@@ -19,7 +19,7 @@ public interface AspnetUsersService {
      * @param aspnetUsers
      * @return
      */
-    Integer updateUser(AspnetUsers aspnetUsers);
+//    Integer updateUser(AspnetUsers aspnetUsers);
 
     /**
      * 修改密码
@@ -31,10 +31,10 @@ public interface AspnetUsersService {
 
     /**
      * 根据用户名/状态获取用户信息
-     * @param userListQueryParam
+     * @param userListQueryParams
      * @return
      */
-    PageInfo<UserListDto> selectUserListDto(UserListQueryParam userListQueryParam);
+    PageInfo<UserListDto> selectUserListDto(UserListQueryParams userListQueryParams);
 
     /**
      * 新增用户数据

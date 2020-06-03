@@ -8,15 +8,14 @@ import com.funtl.myshop.plus.provider.api.UserService;
 import com.funtl.myshop.plus.provider.domain.User;
 import com.funtl.myshop.plus.business.dto.UserParamDto;
 import com.funtl.myshop.plus.provider.dto.UserListQueryParam;
+import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.List;
 
 /**

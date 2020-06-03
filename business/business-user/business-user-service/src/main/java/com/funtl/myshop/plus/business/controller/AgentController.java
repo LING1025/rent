@@ -80,7 +80,7 @@ public class AgentController {
     public ResponseResult<CreditAgent> patch(Byte isOn, Long creditAgentAuto) {
         CreditAgent creditAgent = creditAgentService.selectById(creditAgentAuto);
         if (creditAgent == null) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未查询到代理人设置信息", null);
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "代理人设置信息不存在", null);
         }
         creditAgent.setIsOn(isOn);
         Integer i = creditAgentService.update(creditAgent);

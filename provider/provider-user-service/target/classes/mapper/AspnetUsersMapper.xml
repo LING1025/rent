@@ -6,7 +6,7 @@
     <!--@Table aspnet_Users-->
     <id column="UserId" jdbcType="OTHER" property="userId" />
     <result column="ApplicationId" jdbcType="OTHER" property="applicationId" />
-    <result column="UserName" jdbcType="VARCHAR" property="userName" />
+    <result column="UserName" jdbcType="VARCHAR" property="username" />
     <result column="LoweredUserName" jdbcType="VARCHAR" property="loweredUserName" />
     <result column="MobileAlias" jdbcType="VARCHAR" property="mobileAlias" />
     <result column="IsAnonymous" jdbcType="BIT" property="isAnonymous" />
@@ -18,10 +18,34 @@
     <result column="Email" jdbcType="VARCHAR" property="email" />
     <result column="Password" jdbcType="VARCHAR" property="password" />
     <result column="EmpBase_Auto" jdbcType="INTEGER" property="empBaseAuto" />
+    <result column="IsOn" jdbcType="INTEGER" property="isOn" />
+    <result column="MDT" jdbcType="TIMESTAMP" property="mDT" />
+    <result column="CDT" jdbcType="TIMESTAMP" property="cDT" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     UserId, ApplicationId, UserName, LoweredUserName, MobileAlias, IsAnonymous, LastActivityDate,
-    User_Auto, EXTN, IsEas,MobilePIN,Email,Password,EmpBase_Auto
+    User_Auto, EXTN, IsEas,MobilePIN,Email,Password,EmpBase_Auto,IsOn,MDT,CDT
   </sql>
+  <resultMap id="queryUserListDto" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.UserList">
+    <id column="EmpBase_Auto" jdbcType="BIGINT" property="empBaseAuto" />
+    <result column="FName" jdbcType="VARCHAR" property="fName" />
+  </resultMap>
+  <select id="selectUserListDto" resultMap="queryUserListDto">
+    SELECT
+    au.User_Auto,au.UserName,au.MobilePIN,
+    au.Email,au.IsOn,au.MDT,
+    au.CDT,eb.FName,eb.EmpBase_Auto
+    FROM
+    aspnet_Users AS au
+    INNER JOIN EmpBase AS eb ON au.EmpBase_Auto = eb.EmpBase_Auto
+    WHERE
+    1 = 1
+    <if test="param.username != null and param.username != ''">
+      AND au.UserName LIKE '%${param.username}%'
+    </if>
+    <if test="param.isOn != null">
+      AND au.IsOn = #{param.isOn}
+    </if>
+  </select>
 </mapper>

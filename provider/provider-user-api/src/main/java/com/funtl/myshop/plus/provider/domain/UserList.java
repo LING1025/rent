@@ -11,6 +11,7 @@ public class UserList implements Serializable {
     private Long userAuto;
     private String mobilePIN;
     private String email;
+    private Long empBaseAuto;
     private String fName;
     private String username;
 

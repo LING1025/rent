@@ -1,14 +1,19 @@
 package com.funtl.myshop.plus.business.controller;
 
-import com.funtl.myshop.plus.business.dto.UserDTO;
+import com.funtl.myshop.plus.business.BusinessException;
+import com.funtl.myshop.plus.business.BusinessStatus;
+import com.funtl.myshop.plus.business.dto.UserParamDto;
 import com.funtl.myshop.plus.business.dto.UsersDto;
+import com.funtl.myshop.plus.business.dto.UsersParamDto;
 import com.funtl.myshop.plus.business.dto.params.PasswordParam;
 import com.funtl.myshop.plus.business.dto.params.ProfileParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.AspnetUsersService;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
+import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.domain.User;
 import com.funtl.myshop.plus.provider.dto.UserListDto;
+import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,7 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.Date;
 
 /**
  * 用户信息管理
@@ -49,24 +54,6 @@ public class ConsumerController {
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"获取个人信息",usersDto);
     }
 
-    @ApiOperation(value = "更新个人信息")
-    @PostMapping(value = "update")
-    public ResponseResult<Void> update(@RequestBody ProfileParam profileParam) {
-        AspnetUsers newUmsAdmin = new AspnetUsers();
-        BeanUtils.copyProperties(profileParam, newUmsAdmin);
-        Integer result = aspnetUsersService.updateUser(newUmsAdmin);
-
-        // 成功
-        if (result > 0) {
-            return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "更新个人信息成功");
-        }
-
-        // 失败
-        else {
-            return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "更新个人信息失败");
-        }
-    }
-
     @ApiOperation(value = "修改密码")
     @PostMapping(value = "modify/password")
     public ResponseResult<Void> modifyPassword(@RequestBody PasswordParam passwordParam) {
@@ -88,7 +75,7 @@ public class ConsumerController {
         return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "修改密码失败");
     }
 
-    @ApiOperation(value = "获取员工信息")
+    @ApiOperation(value = "获取用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = false, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "isOn", value = "状态", required = false, dataType = "int", paramType = "path"),
@@ -100,8 +87,76 @@ public class ConsumerController {
                                                        @RequestParam(name = "isOn", required = false) Integer isOn,
                                                        @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                                                        @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize) {
+        UserListQueryParams userListQueryParams = new UserListQueryParams(username,isOn,pageNum,pageSize);
+        PageInfo<UserListDto> pageInfo = aspnetUsersService.selectUserListDto(userListQueryParams);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
+    }
 
-        return null;
+    @ApiOperation(value = "修改用户信息")
+    @PutMapping(value = "updateUser")
+    public ResponseResult<String> updateUser(@RequestBody UsersParamDto usersParamDto) {
+        AspnetUsers aspnetUsers = aspnetUsersService.selectById(usersParamDto.getUserAuto());
+        if (aspnetUsers == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未找到用户信息", null);
+        }
+        BeanUtils.copyProperties(usersParamDto,aspnetUsers);
+        aspnetUsers.setMDT(new Date());
+        Integer i = aspnetUsersService.update(aspnetUsers);
+        if(i == 0){
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
+    }
+
+    @ApiOperation(value = "重置密码")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "string", paramType = "path")
+    @PutMapping(value = "reset/{username}")
+    public ResponseResult<String> resetPwd(@PathVariable("username")String username) {
+        AspnetUsers aspnetUsers = aspnetUsersService.get(username);
+        if(aspnetUsers == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户不存在", null);
+        }
+        aspnetUsers.setPassword(passwordEncoder.encode("123456"));
+        Integer i = aspnetUsersService.update(aspnetUsers);
+        if(i == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "重置密码失败", null);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "重置后密码:123456", null);
+    }
+
+    public ResponseResult<AspnetUsers> patch(Integer isOn, Long userAuto) {
+        AspnetUsers aspnetUsers = aspnetUsersService.selectById(userAuto);
+        if (aspnetUsers == null) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户不存在", null);
+        }
+        aspnetUsers.setIsOn(isOn);
+        Integer i = aspnetUsersService.update(aspnetUsers);
+        if (i == 0) {
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
+    }
+
+
+    @ApiOperation(value = "停用状态")
+    @ApiImplicitParam(name = "userAuto", value = "用户id", required = true, dataType = "long", paramType = "path")
+    @PatchMapping("/stop/{userAuto}")
+    public ResponseResult<AspnetUsers> patchStop(@PathVariable(value = "userAuto") Long userAuto) {
+        return patch(0, userAuto);
+    }
+
+    @ApiOperation(value = "正常状态")
+    @ApiImplicitParam(name = "userAuto", value = "用户id", required = true, dataType = "long", paramType = "path")
+    @PatchMapping("/start/{userAuto}")
+    public ResponseResult<AspnetUsers> patchStart(@PathVariable(value = "userAuto") Long userAuto) {
+        return patch(1, userAuto);
+    }
+
+    @ApiOperation(value = "删除")
+    @ApiImplicitParam(name = "userAuto", value = "用户id", required = true, dataType = "long", paramType = "path")
+    @DeleteMapping("/delete/{userAuto}")
+    public ResponseResult<AspnetUsers> delete(@PathVariable(value = "userAuto") Long userAuto) {
+        return patch(2, userAuto);
     }
 
 

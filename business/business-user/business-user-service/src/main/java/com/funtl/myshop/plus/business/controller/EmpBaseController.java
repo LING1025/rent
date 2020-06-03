@@ -216,7 +216,7 @@ public class EmpBaseController {
     public ResponseResult<EmpBase> patch(Integer isOn, Long empBaseAuto) {
         EmpBase empBase = empBaseService.selectById(empBaseAuto);
         if (empBase == null) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未查询到员工信息", null);
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "员工不存在", null);
         }
         empBase.setIsOn(isOn);
         Integer i = empBaseService.update(empBase);
