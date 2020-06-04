@@ -107,7 +107,7 @@ public class EmpBaseController {
         }
 
         //Org2Emp插入数据
-        /*Org2Emp org2Emp = new Org2Emp();
+        Org2Emp org2Emp = new Org2Emp();
         org2Emp.setOrgAuto(org.getOrgAuto());
         org2Emp.setUserAuto(i1);
         org2Emp.setACLType(0);
@@ -116,7 +116,7 @@ public class EmpBaseController {
             aspnetUsersService.deleteById(i1);
             empBaseService.deleteById(i2);
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
-        }*/
+        }
 
         for (String role : empParamDto.getRoles()
              ) {
@@ -174,8 +174,20 @@ public class EmpBaseController {
             AspnetUsers aspnetUsers = aspnetUsersService.selectByEmpAuto(empBase.getEmpBaseAuto());
             BeanUtils.copyProperties(empParamDto,aspnetUsers);
             aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
-            Integer i = aspnetUsersService.update(aspnetUsers);
-            if (i == 0){
+            Integer i1 = aspnetUsersService.update(aspnetUsers);
+            if (i1 == 0){
+                throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+            }
+
+        }
+
+        //判断是否修改了部门
+        if(!empBase.getOrgAuto().equals(empParamDto.getOrgAuto())){
+            AspnetUsers au = aspnetUsersService.selectByEmpAuto(empBase.getEmpBaseAuto());
+            Org2Emp org2Emp = org2EmpService.selectByUserAuto(au.getUserAuto());
+            org2Emp.setOrgAuto(org.getOrgAuto());
+            Integer i2 = org2EmpService.update(org2Emp);
+            if(i2 == 0){
                 throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
             }
         }

@@ -30,4 +30,11 @@ public class Org2EmpServiceImpl implements Org2EmpService{
         return org2EmpMapper.updateByPrimaryKeySelective(org2Emp);
     }
 
+    @Override
+    public Org2Emp selectByUserAuto(Long userAuto) {
+        Example example = new Example(Org2Emp.class);
+        example.createCriteria().andEqualTo("userAuto",userAuto);
+        return org2EmpMapper.selectOneByExample(example);
+    }
+
 }

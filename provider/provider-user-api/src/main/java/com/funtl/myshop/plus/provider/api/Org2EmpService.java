@@ -19,4 +19,11 @@ public interface Org2EmpService{
 
     Integer update(Org2Emp org2Emp);
 
+    /**
+     * 根据用户id获取部门员工绑定数据
+     * @param userAuto
+     * @return
+     */
+    Org2Emp selectByUserAuto(Long userAuto);
+
 }
