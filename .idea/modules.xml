@@ -24,6 +24,8 @@
       <module fileurl="file://$PROJECT_DIR$/provider/provider.iml" filepath="$PROJECT_DIR$/provider/provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-rental-api/provider-rental-api.iml" filepath="$PROJECT_DIR$/provider/provider-rental-api/provider-rental-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-rental-service/provider-rental-service.iml" filepath="$PROJECT_DIR$/provider/provider-rental-service/provider-rental-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/provider/provider-table-api/provider-table-api.iml" filepath="$PROJECT_DIR$/provider/provider-table-api/provider-table-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/provider/provider-table-service/provider-table-service.iml" filepath="$PROJECT_DIR$/provider/provider-table-service/provider-table-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-user-api/provider-user-api.iml" filepath="$PROJECT_DIR$/provider/provider-user-api/provider-user-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-user-service/provider-user-service.iml" filepath="$PROJECT_DIR$/provider/provider-user-service/provider-user-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/ums-admin-provider-api/ums-admin-provider-api.iml" filepath="$PROJECT_DIR$/provider/ums-admin-provider-api/ums-admin-provider-api.iml" />

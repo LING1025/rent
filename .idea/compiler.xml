@@ -7,12 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="business-oauth2" />
+        <module name="provider-user-api" />
         <module name="business-user-feign" />
         <module name="commons-provider" />
         <module name="gateway" />
         <module name="commons-dto" />
         <module name="provider-rental-api" />
+        <module name="provider-table-service" />
         <module name="ums-admin-provider-api" />
         <module name="business-profile-feign" />
         <module name="provider-user-service" />
@@ -21,12 +22,13 @@
         <module name="commons-utils" />
         <module name="ums-admin-provider-api (1)" />
         <module name="ums-admin-provider-service (1)" />
-        <module name="business-rental" />
-        <module name="business-user-service" />
-        <module name="configuration-feign" />
         <module name="provider-rental-service" />
+        <module name="business-rental" />
+        <module name="provider-table-api" />
+        <module name="configuration-feign" />
+        <module name="business-oauth2" />
         <module name="business-profile-service" />
-        <module name="provider-user-api" />
+        <module name="business-user-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -53,6 +55,8 @@
       <module name="provider" target="1.8" />
       <module name="provider-rental-api" target="1.8" />
       <module name="provider-rental-service" target="1.8" />
+      <module name="provider-table-api" target="1.8" />
+      <module name="provider-table-service" target="1.8" />
       <module name="provider-transaction-api" target="1.8" />
       <module name="provider-transaction-service" target="1.8" />
       <module name="provider-user-api" target="1.8" />
@@ -81,6 +85,8 @@
       <module name="gateway" options="-parameters" />
       <module name="provider-rental-api" options="-parameters" />
       <module name="provider-rental-service" options="-parameters" />
+      <module name="provider-table-api" options="-parameters" />
+      <module name="provider-table-service" options="-parameters" />
       <module name="provider-transaction-api" options="-parameters" />
       <module name="provider-transaction-service" options="-parameters" />
       <module name="provider-user-api" options="-parameters" />

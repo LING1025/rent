@@ -36,5 +36,7 @@
         <module>provider-user-service</module>
         <module>provider-rental-api</module>
         <module>provider-rental-service</module>
+        <module>provider-table-api</module>
+        <module>provider-table-service</module>
     </modules>
 </project>

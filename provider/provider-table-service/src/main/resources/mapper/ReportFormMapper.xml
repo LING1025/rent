@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.ReportFormMapper">
+    <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ReportForms">
+        <result column="orgName" jdbcType="VARCHAR" property="orgName" />
+        <result column="targetNum" jdbcType="INTEGER" property="targetNum" />
+        <result column="realNum" jdbcType="INTEGER" property="realNum" />
+        <result column="targetPaperNum" jdbcType="INTEGER" property="targetPaperNum" />
+        <result column="proPaperNum" jdbcType="INTEGER" property="proPaperNum" />
+        <result column="rentPaperNum" jdbcType="INTEGER" property="rentPaperNum" />
+        <result column="targetVolume" jdbcType="INTEGER" property="targetVolume" />
+        <result column="realVolume" jdbcType="INTEGER" property="realVolume" />
+        <result column="rentOut" jdbcType="INTEGER" property="rentOut" />
+        <result column="rentBack" jdbcType="INTEGER" property="rentBack" />
+        <result column="maintainNum" jdbcType="INTEGER" property="maintainNum" />
+        <result column="extension" jdbcType="INTEGER" property="extension" />
+        <result column="tenure" jdbcType="INTEGER" property="tenure" />
+        <result column="instrNum" jdbcType="INTEGER" property="instrNum" />
+        <result column="carGo" jdbcType="INTEGER" property="carGo" />
+        <result column="getOut" jdbcType="INTEGER" property="getOut" />
+        <result column="getBack" jdbcType="INTEGER" property="getBack" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        orgName,targetNum,realNum,targetPaperNum,proPaperNum,rentPaperNum,targetVolume,realVolume,
+        rentOut,rentBack,maintainNum,extension,tenure,instrNum,carGo,getOut,getBack
+    </sql>
+    <select id="getRptQ" statementType="CALLABLE" resultMap="BaseResultMap">
+        {
+        CALL
+        s_AchievementsRpt_Q
+        (
+        #{rptQueryParams.Type,mode=IN,jdbcType=INTEGER},
+        #{rptQueryParams.UserID,mode=IN,jdbcType=BIGINT},
+        #{rptQueryParams.StartDT_F,mode=IN,jdbcType=VARCHAR},
+        #{rptQueryParams.StartDT_E,mode=IN,jdbcType=VARCHAR}
+        )
+        }
+    </select>
+</mapper>
