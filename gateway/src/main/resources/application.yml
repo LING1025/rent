@@ -50,15 +50,9 @@ spring:
         - id: BUSINESS-RENTAL
           uri: lb://business-rental
           predicates:
-            - Path=/api/rental/**
+            - Path=/api/table/**
           filters:
             - StripPrefix=1
-#        - id: BUSINESS-REG
-#          uri: lb://business-reg
-#          predicates:
-#            - Path=/api/reg/**
-#          filters:
-#            - StripPrefix=1
 
 server:
   port: 8888
