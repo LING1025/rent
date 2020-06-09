@@ -1,34 +1,42 @@
 package com.funtl.myshop.plus.provider.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
+@ApiModel(value = "营业报表返回属性")
 public class ReportForms implements Serializable {
     /**
      * 部门
      */
+    @ApiModelProperty(value = "部门")
     private String orgName;
 
     /**
      * 目标台数
      */
+    @ApiModelProperty(value = "目标台数")
     private Integer targetNum;
 
     /**
      * 实际台数
      */
+    @ApiModelProperty(value = "实际台数")
     private Integer realNum;
 
     /**
      * 目标报件户数
      */
+    @ApiModelProperty(value = "目标报件户数")
     private Integer targetPaperNum;
 
     /**
      * 试算报件户数
      */
+    @ApiModelProperty(value = "试算报件户数")
     private Integer proPaperNum;
 
     /**
@@ -39,11 +47,13 @@ public class ReportForms implements Serializable {
     /**
      * 目标营业额
      */
+    @ApiModelProperty(value = "目标营业额")
     private Integer targetVolume;
 
     /**
      * 实际营业额
      */
+    @ApiModelProperty(value = "实际营业额")
     private Integer realVolume;
 /*
 

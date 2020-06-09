@@ -98,6 +98,8 @@ public class EmpBaseController {
         //aspnetUsers插入数据
         AspnetUsers aspnetUsers = new AspnetUsers();
         BeanUtils.copyProperties(empParamDto,aspnetUsers);
+        aspnetUsers.setUserId("8FEE10B0-8BF9-4A91-91EF-B28941B73AB9");
+        aspnetUsers.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
         aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
         aspnetUsers.setEmpBaseAuto(i2);
         Long i1 = aspnetUsersService.insert(aspnetUsers);

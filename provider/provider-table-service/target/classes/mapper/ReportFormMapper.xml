@@ -7,10 +7,10 @@
         <result column="realNum" jdbcType="INTEGER" property="realNum" />
         <result column="targetPaperNum" jdbcType="INTEGER" property="targetPaperNum" />
         <result column="proPaperNum" jdbcType="INTEGER" property="proPaperNum" />
-        <result column="rentPaperNum" jdbcType="INTEGER" property="rentPaperNum" />
+<!--        <result column="rentPaperNum" jdbcType="INTEGER" property="rentPaperNum" />-->
         <result column="targetVolume" jdbcType="INTEGER" property="targetVolume" />
         <result column="realVolume" jdbcType="INTEGER" property="realVolume" />
-        <result column="rentOut" jdbcType="INTEGER" property="rentOut" />
+        <!--<result column="rentOut" jdbcType="INTEGER" property="rentOut" />
         <result column="rentBack" jdbcType="INTEGER" property="rentBack" />
         <result column="maintainNum" jdbcType="INTEGER" property="maintainNum" />
         <result column="extension" jdbcType="INTEGER" property="extension" />
@@ -18,7 +18,7 @@
         <result column="instrNum" jdbcType="INTEGER" property="instrNum" />
         <result column="carGo" jdbcType="INTEGER" property="carGo" />
         <result column="getOut" jdbcType="INTEGER" property="getOut" />
-        <result column="getBack" jdbcType="INTEGER" property="getBack" />
+        <result column="getBack" jdbcType="INTEGER" property="getBack" />-->
     </resultMap>
     <sql id="Base_Column_List">
         orgName,targetNum,realNum,targetPaperNum,proPaperNum,rentPaperNum,targetVolume,realVolume,

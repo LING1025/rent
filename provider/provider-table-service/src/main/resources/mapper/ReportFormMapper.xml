@@ -7,7 +7,7 @@
         <result column="realNum" jdbcType="INTEGER" property="realNum" />
         <result column="targetPaperNum" jdbcType="INTEGER" property="targetPaperNum" />
         <result column="proPaperNum" jdbcType="INTEGER" property="proPaperNum" />
-        <result column="rentPaperNum" jdbcType="INTEGER" property="rentPaperNum" />
+<!--        <result column="rentPaperNum" jdbcType="INTEGER" property="rentPaperNum" />-->
         <result column="targetVolume" jdbcType="INTEGER" property="targetVolume" />
         <result column="realVolume" jdbcType="INTEGER" property="realVolume" />
         <!--<result column="rentOut" jdbcType="INTEGER" property="rentOut" />
