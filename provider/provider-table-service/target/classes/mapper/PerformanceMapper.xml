@@ -26,12 +26,12 @@
   <select id="selectByYM" resultMap="queryByYM">
     SELECT
     emp.DepName AS 'orgName',
-    p.P_Count AS 'targetNum',
+    SUM(p.P_Count) AS 'targetNum',
     COUNT(o.YJCDT) AS 'realNum',
-    ((p.P_Count) * 3.33) AS 'targetPaperNum',
-    os.TradeItem_Auto AS 'proPaperNum',
-    ((p.P_Count) * ic.Num) AS 'targetVolume',
-    (o.MAmt * o.MM) AS 'realVolume'
+    (SUM(p.P_Count) * 3.33) AS 'targetPaperNum',
+    SUM(os.TradeItem_Auto) AS 'proPaperNum',
+    (SUM(p.P_Count) * ic.Num) AS 'targetVolume',
+    SUM(o.MAmt * o.MM) AS 'realVolume'
     FROM
     [v_Emp] AS emp
     INNER JOIN [Performance] AS p ON p.Sales_Auto = emp.User_Auto
@@ -46,6 +46,6 @@
     <if test="param.month != null and param.month != ''">
       AND p.P_Month = #{param.month}
     </if>
-    GROUP BY emp.DepName,p.P_Count,os.TradeItem_Auto,ic.Num,o.MAmt,o.MM
+    GROUP BY emp.DepName,ic.Num
   </select>
 </mapper>
