@@ -29,17 +29,17 @@ public class TableController {
 
     @ApiOperation(value = "获取营业报表信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "year", value = "年份", required = true, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "month", value = "月份", required = true, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, dataType = "string", paramType = "path")
+            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path")
+           /* @ApiImplicitParam(name = "startDate", value = "开始日期", required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = true, dataType = "string", paramType = "path")*/
     })
     @GetMapping(value = "query")
-    public ResponseResult<List<ReportForms>> query(@RequestParam(name = "year",required = true) Integer year,
-                                                       @RequestParam(name = "month",required = true) Integer month,
-                                                       @RequestParam(name = "startDate",required = true) String startDate,
-                                                       @RequestParam(name = "endDate",required = true) String endDate){
-        RptQueryParam rptQueryParam = new RptQueryParam(year,month,startDate,endDate);
+    public ResponseResult<List<ReportForms>> query(@RequestParam(name = "year",required = false) Integer year,
+                                                       @RequestParam(name = "month",required = false) Integer month
+                                                       /*@RequestParam(name = "startDate",required = true) String startDate,
+                                                       @RequestParam(name = "endDate",required = true) String endDate*/){
+        RptQueryParam rptQueryParam = new RptQueryParam(year,month);
         List<ReportForms> list = performanceService.selectByYM(rptQueryParam);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
