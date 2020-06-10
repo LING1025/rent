@@ -159,7 +159,6 @@
     <orderEntry type="module" module-name="commons-dto" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.8" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
-    <orderEntry type="module" module-name="ums-admin-provider-api" />
     <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:2.2.2" level="project" />

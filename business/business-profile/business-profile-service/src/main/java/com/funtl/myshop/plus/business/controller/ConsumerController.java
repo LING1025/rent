@@ -2,17 +2,13 @@ package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.business.BusinessException;
 import com.funtl.myshop.plus.business.BusinessStatus;
-import com.funtl.myshop.plus.business.dto.UserParamDto;
 import com.funtl.myshop.plus.business.dto.UsersDto;
 import com.funtl.myshop.plus.business.dto.UsersParamDto;
 import com.funtl.myshop.plus.business.dto.params.ConsumerParam;
 import com.funtl.myshop.plus.business.dto.params.PasswordParam;
-import com.funtl.myshop.plus.business.dto.params.ProfileParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.AspnetUsersService;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
-import com.funtl.myshop.plus.provider.domain.EmpBase;
-import com.funtl.myshop.plus.provider.domain.User;
 import com.funtl.myshop.plus.provider.dto.UserListDto;
 import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
 import com.github.pagehelper.PageInfo;

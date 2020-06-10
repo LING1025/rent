@@ -28,9 +28,7 @@
       <module fileurl="file://$PROJECT_DIR$/provider/provider-table-service/provider-table-service.iml" filepath="$PROJECT_DIR$/provider/provider-table-service/provider-table-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-user-api/provider-user-api.iml" filepath="$PROJECT_DIR$/provider/provider-user-api/provider-user-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-user-service/provider-user-service.iml" filepath="$PROJECT_DIR$/provider/provider-user-service/provider-user-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/provider/ums-admin-provider-api/ums-admin-provider-api.iml" filepath="$PROJECT_DIR$/provider/ums-admin-provider-api/ums-admin-provider-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-user-api/ums-admin-provider-api (1).iml" filepath="$PROJECT_DIR$/provider/provider-user-api/ums-admin-provider-api (1).iml" />
-      <module fileurl="file://$PROJECT_DIR$/provider/ums-admin-provider-service/ums-admin-provider-service.iml" filepath="$PROJECT_DIR$/provider/ums-admin-provider-service/ums-admin-provider-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/provider/provider-user-service/ums-admin-provider-service (1).iml" filepath="$PROJECT_DIR$/provider/provider-user-service/ums-admin-provider-service (1).iml" />
     </modules>
   </component>

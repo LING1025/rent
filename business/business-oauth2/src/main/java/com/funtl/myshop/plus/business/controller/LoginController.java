@@ -3,16 +3,13 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.business.dto.LoginInfo;
 import com.funtl.myshop.plus.business.dto.LoginParam;
 import com.funtl.myshop.plus.business.feign.ConsumerFeign;
-import com.funtl.myshop.plus.business.feign.ProfileFeign;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.commons.utils.MapperUtils;
 import com.funtl.myshop.plus.commons.utils.OkHttpClientUtil;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
-import com.funtl.myshop.plus.provider.domain.User;
 import com.google.common.collect.Maps;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,9 +48,6 @@ public class LoginController {
 
     @Resource
     public TokenStore tokenStore;
-
-    @Resource
-    private ProfileFeign profileFeign;
 
     @Resource
     private ConsumerFeign consumerFeign;
