@@ -16,8 +16,6 @@
   </sql>
   <resultMap id="queryByYM" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ReportForms">
     <result column="salesAuto" jdbcType="BIGINT" property="salesAuto" />
-    <result column="Org_Auto" jdbcType="BIGINT" property="orgAuto" />
-    <result column="UpUnit" jdbcType="BIGINT" property="upUnit" />
     <result column="orgName" jdbcType="VARCHAR" property="orgName" />
     <result column="targetNum" jdbcType="INTEGER" property="targetNum" />
     <result column="realNum" jdbcType="INTEGER" property="realNum" />
@@ -29,14 +27,13 @@
   <select id="selectByYM" resultMap="queryByYM">
     SELECT
     emp.User_Auto AS salesAuto,
-    emp.DepName AS 'orgName',
-    emp.UpUnit,emp.Org_Auto,
-    SUM(p.P_Count) AS 'targetNum',
-    COUNT(o.YJCDT) AS 'realNum',
-    (SUM(p.P_Count) * 3.33) AS 'targetPaperNum',
-    SUM(os.TradeItem_Auto) AS 'proPaperNum',
-    (SUM(p.P_Count) * ic.Num) AS 'targetVolume',
-    SUM(o.MAmt * o.MM) AS 'realVolume'
+    emp.DepName AS orgName,
+    SUM(p.P_Count) AS targetNum,
+    COUNT(o.YJCDT) AS realNum,
+    (SUM(p.P_Count) * 3.33) AS targetPaperNum,
+    SUM(os.TradeItem_Auto) AS proPaperNum,
+    (SUM(p.P_Count) * ic.Num) AS targetVolume,
+    SUM(o.MAmt * o.MM) AS realVolume
     FROM
     [v_Emp] AS emp
     INNER JOIN [Performance] AS p ON p.Sales_Auto = emp.User_Auto
@@ -52,19 +49,17 @@
       AND p.P_Month = #{param.month}
     </if>
     AND emp.User_Auto = #{param.salesAuto}
-    GROUP BY emp.DepName,ic.Num,emp.User_Auto,emp.UpUnit,emp.Org_Auto
+    GROUP BY emp.DepName,ic.Num,emp.User_Auto
   </select>
   <select id="selectByUpId" resultMap="queryByYM">
     SELECT
-    emp.User_Auto AS salesAuto,
-    emp.DepName AS 'orgName',
-    emp.UpUnit,emp.Org_Auto,
-    SUM(p.P_Count) AS 'targetNum',
-    COUNT(o.YJCDT) AS 'realNum',
-    (SUM(p.P_Count) * 3.33) AS 'targetPaperNum',
-    SUM(os.TradeItem_Auto) AS 'proPaperNum',
-    (SUM(p.P_Count) * ic.Num) AS 'targetVolume',
-    SUM(o.MAmt * o.MM) AS 'realVolume'
+    emp.DepName AS orgName,
+    SUM(p.P_Count) AS targetNum,
+    COUNT(o.YJCDT) AS realNum,
+    (SUM(p.P_Count) * 3.33) AS targetPaperNum,
+    SUM(os.TradeItem_Auto) AS proPaperNum,
+    (SUM(p.P_Count) * ic.Num) AS targetVolume,
+    SUM(o.MAmt * o.MM) AS realVolume
     FROM
     [v_Emp] AS emp
     INNER JOIN [Performance] AS p ON p.Sales_Auto = emp.User_Auto
@@ -80,6 +75,6 @@
       AND p.P_Month = #{month}
     </if>
     AND emp.UpUnit = #{upUnit}
-    GROUP BY emp.DepName,ic.Num,emp.User_Auto,emp.UpUnit,emp.Org_Auto
+    GROUP BY emp.DepName,ic.Num
   </select>
 </mapper>

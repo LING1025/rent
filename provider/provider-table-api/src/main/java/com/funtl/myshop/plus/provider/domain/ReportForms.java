@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,9 +10,10 @@ import java.io.Serializable;
 @Data
 @ApiModel(value = "营业报表返回属性")
 public class ReportForms implements Serializable {
+    @JsonIgnore
     private Long salesAuto;
-    private Long upUnit;
-    private Long orgAuto;
+    /*private Long upUnit;
+    private Long orgAuto;*/
 
     /**
      * 部门
