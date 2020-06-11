@@ -73,17 +73,12 @@ public class TableController {
     @GetMapping(value = "queryke")
     public ResponseResult<List<ReportForms>> queryke(@RequestParam(name = "year",required = false) Integer year,
                                                    @RequestParam(name = "month",required = false) Integer month){
-        List<Org2Emp> org2Emps = org2EmpService.selectType(22);
+        List<Org2Emp> org2Emps = org2EmpService.selectType(21);
         if(org2Emps.size() > 0){
-            List<ReportForms> list = Lists.newArrayList();
-            for(Org2Emp oe : org2Emps){
-                if(oe != null){
-                    RptQueryParam rptQueryParam = new RptQueryParam(year,month,oe.getUserAuto());
-                    ReportForms reportForms = performanceService.selectByYM(rptQueryParam);
-                    list.add(reportForms);
-                }
+            for(Org2Emp org2Emp: org2Emps){
+                List<ReportForms> list = performanceService.selectByUpId(year,month,org2Emp.getOrgAuto());
+                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
             }
-            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }

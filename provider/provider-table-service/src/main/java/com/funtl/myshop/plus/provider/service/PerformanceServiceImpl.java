@@ -22,6 +22,11 @@ public class PerformanceServiceImpl implements PerformanceService{
         return performanceMapper.selectByYM(rptQueryParam);
     }
 
+    @Override
+    public List<ReportForms> selectByUpId(Integer year, Integer month, Long upUnit) {
+        return performanceMapper.selectByUpId(year,month,upUnit);
+    }
+
     /*@Override
     public List<ReportForms> selectByYM(RptQueryParam rptQueryParam) {
         return performanceMapper.selectByYM(rptQueryParam);

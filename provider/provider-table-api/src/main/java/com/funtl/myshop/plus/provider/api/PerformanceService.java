@@ -16,4 +16,6 @@ public interface PerformanceService{
 //    List<ReportForms> selectByYM(RptQueryParam rptQueryParam);
     ReportForms selectByYM(RptQueryParam rptQueryParam);
 
+    List<ReportForms> selectByUpId(Integer year, Integer month, Long upUnit);
+
 }

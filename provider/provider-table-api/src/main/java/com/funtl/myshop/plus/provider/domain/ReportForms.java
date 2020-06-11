@@ -10,10 +10,9 @@ import java.io.Serializable;
 @ApiModel(value = "营业报表返回属性")
 public class ReportForms implements Serializable {
     private Long salesAuto;
+    private Long upUnit;
+    private Long orgAuto;
 
-    /*private Long orgAuto;
-
-    private Long upUnit;*/
     /**
      * 部门
      */

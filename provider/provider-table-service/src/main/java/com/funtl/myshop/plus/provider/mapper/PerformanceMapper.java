@@ -11,5 +11,7 @@ import java.util.List;
 
 public interface PerformanceMapper extends MyMapper<Performance> {
     ReportForms selectByYM(@Param("param") RptQueryParam rptQueryParam);
+
+    List<ReportForms> selectByUpId(@Param("year") Integer year, @Param("month") Integer month, @Param("upUnit") Long upUnit);
 //    List<ReportForms> selectByYM(@Param("param") RptQueryParam rptQueryParam);
 }
