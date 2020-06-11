@@ -10,5 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface PerformanceMapper extends MyMapper<Performance> {
-    List<ReportForms> selectByYM(@Param("param") RptQueryParam rptQueryParam);
+    ReportForms selectByYM(@Param("param") RptQueryParam rptQueryParam);
+//    List<ReportForms> selectByYM(@Param("param") RptQueryParam rptQueryParam);
 }

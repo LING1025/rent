@@ -7,6 +7,8 @@ import com.funtl.myshop.plus.provider.api.Org2EmpService;
 import org.apache.dubbo.config.annotation.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 @Service(version = "1.0.0")
 public class Org2EmpServiceImpl implements Org2EmpService{
 
@@ -35,6 +37,13 @@ public class Org2EmpServiceImpl implements Org2EmpService{
         Example example = new Example(Org2Emp.class);
         example.createCriteria().andEqualTo("userAuto",userAuto);
         return org2EmpMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<Org2Emp> selectType(Integer ACLType) {
+        Example example = new Example(Org2Emp.class);
+        example.createCriteria().andEqualTo("ACLType",ACLType);
+        return org2EmpMapper.selectByExample(example);
     }
 
 }

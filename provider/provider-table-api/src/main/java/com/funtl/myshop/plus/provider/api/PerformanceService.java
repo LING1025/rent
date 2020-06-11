@@ -13,6 +13,7 @@ public interface PerformanceService{
      * @param rptQueryParam
      * @return
      */
-    List<ReportForms> selectByYM(RptQueryParam rptQueryParam);
+//    List<ReportForms> selectByYM(RptQueryParam rptQueryParam);
+    ReportForms selectByYM(RptQueryParam rptQueryParam);
 
 }

@@ -7,6 +7,7 @@ import com.funtl.myshop.plus.provider.domain.OrgNameList;
 import com.funtl.myshop.plus.provider.mapper.OrgMapper;
 import com.funtl.myshop.plus.provider.api.OrgService;
 import org.apache.dubbo.config.annotation.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -25,4 +26,5 @@ public class OrgServiceImpl implements OrgService{
     public Org selectById(Long orgAuto) {
         return orgMapper.selectByPrimaryKey(orgAuto);
     }
+
 }

@@ -18,7 +18,12 @@ public class PerformanceServiceImpl implements PerformanceService{
     private PerformanceMapper performanceMapper;
 
     @Override
-    public List<ReportForms> selectByYM(RptQueryParam rptQueryParam) {
+    public ReportForms selectByYM(RptQueryParam rptQueryParam) {
         return performanceMapper.selectByYM(rptQueryParam);
     }
+
+    /*@Override
+    public List<ReportForms> selectByYM(RptQueryParam rptQueryParam) {
+        return performanceMapper.selectByYM(rptQueryParam);
+    }*/
 }

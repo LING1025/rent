@@ -9,11 +9,13 @@ import java.util.Date;
 public class RptQueryParam implements Serializable {
     private Integer year;
     private Integer month;
+    private Long salesAuto;
     /*private String startDate;
     private String endDate;*/
 
-    public RptQueryParam(Integer year, Integer month) {
+    public RptQueryParam(Integer year, Integer month, Long salesAuto) {
         this.year = year;
         this.month = month;
+        this.salesAuto = salesAuto;
     }
 }

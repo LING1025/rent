@@ -15,6 +15,9 @@
     Performance_Auto, Sales_Auto, P_Year, P_Month, P_Count
   </sql>
   <resultMap id="queryByYM" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ReportForms">
+    <result column="salesAuto" jdbcType="BIGINT" property="salesAuto" />
+    <!--<result column="Org_Auto" jdbcType="BIGINT" property="orgAuto" />
+    <result column="UpUnit" jdbcType="BIGINT" property="upUnit" />-->
     <result column="orgName" jdbcType="VARCHAR" property="orgName" />
     <result column="targetNum" jdbcType="INTEGER" property="targetNum" />
     <result column="realNum" jdbcType="INTEGER" property="realNum" />
@@ -25,6 +28,9 @@
   </resultMap>
   <select id="selectByYM" resultMap="queryByYM">
     SELECT
+    <!--emp.User_Auto AS salesAuto,
+    emp.Org_Auto,emp.UpUnit,-->
+    emp.User_Auto AS salesAuto,
     emp.DepName AS 'orgName',
     SUM(p.P_Count) AS 'targetNum',
     COUNT(o.YJCDT) AS 'realNum',
@@ -46,6 +52,7 @@
     <if test="param.month != null and param.month != ''">
       AND p.P_Month = #{param.month}
     </if>
-    GROUP BY emp.DepName,ic.Num
+    AND emp.User_Auto = #{param.salesAuto}
+    GROUP BY emp.DepName,ic.Num,emp.User_Auto<!--,emp.User_Auto,emp.Org_Auto,emp.UpUnit-->
   </select>
 </mapper>
