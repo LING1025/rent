@@ -19,7 +19,5 @@
     <file url="file://$PROJECT_DIR$/provider/provider-table-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/provider/provider-user-api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/provider/provider-user-service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/provider/ums-admin-provider-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/provider/ums-admin-provider-service/src/main/java" charset="UTF-8" />
   </component>
 </project>

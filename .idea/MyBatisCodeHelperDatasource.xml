@@ -4,7 +4,6 @@
     <option name="projectProfile">
       <ProjectProfile>
         <option name="addSerializeUid" value="true" />
-        <option name="generateService" value="true" />
         <option name="generateServiceInterface" value="true" />
         <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
         <option name="javaMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
@@ -39,8 +38,6 @@
                   <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-table-api/src/main/java" />
                   <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.api" />
                   <option name="javaServiceInterfacePath" value="D:\Work\rent\provider\provider-table-api\src\main\java" />
-                  <option name="javaServicePackage" value="com.funtl.myshop.plus.provider.service" />
-                  <option name="javaServicePath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
                   <option name="xmlPackage" value="mapper" />
                   <option name="xmlPath" value="D:\Work\rent\provider\provider-table-service\src\main\resources" />
                 </UserPackageAndPathInfoByModule>
@@ -1772,6 +1769,7 @@
             </entry>
           </map>
         </option>
+        <option name="useActualColumnNames" value="true" />
         <option name="xmlMapperPackage" value="mapper" />
         <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\resources" />
       </ProjectProfile>

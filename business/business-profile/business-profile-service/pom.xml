@@ -122,11 +122,6 @@
             <artifactId>business-profile-feign</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.funtl.myshop.plus</groupId>
-            <artifactId>ums-admin-provider-api</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
         <!-- Swagger2 Begin -->
         <dependency>
             <groupId>io.springfox</groupId>
