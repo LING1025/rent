@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.api;
 
 import com.funtl.myshop.plus.provider.domain.Org;
+import com.funtl.myshop.plus.provider.domain.Org2Emp;
 import com.funtl.myshop.plus.provider.domain.OrgNameList;
 
 import java.util.List;
@@ -19,5 +20,22 @@ public interface OrgService{
      * @return
      */
     Org selectById(Long orgAuto);
+
+
+    /**
+     * 获取下级课数据
+     * @param userAuto
+     * @param orgAuto
+     * @return
+     */
+    Org selectModeOne(Long userAuto, Long orgAuto);
+
+    /**
+     * 获取部门数据
+     * @param userAuto
+     * @param orgAuto
+     * @return
+     */
+    Org selectModeTwo(Long userAuto, Long orgAuto);
 
 }

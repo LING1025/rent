@@ -18,4 +18,23 @@ public interface PerformanceService{
 
     List<ReportForms> selectByUpId(Integer year, Integer month, Long upUnit);
 
+    /**
+     * 获取下级数据
+     * @param year
+     * @param month
+     * @return
+     */
+    List<ReportForms> selectModeOne(Integer year, Integer month,String startDate,String endDate);
+
+    /**
+     * 获取业代数据
+     * @param year
+     * @param month
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    List<ReportForms> selectModeZero(Integer year, Integer month,String startDate,String endDate);
+
+
 }

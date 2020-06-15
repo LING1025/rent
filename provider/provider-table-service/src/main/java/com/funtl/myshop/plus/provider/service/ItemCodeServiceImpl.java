@@ -6,6 +6,8 @@ import com.funtl.myshop.plus.provider.mapper.ItemCodeMapper;
 import com.funtl.myshop.plus.provider.api.ItemCodeService;
 import org.apache.dubbo.config.annotation.Service;
 
+import java.util.List;
+
 @Service(version = "1.0.0")
 public class ItemCodeServiceImpl implements ItemCodeService{
 
@@ -13,4 +15,8 @@ public class ItemCodeServiceImpl implements ItemCodeService{
     private ItemCodeMapper itemCodeMapper;
 
 
+    @Override
+    public List<ItemCode> selectByYear(Integer year) {
+        return itemCodeMapper.selectByYear(year);
+    }
 }

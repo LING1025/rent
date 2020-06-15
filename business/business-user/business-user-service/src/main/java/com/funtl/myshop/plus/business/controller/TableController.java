@@ -1,12 +1,9 @@
 package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
-import com.funtl.myshop.plus.provider.api.Org2EmpService;
-import com.funtl.myshop.plus.provider.api.OrgService;
-import com.funtl.myshop.plus.provider.api.PerformanceService;
-import com.funtl.myshop.plus.provider.domain.Org;
-import com.funtl.myshop.plus.provider.domain.Org2Emp;
-import com.funtl.myshop.plus.provider.domain.ReportForms;
+import com.funtl.myshop.plus.provider.api.*;
+import com.funtl.myshop.plus.provider.domain.*;
+import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.dto.RptQueryParam;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
@@ -37,6 +34,12 @@ public class TableController {
 
     @Reference(version = "1.0.0")
     private OrgService orgService;
+
+    @Reference(version = "1.0.0")
+    private ItemCodeService itemCodeService;
+
+    @Reference(version = "1.0.0")
+    private AspnetUsersService aspnetUsersService;
 
     @ApiOperation(value = "获取部门营业报表信息")
     @ApiImplicitParams({
@@ -82,5 +85,62 @@ public class TableController {
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }
+
+    @ApiOperation(value = "获取业代营业报表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path")
+    })
+    @GetMapping(value = "queryZero")
+    public ResponseResult<List<ReportForms>> queryZero(@RequestParam(name = "year",required = false) Integer year,
+                                                      @RequestParam(name = "month",required = false) Integer month,
+                                                      @RequestParam(name = "startDate",required = false) String startDate,
+                                                      @RequestParam(name = "endDate",required = false) String endDate){
+        List<ReportForms> list1 = performanceService.selectModeZero(year,month,startDate,endDate);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list1);
+    }
+
+    @ApiOperation(value = "获取课营业报表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path")
+    })
+    @GetMapping(value = "queryOne")
+    public ResponseResult<List<ReportForms>> queryOne(@RequestParam(name = "year",required = false) Integer year,
+                                                     @RequestParam(name = "month",required = false) Integer month,
+                                                    @RequestParam(name = "startDate",required = false) String startDate,
+                                                    @RequestParam(name = "endDate",required = false) String endDate){
+        List<ReportForms> list = performanceService.selectModeOne(year,month,startDate,endDate);
+        for(ReportForms reportForms : list){
+            Org org = orgService.selectModeOne(reportForms.getSalesAuto(), reportForms.getOrgAuto());
+            if(org == null){
+                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
+            }
+            reportForms.setOrgName(org.getDepName());
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
+
+    @ApiOperation(value = "获取部门营业报表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path")
+    })
+    @GetMapping(value = "queryTwo")
+    public ResponseResult<List<ReportForms>> queryTwo(@RequestParam(name = "year",required = false) Integer year,
+                                                      @RequestParam(name = "month",required = false) Integer month,
+                                                      @RequestParam(name = "startDate",required = false) String startDate,
+                                                      @RequestParam(name = "endDate",required = false) String endDate){
+        List<ReportForms> list = performanceService.selectModeOne(year,month,startDate,endDate);
+        for(ReportForms reportForms : list){
+            Org org = orgService.selectModeTwo(reportForms.getSalesAuto(), reportForms.getOrgAuto());
+            if(org == null){
+                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
+            }
+            reportForms.setOrgName(org.getDepName());
+        }
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
+
 
 }

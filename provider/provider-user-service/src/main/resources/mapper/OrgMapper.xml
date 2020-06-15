@@ -27,4 +27,37 @@
       WHERE
       DepName LIKE '%${depName}%'
     </select>
+    <select id="selectModeOne" resultMap="BaseResultMap">
+      SELECT
+      *
+      FROM
+      [Org] b
+      INNER JOIN [Org2Emp] a ON b.Org_Auto = a.Org_Auto
+      WHERE
+      1 = 1
+      <if test="userAuto != null and userAuto != ''">
+        AND a.User_Auto = #{userAuto}
+      </if>
+      <if test="orgAuto != null and orgAuto != ''">
+        AND b.Org_Auto = #{orgAuto}
+      </if>
+      AND a.acltype = 0 AND b.Lev = 5
+    </select>
+  <select id="selectModeTwo" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM
+    [Org] b
+    INNER JOIN [Org2Emp] a ON b.Org_Auto = a.Org_Auto
+    WHERE
+    1 = 1
+    <if test="userAuto != null and userAuto != ''">
+      AND a.User_Auto = #{userAuto}
+    </if>
+    <if test="orgAuto != null and orgAuto != ''">
+      AND b.Org_Auto = #{orgAuto}
+    </if>
+    AND b.Lev = 4
+    AND b.IsSalesDep = 1
+  </select>
 </mapper>

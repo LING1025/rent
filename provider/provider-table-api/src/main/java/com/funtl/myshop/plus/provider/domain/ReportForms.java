@@ -12,8 +12,11 @@ import java.io.Serializable;
 public class ReportForms implements Serializable {
     @JsonIgnore
     private Long salesAuto;
-    /*private Long upUnit;
-    private Long orgAuto;*/
+
+    @JsonIgnore
+    private Long orgAuto;
+
+    private String username;
 
     /**
      * 部门
@@ -54,7 +57,7 @@ public class ReportForms implements Serializable {
      * 目标营业额
      */
     @ApiModelProperty(value = "目标营业额")
-    private Integer targetVolume;
+    private Long targetVolume;
 
     /**
      * 实际营业额

@@ -27,4 +27,14 @@ public class OrgServiceImpl implements OrgService{
         return orgMapper.selectByPrimaryKey(orgAuto);
     }
 
+    @Override
+    public Org selectModeOne(Long userAuto, Long orgAuto) {
+        return orgMapper.selectModeOne(userAuto,orgAuto);
+    }
+
+    @Override
+    public Org selectModeTwo(Long userAuto, Long orgAuto) {
+        return orgMapper.selectModeTwo(userAuto,orgAuto);
+    }
+
 }

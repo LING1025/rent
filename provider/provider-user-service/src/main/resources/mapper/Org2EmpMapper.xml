@@ -13,4 +13,5 @@
     <!--@mbg.generated-->
     Org2Emp_Auto, User_Auto, Org_Auto, ACLType
   </sql>
+
 </mapper>
