@@ -2,6 +2,7 @@ package com.funtl.myshop.plus.provider.service;
 
 import javax.annotation.Resource;
 
+import com.funtl.myshop.plus.provider.domain.ModeTwoList;
 import com.funtl.myshop.plus.provider.domain.Org;
 import com.funtl.myshop.plus.provider.domain.OrgNameList;
 import com.funtl.myshop.plus.provider.mapper.OrgMapper;
@@ -28,13 +29,13 @@ public class OrgServiceImpl implements OrgService{
     }
 
     @Override
-    public Org selectModeOne(Long userAuto, Long orgAuto) {
-        return orgMapper.selectModeOne(userAuto,orgAuto);
+    public List<ModeTwoList> selectModeOne(Integer isSalesDep, Integer lev, Integer ACLType) {
+        return orgMapper.selectModeOne(isSalesDep,lev,ACLType);
     }
 
     @Override
-    public Org selectModeTwo(Long userAuto, Long orgAuto) {
-        return orgMapper.selectModeTwo(userAuto,orgAuto);
+    public List<ModeTwoList> selectModeTwo(Integer isSalesDep, Integer lev) {
+        return orgMapper.selectModeTwo(isSalesDep,lev);
     }
 
 }

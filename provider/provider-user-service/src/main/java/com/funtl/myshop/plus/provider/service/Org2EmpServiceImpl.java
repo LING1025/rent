@@ -39,11 +39,4 @@ public class Org2EmpServiceImpl implements Org2EmpService{
         return org2EmpMapper.selectOneByExample(example);
     }
 
-    @Override
-    public List<Org2Emp> selectType(Integer ACLType) {
-        Example example = new Example(Org2Emp.class);
-        example.createCriteria().andEqualTo("ACLType",ACLType);
-        return org2EmpMapper.selectByExample(example);
-    }
-
 }

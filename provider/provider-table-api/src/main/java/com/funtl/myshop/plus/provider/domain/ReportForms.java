@@ -13,9 +13,6 @@ public class ReportForms implements Serializable {
     @JsonIgnore
     private Long salesAuto;
 
-    @JsonIgnore
-    private Long orgAuto;
-
     private String username;
 
     /**

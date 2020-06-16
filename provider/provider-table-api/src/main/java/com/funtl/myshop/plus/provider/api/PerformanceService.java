@@ -8,15 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface PerformanceService{
-    /**
-     * 根据年份月份获取营业报表信息
-     * @param rptQueryParam
-     * @return
-     */
-//    List<ReportForms> selectByYM(RptQueryParam rptQueryParam);
-    ReportForms selectByYM(RptQueryParam rptQueryParam);
-
-    List<ReportForms> selectByUpId(Integer year, Integer month, Long upUnit);
 
     /**
      * 获取下级数据
@@ -36,5 +27,5 @@ public interface PerformanceService{
      */
     List<ReportForms> selectModeZero(Integer year, Integer month,String startDate,String endDate);
 
-
+    ReportForms selectModeTwo(Integer year, Integer month,String startDate,String endDate,Long userAuto);
 }

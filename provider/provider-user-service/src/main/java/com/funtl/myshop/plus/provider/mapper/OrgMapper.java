@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.mapper;
 
+import com.funtl.myshop.plus.provider.domain.ModeTwoList;
 import com.funtl.myshop.plus.provider.domain.Org;
 import com.funtl.myshop.plus.provider.domain.OrgNameList;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface OrgMapper extends MyMapper<Org> {
     List<OrgNameList> selectOrgName(@Param("depName") String depName);
 
-    Org selectModeOne(@Param("userAuto") Long userAuto,@Param("orgAuto") Long orgAuto);
+    List<ModeTwoList> selectModeOne(@Param("isSalesDep") Integer isSalesDep, @Param("lev") Integer lev,@Param("ACLType") Integer ACLType);
 
-    Org selectModeTwo(@Param("userAuto") Long userAuto,@Param("orgAuto") Long orgAuto);
+    List<ModeTwoList> selectModeTwo(@Param("isSalesDep") Integer isSalesDep, @Param("lev") Integer lev);
 }

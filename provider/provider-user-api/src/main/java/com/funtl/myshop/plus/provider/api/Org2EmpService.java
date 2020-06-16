@@ -29,11 +29,4 @@ public interface Org2EmpService{
      */
     Org2Emp selectByUserAuto(Long userAuto);
 
-    /**
-     * 根据级别获取部门员工绑定数据
-     * @param ACLType
-     * @return
-     */
-    List<Org2Emp> selectType(Integer ACLType);
-
 }
