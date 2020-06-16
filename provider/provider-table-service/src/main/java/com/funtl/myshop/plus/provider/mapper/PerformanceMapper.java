@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface PerformanceMapper extends MyMapper<Performance> {
 
-    List<ReportForms> selectModeOne(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate);
+    List<ReportForms> selectModeOne(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("orgAuto") Long orgAuto);
 
-    List<ReportForms> selectModeZero(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate);
+    List<ReportForms> selectModeZero(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate, @Param("userAuto") Long userAuto);
 
     ReportForms selectModeTwo(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate, @Param("userAuto") Long userAuto);
 }
