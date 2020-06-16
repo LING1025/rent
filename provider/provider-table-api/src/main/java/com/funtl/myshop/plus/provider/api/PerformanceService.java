@@ -25,7 +25,7 @@ public interface PerformanceService{
      * @param endDate
      * @return
      */
-    List<ReportForms> selectModeZero(Integer year, Integer month,String startDate,String endDate,Long userAuto);
+    List<ReportForms> selectModeZero(Integer year, Integer month,String startDate,String endDate,Long userAuto,Long orgAuto);
 
-    ReportForms selectModeTwo(Integer year, Integer month,String startDate,String endDate,Long userAuto);
+    List<ReportForms> selectModeTwo(Integer year, Integer month,String startDate,String endDate,Long orgAuto);
 }

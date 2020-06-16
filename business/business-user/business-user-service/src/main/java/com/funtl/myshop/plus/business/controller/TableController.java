@@ -58,7 +58,7 @@ public class TableController {
         List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
         if(modeTwoLists.size() > 0){
             for(ModeTwoList dto : modeTwoLists){
-                List<ReportForms> list1 = performanceService.selectModeZero(year,month,startDate,endDate,dto.getUserAuto());
+                List<ReportForms> list1 = performanceService.selectModeZero(year,month,startDate,endDate,dto.getUserAuto(),dto.getOrgAuto());
                 return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list1);
             }
         }
@@ -114,14 +114,10 @@ public class TableController {
                                                       @RequestParam(name = "endDate",required = false) String endDate){
         List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
         if(modeTwoLists.size() > 0){
-            List<ReportForms> list = Lists.newArrayList();
             for(ModeTwoList dto : modeTwoLists){
-                ReportForms reportForms = performanceService.selectModeTwo(year,month,startDate,endDate,dto.getUserAuto());
-                if(reportForms != null){
-                    list.add(reportForms);
-                }
+                List<ReportForms> list = performanceService.selectModeTwo(year,month,startDate,endDate,dto.getOrgAuto());
+                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
             }
-            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }

@@ -23,13 +23,13 @@ public class PerformanceServiceImpl implements PerformanceService{
     }
 
     @Override
-    public List<ReportForms> selectModeZero(Integer year, Integer month, String startDate, String endDate,Long userAuto) {
-        return performanceMapper.selectModeZero(year,month,startDate,endDate,userAuto);
+    public List<ReportForms> selectModeZero(Integer year, Integer month, String startDate, String endDate,Long userAuto,Long orgAuto) {
+        return performanceMapper.selectModeZero(year,month,startDate,endDate,userAuto,orgAuto);
     }
 
     @Override
-    public ReportForms selectModeTwo(Integer year, Integer month, String startDate, String endDate, Long userAuto) {
-        return performanceMapper.selectModeTwo(year,month,startDate,endDate,userAuto);
+    public List<ReportForms> selectModeTwo(Integer year, Integer month, String startDate, String endDate,Long orgAuto) {
+        return performanceMapper.selectModeTwo(year,month,startDate,endDate,orgAuto);
     }
 
     /*@Override

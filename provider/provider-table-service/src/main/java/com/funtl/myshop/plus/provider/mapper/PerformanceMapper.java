@@ -9,7 +9,7 @@ public interface PerformanceMapper extends MyMapper<Performance> {
 
     List<ReportForms> selectModeOne(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("orgAuto") Long orgAuto);
 
-    List<ReportForms> selectModeZero(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate, @Param("userAuto") Long userAuto);
+    List<ReportForms> selectModeZero(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate, @Param("userAuto") Long userAuto,@Param("orgAuto") Long orgAuto);
 
-    ReportForms selectModeTwo(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate, @Param("userAuto") Long userAuto);
+    List<ReportForms> selectModeTwo(@Param("year") Integer year, @Param("month") Integer month,@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("orgAuto") Long orgAuto);
 }
