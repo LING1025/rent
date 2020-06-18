@@ -42,10 +42,10 @@
     LEFT JOIN [Orders] AS os ON p.Sales_Auto = os.Sales_Auto
     WHERE
     1 = 1
-    <if test="year != null and year != ''">
+    <if test="year != null">
       AND p.P_Year = #{year}
     </if>
-    <if test="month != null and month != ''">
+    <if test="month != null">
       AND p.P_Month = #{month}
     </if>
     <if test="orgAuto != null">
@@ -72,7 +72,7 @@
     LEFT JOIN [Orders] AS os ON p.Sales_Auto = os.Sales_Auto
     WHERE
     1 = 1
-    <if test="year != null and year != ''">
+    <if test="year != null">
       AND p.P_Year = #{year}
     </if>
     <if test="month != null and month != ''">

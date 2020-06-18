@@ -6,15 +6,17 @@ import java.io.Serializable;
 
 @Data
 public class RptQueryParams implements Serializable {
-    private Integer Type;
-    private Long UserID;
-    private String StartDT_F;
-    private String StartDT_E;
+    private Integer year;
+    private Integer month;
+    private String startDate;
+    private String endDate;
+    private Long orgAuto;
 
-    public RptQueryParams(Integer type, Long userID, String startDT_F, String startDT_E) {
-        Type = type;
-        UserID = userID;
-        StartDT_F = startDT_F;
-        StartDT_E = startDT_E;
+    public RptQueryParams(Integer year, Integer month, String startDate, String endDate, Long orgAuto) {
+        this.year = year;
+        this.month = month;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.orgAuto = orgAuto;
     }
 }

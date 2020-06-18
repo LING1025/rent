@@ -3,19 +3,21 @@ package com.funtl.myshop.plus.provider.dto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 @Data
 public class RptQueryParam implements Serializable {
     private Integer year;
     private Integer month;
-    private Long salesAuto;
-    /*private String startDate;
-    private String endDate;*/
+    private String startDate;
+    private String endDate;
+    private List<Long> orgAutos;
 
-    public RptQueryParam(Integer year, Integer month, Long salesAuto) {
+    public RptQueryParam(Integer year, Integer month, String startDate, String endDate, List<Long> orgAutos) {
         this.year = year;
         this.month = month;
-        this.salesAuto = salesAuto;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.orgAutos = orgAutos;
     }
 }
