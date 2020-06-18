@@ -18,22 +18,18 @@ public class PerformanceServiceImpl implements PerformanceService{
     private PerformanceMapper performanceMapper;
 
     @Override
-    public List<ReportForms> selectModeOne(Integer year, Integer month,String startDate,String endDate,Long orgAuto) {
-        return performanceMapper.selectModeOne(year,month,startDate,endDate,orgAuto);
+    public List<ReportForms> selectModeOnes(Integer year, Integer month, String startDate, String endDate, List<Long> orgAutos) {
+        return performanceMapper.selectModeOnes(year,month,startDate,endDate,orgAutos);
+
     }
 
     @Override
-    public List<ReportForms> selectModeZero(Integer year, Integer month, String startDate, String endDate,Long userAuto,Long orgAuto) {
-        return performanceMapper.selectModeZero(year,month,startDate,endDate,userAuto,orgAuto);
+    public List<ReportForms> selectModeZeros(Integer year, Integer month, String startDate, String endDate, List<Long> orgAutos) {
+        return performanceMapper.selectModeZeros(year,month,startDate,endDate,orgAutos);
     }
 
     @Override
-    public List<ReportForms> selectModeTwo(Integer year, Integer month, String startDate, String endDate,Long orgAuto) {
+    public ReportForms selectModeTwo(Integer year, Integer month, String startDate, String endDate,Long orgAuto) {
         return performanceMapper.selectModeTwo(year,month,startDate,endDate,orgAuto);
     }
-
-    /*@Override
-    public List<ReportForms> selectByYM(RptQueryParam rptQueryParam) {
-        return performanceMapper.selectByYM(rptQueryParam);
-    }*/
 }

@@ -15,7 +15,7 @@ public interface PerformanceService{
      * @param month
      * @return
      */
-    List<ReportForms> selectModeOne(Integer year, Integer month,String startDate,String endDate,Long orgAuto);
+    List<ReportForms> selectModeOnes(Integer year, Integer month,String startDate,String endDate,List<Long> orgAutos);
 
     /**
      * 获取业代数据
@@ -25,7 +25,9 @@ public interface PerformanceService{
      * @param endDate
      * @return
      */
-    List<ReportForms> selectModeZero(Integer year, Integer month,String startDate,String endDate,Long userAuto,Long orgAuto);
 
-    List<ReportForms> selectModeTwo(Integer year, Integer month,String startDate,String endDate,Long orgAuto);
+    List<ReportForms> selectModeZeros(Integer year, Integer month,String startDate,String endDate,List<Long> orgAutos);
+
+
+    ReportForms selectModeTwo(Integer year, Integer month,String startDate,String endDate,Long orgAuto);
 }

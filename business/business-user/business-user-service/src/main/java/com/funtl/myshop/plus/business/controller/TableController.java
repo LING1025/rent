@@ -57,10 +57,12 @@ public class TableController {
         //获取上级部门，reportFroms查询时条件改成emp.upUnit = org.orgAuto,获取该部门下的课的业代
         List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
         if(modeTwoLists.size() > 0){
+            List<Long> orgIds = Lists.newArrayList();
             for(ModeTwoList dto : modeTwoLists){
-                List<ReportForms> list1 = performanceService.selectModeZero(year,month,startDate,endDate,dto.getUserAuto(),dto.getOrgAuto());
-                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list1);
+                orgIds.add(dto.getOrgAuto());
             }
+            List<ReportForms> list1 = performanceService.selectModeZeros(year,month,startDate,endDate,orgIds);
+            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list1);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }
@@ -92,10 +94,13 @@ public class TableController {
         //获取上级部门，reportFroms查询时条件改成emp.upUnit = org.orgAuto,获取该部门下的课
         List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
         if(modeTwoLists.size() > 0){
+            List<Long> orgIds = Lists.newArrayList();
             for(ModeTwoList dto : modeTwoLists){
-                List<ReportForms> list = performanceService.selectModeOne(year,month,startDate,endDate,dto.getOrgAuto());
-                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+                orgIds.add(dto.getOrgAuto());
             }
+//            List<ReportForms> list = performanceService.selectModeOne(year,month,startDate,endDate,dto.getOrgAuto());
+            List<ReportForms> list = performanceService.selectModeOnes(year,month,startDate,endDate,orgIds);
+            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }
@@ -114,10 +119,14 @@ public class TableController {
                                                       @RequestParam(name = "endDate",required = false) String endDate){
         List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
         if(modeTwoLists.size() > 0){
+            List<ReportForms> list = Lists.newArrayList();
             for(ModeTwoList dto : modeTwoLists){
-                List<ReportForms> list = performanceService.selectModeTwo(year,month,startDate,endDate,dto.getOrgAuto());
-                return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+                ReportForms reportForms = performanceService.selectModeTwo(year,month,startDate,endDate,dto.getOrgAuto());
+                if(reportForms != null){
+                    list.add(reportForms);
+                }
             }
+            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }
