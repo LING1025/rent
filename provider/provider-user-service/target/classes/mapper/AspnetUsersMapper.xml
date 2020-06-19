@@ -4,14 +4,14 @@
   <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.AspnetUsers">
     <!--@mbg.generated-->
     <!--@Table aspnet_Users-->
-    <id column="UserId" jdbcType="OTHER" property="userId" />
+    <id column="User_Auto" jdbcType="BIGINT" property="userAuto" />
+    <result column="UserId" jdbcType="OTHER" property="userId" />
     <result column="ApplicationId" jdbcType="OTHER" property="applicationId" />
     <result column="UserName" jdbcType="VARCHAR" property="username" />
     <result column="LoweredUserName" jdbcType="VARCHAR" property="loweredUserName" />
     <result column="MobileAlias" jdbcType="VARCHAR" property="mobileAlias" />
     <result column="IsAnonymous" jdbcType="BIT" property="isAnonymous" />
     <result column="LastActivityDate" jdbcType="TIMESTAMP" property="lastActivityDate" />
-    <result column="User_Auto" jdbcType="BIGINT" property="userAuto" />
     <result column="EXTN" jdbcType="VARCHAR" property="extn" />
     <result column="IsEas" jdbcType="INTEGER" property="isEas" />
     <result column="MobilePIN" jdbcType="VARCHAR" property="mobilePIN" />

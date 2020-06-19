@@ -52,6 +52,9 @@ public class EmpBaseController {
     @Reference(version = "1.0.0")
     private Roles2OrgService roles2OrgService;
 
+    @Reference(version = "1.0.0")
+    private AspnetUsersInRolesService aspnetUsersInRolesService;
+
     @ApiOperation(value = "新建员工")
     @PostMapping(value = "insert")
     public ResponseResult<String> insert(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto){
@@ -138,6 +141,17 @@ public class EmpBaseController {
                 empBaseService.deleteById(i2);
                 throw new BusinessException(BusinessStatus.SAVE_FAILURE);
             }
+            AspnetUsers a = aspnetUsersService.selectById(i1);
+
+            //aspnetUsersInRoles插入数据
+            AspnetUsersInRoles aspnetUsersInRoles = new AspnetUsersInRoles();
+            aspnetUsersInRoles.setUserId(a.getUserId());
+            aspnetUsersInRoles.setRoleId(aspnetRoles.getRoleId());
+            Integer i5 = aspnetUsersInRolesService.insert(aspnetUsersInRoles);
+            if (i5 == 0){
+                throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+            }
+
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "保存成功", null);
     }
