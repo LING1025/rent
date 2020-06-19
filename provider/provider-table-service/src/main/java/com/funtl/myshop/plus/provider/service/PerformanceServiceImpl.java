@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import com.funtl.myshop.plus.provider.domain.Performance;
 import com.funtl.myshop.plus.provider.domain.ReportForms;
 import com.funtl.myshop.plus.provider.dto.RptQueryParam;
+import com.funtl.myshop.plus.provider.dto.RptQueryParams;
 import com.funtl.myshop.plus.provider.mapper.PerformanceMapper;
 import com.funtl.myshop.plus.provider.api.PerformanceService;
 import org.apache.dubbo.config.annotation.Service;
@@ -18,18 +19,18 @@ public class PerformanceServiceImpl implements PerformanceService{
     private PerformanceMapper performanceMapper;
 
     @Override
-    public List<ReportForms> selectModeOnes(Integer year, Integer month, String startDate, String endDate, List<Long> orgAutos) {
-        return performanceMapper.selectModeOnes(year,month,startDate,endDate,orgAutos);
+    public List<ReportForms> selectModeOnes(RptQueryParam rptQueryParam) {
+        return performanceMapper.selectModeOnes(rptQueryParam);
 
     }
 
     @Override
-    public List<ReportForms> selectModeZeros(Integer year, Integer month, String startDate, String endDate, List<Long> orgAutos) {
-        return performanceMapper.selectModeZeros(year,month,startDate,endDate,orgAutos);
+    public List<ReportForms> selectModeZeros(RptQueryParam rptQueryParam) {
+        return performanceMapper.selectModeZeros(rptQueryParam);
     }
 
     @Override
-    public ReportForms selectModeTwo(Integer year, Integer month, String startDate, String endDate,Long orgAuto) {
-        return performanceMapper.selectModeTwo(year,month,startDate,endDate,orgAuto);
+    public ReportForms selectModeTwo(RptQueryParams rptQueryParams) {
+        return performanceMapper.selectModeTwo(rptQueryParams);
     }
 }

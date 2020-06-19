@@ -29,7 +29,7 @@
     </select>
     <select id="selectModeOne" resultMap="queryModeTwo">
       SELECT
-      DISTINCT b.Org_Auto,b.DepName,a.User_Auto
+      DISTINCT b.Org_Auto,b.DepName
       FROM
       [Org] b
       INNER JOIN [Org2Emp] a ON b.Org_Auto = a.Org_Auto
@@ -50,10 +50,10 @@
   </resultMap>
   <select id="selectModeTwo" resultMap="queryModeTwo">
     SELECT
-    DISTINCT b.Org_Auto,b.DepName,a.User_Auto
+    DISTINCT b.Org_Auto,b.DepName
     FROM
     [Org] b
-    INNER JOIN [Org2Emp] a ON b.UpUnit = a.Org_Auto
+    INNER JOIN [Org2Emp] a ON b.Org_Auto = a.Org_Auto
     WHERE
     1 = 1
     <if test="isSalesDep != null">

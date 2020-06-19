@@ -5,6 +5,7 @@ import com.funtl.myshop.plus.provider.api.*;
 import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.dto.RptQueryParam;
+import com.funtl.myshop.plus.provider.dto.RptQueryParams;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -61,7 +62,8 @@ public class TableController {
             for(ModeTwoList dto : modeTwoLists){
                 orgIds.add(dto.getOrgAuto());
             }
-            List<ReportForms> list1 = performanceService.selectModeZeros(year,month,startDate,endDate,orgIds);
+            RptQueryParam rptQueryParam = new RptQueryParam(year,month,startDate,endDate,orgIds);
+            List<ReportForms> list1 = performanceService.selectModeZeros(rptQueryParam);
             return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list1);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
@@ -99,7 +101,8 @@ public class TableController {
                 orgIds.add(dto.getOrgAuto());
             }
 //            List<ReportForms> list = performanceService.selectModeOne(year,month,startDate,endDate,dto.getOrgAuto());
-            List<ReportForms> list = performanceService.selectModeOnes(year,month,startDate,endDate,orgIds);
+            RptQueryParam rptQueryParam = new RptQueryParam(year,month,startDate,endDate,orgIds);
+            List<ReportForms> list = performanceService.selectModeOnes(rptQueryParam);
             return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
@@ -121,7 +124,8 @@ public class TableController {
         if(modeTwoLists.size() > 0){
             List<ReportForms> list = Lists.newArrayList();
             for(ModeTwoList dto : modeTwoLists){
-                ReportForms reportForms = performanceService.selectModeTwo(year,month,startDate,endDate,dto.getOrgAuto());
+                RptQueryParams rptQueryParams = new RptQueryParams(year,month,startDate,endDate,dto.getOrgAuto());
+                ReportForms reportForms = performanceService.selectModeTwo(rptQueryParams);
                 if(reportForms != null){
                     list.add(reportForms);
                 }

@@ -31,9 +31,9 @@
     emp.DepName AS orgName,
     SUM(p.P_Count) AS targetNum,
     COUNT(o.YJOrg) AS realNum,
-    (SUM(p.P_Count) * 3.33) AS targetPaperNum,
+    SUM(p.P_Count * 3.33) AS targetPaperNum,
     COUNT(os.TradeItem_Auto) AS proPaperNum,
-    (SUM(p.P_Count) * (SELECT Num FROM [ItemCode] WHERE ItemType = 10000 + #{year})) AS targetVolume,
+    (SUM(p.P_Count) * (SELECT Num FROM [ItemCode] WHERE ItemType = 10000 + #{param.year})) AS targetVolume,
     SUM(o.MAmt * o.MM) AS realVolume
     FROM
     [v_Emp] AS emp
@@ -42,18 +42,18 @@
     LEFT JOIN [Orders] AS os ON p.Sales_Auto = os.Sales_Auto
     WHERE
     1 = 1
-    <if test="year != null">
-      AND p.P_Year = #{year}
+    <if test="param.year != null">
+      AND p.P_Year = #{param.year}
     </if>
-    <if test="month != null">
-      AND p.P_Month = #{month}
+    <if test="param.month != null">
+      AND p.P_Month = #{param.month}
     </if>
-    <if test="orgAuto != null">
-      AND emp.Org_Auto = #{orgAuto}
+    <if test="param.orgAuto != null">
+      AND emp.Org_Auto = #{param.orgAuto}
     </if>
     <!--AND os.OrderStatus = 20
     AND os.PostType = 4-->
-    AND os.AppDate BETWEEN #{startDate} AND #{endDate}
+    AND os.AppDate BETWEEN #{param.startDate} AND #{param.endDate}
     GROUP BY emp.DepName
   </select>
   <select id="selectModeOnes" resultMap="queryByYM">
@@ -61,9 +61,9 @@
     emp.DepName AS orgName,
     SUM(p.P_Count) AS targetNum,
     COUNT(o.YJOrg) AS realNum,
-    (SUM(p.P_Count) * 3.33) AS targetPaperNum,
+    SUM(p.P_Count * 3.33) AS targetPaperNum,
     COUNT(os.TradeItem_Auto) AS proPaperNum,
-    (SUM(p.P_Count) * (SELECT Num FROM [ItemCode] WHERE ItemType = 10000 + #{year})) AS targetVolume,
+    (SUM(p.P_Count) * (SELECT Num FROM [ItemCode] WHERE ItemType = 10000 + #{param.year})) AS targetVolume,
     SUM(o.MAmt * o.MM) AS realVolume
     FROM
     [v_Emp] AS emp
@@ -72,19 +72,19 @@
     LEFT JOIN [Orders] AS os ON p.Sales_Auto = os.Sales_Auto
     WHERE
     1 = 1
-    <if test="year != null">
-      AND p.P_Year = #{year}
+    <if test="param.year != null">
+      AND p.P_Year = #{param.year}
     </if>
-    <if test="month != null and month != ''">
-      AND p.P_Month = #{month}
+    <if test="param.month != null">
+      AND p.P_Month = #{param.month}
     </if>
     AND emp.UpUnit in
-    <foreach collection="orgAutos" index="index" item="item" open="(" separator="," close=")">
+    <foreach collection="param.orgAutos" index="index" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
     <!--AND os.OrderStatus = 20
     AND os.PostType = 4-->
-    AND os.AppDate BETWEEN #{startDate} AND #{endDate}
+    AND os.AppDate BETWEEN #{param.startDate} AND #{param.endDate}
     GROUP BY emp.DepName
   </select>
   <select id="selectModeZeros" resultMap="queryByYM">
@@ -92,9 +92,9 @@
     emp.FName AS fName,
     SUM(p.P_Count) AS targetNum,
     COUNT(o.YJOrg) AS realNum,
-    (SUM(p.P_Count) * 3.33) AS targetPaperNum,
+    SUM(p.P_Count * 3.33) AS targetPaperNum,
     COUNT(os.TradeItem_Auto) AS proPaperNum,
-    (SUM(p.P_Count) * (SELECT Num FROM [ItemCode] WHERE ItemType = 10000 + #{year})) AS targetVolume,
+    (SUM(p.P_Count) * (SELECT Num FROM [ItemCode] WHERE ItemType = 10000 + #{param.year})) AS targetVolume,
     SUM(o.MAmt * o.MM) AS realVolume
     FROM
     [v_Emp] AS emp
@@ -103,19 +103,19 @@
     LEFT JOIN [Orders] AS os ON p.Sales_Auto = os.Sales_Auto
     WHERE
     1 = 1
-    <if test="year != null and year != ''">
-      AND p.P_Year = #{year}
+    <if test="param.year != null">
+      AND p.P_Year = #{param.year}
     </if>
-    <if test="month != null and month != ''">
-      AND p.P_Month = #{month}
+    <if test="param.month != null">
+      AND p.P_Month = #{param.month}
     </if>
     AND emp.UpUnit in
-    <foreach collection="orgAutos" index="index" item="item" open="(" separator="," close=")">
+    <foreach collection="param.orgAutos" index="index" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
     <!--AND os.OrderStatus = 20
     AND os.PostType = 4-->
-    AND os.AppDate BETWEEN #{startDate} AND #{endDate}
+    AND os.AppDate BETWEEN #{param.startDate} AND #{param.endDate}
     GROUP BY emp.FName
   </select>
 </mapper>
