@@ -11,12 +11,15 @@ import io.swagger.annotations.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 员工信息
@@ -50,10 +53,10 @@ public class EmpBaseController {
     private Roles2EmpService roles2EmpService;
 
     @Reference(version = "1.0.0")
-    private Roles2OrgService roles2OrgService;
-
-    @Reference(version = "1.0.0")
     private AspnetUsersInRolesService aspnetUsersInRolesService;
+
+    @Resource
+    public BCryptPasswordEncoder passwordEncoder;
 
     @ApiOperation(value = "新建员工")
     @PostMapping(value = "insert")
@@ -101,9 +104,10 @@ public class EmpBaseController {
         //aspnetUsers插入数据
         AspnetUsers aspnetUsers = new AspnetUsers();
         BeanUtils.copyProperties(empParamDto,aspnetUsers);
-        aspnetUsers.setUserId("8FEE10B0-8BF9-4A91-91EF-B28941B73AB9");
+        aspnetUsers.setUserId(UUID.randomUUID().toString());
         aspnetUsers.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
         aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
+        aspnetUsers.setPassword(passwordEncoder.encode("123456"));
         aspnetUsers.setEmpBaseAuto(i2);
         Long i1 = aspnetUsersService.insert(aspnetUsers);
         if(i1 == 0){
@@ -142,6 +146,7 @@ public class EmpBaseController {
                 throw new BusinessException(BusinessStatus.SAVE_FAILURE);
             }
             AspnetUsers a = aspnetUsersService.selectById(i1);
+            System.out.println(a.getUserId());
 
             //aspnetUsersInRoles插入数据
             AspnetUsersInRoles aspnetUsersInRoles = new AspnetUsersInRoles();
@@ -221,6 +226,11 @@ public class EmpBaseController {
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
         }
 
+        AspnetUsers a = aspnetUsersService.selectByEmpAuto(empBase.getEmpBaseAuto());
+        //删除用户角色绑定信息
+        aspnetUsersInRolesService.deleteByUserId(a.getUserId());
+
+        //删除员工角色绑定数据
         roles2EmpService.deleteByEmpAuto(empBase.getEmpBaseAuto());
         for (String role : empParamDto.getRoles()
         ) {
@@ -235,6 +245,15 @@ public class EmpBaseController {
             roles2Emp.setEmpBaseAuto(empBase.getEmpBaseAuto());
             Long i4 = roles2EmpService.insert(roles2Emp);
             if(i4 == 0){
+                throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+            }
+
+            //aspnetUsersInRoles插入数据
+            AspnetUsersInRoles aspnetUsersInRoles = new AspnetUsersInRoles();
+            aspnetUsersInRoles.setUserId(a.getUserId());
+            aspnetUsersInRoles.setRoleId(aspnetRoles.getRoleId());
+            Integer i5 = aspnetUsersInRolesService.insert(aspnetUsersInRoles);
+            if (i5 == 0){
                 throw new BusinessException(BusinessStatus.SAVE_FAILURE);
             }
         }
