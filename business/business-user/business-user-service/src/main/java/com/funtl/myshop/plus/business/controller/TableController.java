@@ -64,6 +64,7 @@ public class TableController {
         List<ReportForms> list = vEmpService.selectMode(lineChartQueryParam);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
+/*
 
     @ApiOperation(value = "获取业代营业报表信息")
     @ApiImplicitParams({
@@ -103,7 +104,8 @@ public class TableController {
                                                      @RequestParam(name = "month",required = false) Integer month,
                                                     @RequestParam(name = "startDate",required = false) String startDate,
                                                     @RequestParam(name = "endDate",required = false) String endDate){
-        /*List<ModeTwoList> modeTwoLists = orgService.selectModeOne(1,5,0);
+        */
+/*List<ModeTwoList> modeTwoLists = orgService.selectModeOne(1,5,0);
         if(modeTwoLists.size() > 0){
             List<ReportForms> list = Lists.newArrayList();
             for(ModeTwoList dto : modeTwoLists){
@@ -113,7 +115,8 @@ public class TableController {
                 }
             }
             return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
-        }*/
+        }*//*
+
 
         //获取上级部门，reportFroms查询时条件改成emp.upUnit = org.orgAuto,获取该部门下的课
         List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
@@ -156,6 +159,7 @@ public class TableController {
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
     }
+*/
 
 
 }

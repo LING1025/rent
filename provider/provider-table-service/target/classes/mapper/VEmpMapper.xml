@@ -38,7 +38,7 @@
     DepName, TitleName, FName, Expr1, IsOn, IsEas, AccCode, IsSalesDep
   </sql>
   <resultMap id="queryByMode" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ReportForms">
-    <result column="salesAuto" jdbcType="BIGINT" property="salesAuto" />
+    <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />
     <result column="orgName" jdbcType="VARCHAR" property="orgName" />
     <result column="targetNum" jdbcType="INTEGER" property="targetNum" />
     <result column="realNum" jdbcType="INTEGER" property="realNum" />
