@@ -113,6 +113,7 @@ public class LoginController {
         // 封装并返回结果
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setName(aspnetUsers.getUsername());
+        loginInfo.setUserAuto(aspnetUsers.getUserAuto());
         return new ResponseResult<LoginInfo>(ResponseResult.CodeStatus.OK, "获取用户信息", loginInfo);
     }
 

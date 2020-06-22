@@ -7,10 +7,10 @@
         <option name="generateService" value="true" />
         <option name="generateServiceInterface" value="true" />
         <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-        <option name="javaMapperPath" value="D:\Work\rent\provider\provider-user-service\src\main\java" />
+        <option name="javaMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
         <option name="javaModelPackage" value="com.funtl.myshop.plus.provider.domain" />
-        <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-user-api/src/main/java" />
-        <option name="lastDatabaseCrudChooseModuleName" value="provider-user-api" />
+        <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-table-api/src/main/java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="provider-table-api" />
         <option name="lombokDataAnnotation" value="true" />
         <option name="moduleNameToPackageAndPathMap">
           <map>
@@ -37,9 +37,10 @@
                   <option name="javaMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
                   <option name="javaModelPacakge" value="com.funtl.myshop.plus.provider.domain" />
                   <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-table-api/src/main/java" />
-                  <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.api" />
+                  <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.service" />
                   <option name="javaServiceInterfacePath" value="D:\Work\rent\provider\provider-table-api\src\main\java" />
-                  <option name="javaServicePath" value="$PROJECT_DIR$/provider/provider-table-api/src/main/java" />
+                  <option name="javaServicePackage" value="com.funtl.myshop.plus.provider.service" />
+                  <option name="javaServicePath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
                   <option name="xmlPackage" value="mapper" />
                   <option name="xmlPath" value="D:\Work\rent\provider\provider-table-service\src\main\resources" />
                 </UserPackageAndPathInfoByModule>
@@ -1793,11 +1794,127 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="dbo:v_Emp">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg4Name" />
+                        <option name="javaProperty" value="uPOrg4Name" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg5" />
+                        <option name="javaProperty" value="uPOrg5" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg3Name" />
+                        <option name="javaProperty" value="uPOrg3Name" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg4" />
+                        <option name="javaProperty" value="uPOrg4" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg2Name" />
+                        <option name="javaProperty" value="uPOrg2Name" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg3" />
+                        <option name="javaProperty" value="uPOrg3" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrgName" />
+                        <option name="javaProperty" value="uPOrgName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UPOrg2" />
+                        <option name="javaProperty" value="uPOrg2" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="TradeItem_Auto" />
+                        <option name="javaProperty" value="tradeItemAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UserId" />
+                        <option name="javaProperty" value="userId" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="User_Auto" />
+                        <option name="javaProperty" value="userAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UserName" />
+                        <option name="javaProperty" value="userName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Org_Auto" />
+                        <option name="javaProperty" value="orgAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="DepCode" />
+                        <option name="javaProperty" value="depCode" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Lev" />
+                        <option name="javaProperty" value="lev" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UpUnit" />
+                        <option name="javaProperty" value="upUnit" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="TitleLevel" />
+                        <option name="javaProperty" value="titleLevel" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="EmpBase_Auto" />
+                        <option name="javaProperty" value="empBaseAuto" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="DepName" />
+                        <option name="javaProperty" value="depName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="TitleName" />
+                        <option name="javaProperty" value="titleName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FName" />
+                        <option name="javaProperty" value="fName" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Expr1" />
+                        <option name="javaProperty" value="expr1" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="IsOn" />
+                        <option name="javaProperty" value="isOn" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="IsEas" />
+                        <option name="javaProperty" value="isEas" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="AccCode" />
+                        <option name="javaProperty" value="accCode" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="VEmp" />
+                  <option name="moduleName" value="provider-table-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
           </map>
         </option>
         <option name="useActualColumnNames" value="true" />
         <option name="xmlMapperPackage" value="mapper" />
-        <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-user-service\src\main\resources" />
+        <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\resources" />
       </ProjectProfile>
     </option>
   </component>

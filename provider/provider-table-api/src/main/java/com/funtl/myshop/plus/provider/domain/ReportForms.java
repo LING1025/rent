@@ -10,13 +10,11 @@ import java.io.Serializable;
 @Data
 @ApiModel(value = "营业报表返回属性")
 public class ReportForms implements Serializable {
-    @JsonIgnore
     private Long salesAuto;
 
     private String fName;
 
-    @JsonIgnore
-    private String username;
+    private Long orgAuto;
 
     /**
      * 部门
@@ -64,6 +62,15 @@ public class ReportForms implements Serializable {
      */
     @ApiModelProperty(value = "实际营业额")
     private Integer realVolume;
+
+    @ApiModelProperty(value = "报件达成率")
+    private Integer paperLv;
+
+    @ApiModelProperty(value = "台数达成率")
+    private Integer countLv;
+
+    @ApiModelProperty(value = "营业额达成率")
+    private Integer volumeLv;
 /*
 
     */
