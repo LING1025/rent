@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.service;
 
 import com.funtl.myshop.plus.provider.domain.ReportForms;
+import com.funtl.myshop.plus.provider.domain.TrialForms;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 
 import javax.annotation.Resource;
@@ -20,5 +21,10 @@ public class VEmpServiceImpl implements VEmpService{
     @Override
     public List<ReportForms> selectMode(LineChartQueryParam lineChartQueryParam) {
         return vEmpMapper.selectMode(lineChartQueryParam);
+    }
+
+    @Override
+    public List<TrialForms> selectTrail(LineChartQueryParam lineChartQueryParam) {
+        return vEmpMapper.selectTrail(lineChartQueryParam);
     }
 }

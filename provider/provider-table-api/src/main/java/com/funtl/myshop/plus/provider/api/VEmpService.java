@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.api;
 
 import com.funtl.myshop.plus.provider.domain.ReportForms;
+import com.funtl.myshop.plus.provider.domain.TrialForms;
 import com.funtl.myshop.plus.provider.domain.VEmp;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 
@@ -13,5 +14,7 @@ public interface VEmpService{
      * @return
      */
     List<ReportForms> selectMode(LineChartQueryParam lineChartQueryParam);
+
+    List<TrialForms> selectTrail(LineChartQueryParam lineChartQueryParam);
 
 }
