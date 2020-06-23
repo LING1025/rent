@@ -60,6 +60,13 @@ public class TableController {
                                                        @RequestParam(name = "endDate",required = false) String endDate,
                                                        @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
                                                        @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不能跨年份或月份查询",null);
+        }
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
         List<ReportForms> list = vEmpService.selectMode(lineChartQueryParam);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
