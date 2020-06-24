@@ -11,10 +11,10 @@ import java.io.Serializable;
 public class TrialForms implements Serializable {
 
     @ApiModelProperty(value = "年月")
-    private Integer mm;
+    private String yearMon;
 
     @ApiModelProperty(value = "日")
-    private Integer dd;
+    private String days;
 
     @ApiModelProperty(value = "台数")
     private Integer pCount;

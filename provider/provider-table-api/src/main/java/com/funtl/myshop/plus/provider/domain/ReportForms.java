@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @ApiModel(value = "营业报表返回属性")
@@ -16,17 +17,6 @@ public class ReportForms implements Serializable {
 
     private Long orgAuto;
 
-    @ApiModelProperty(value = "年月")
-    private Integer mm;
-
-    @ApiModelProperty(value = "日")
-    private Integer dd;
-
-    @ApiModelProperty(value = "台数")
-    private Integer pCount;
-
-    @ApiModelProperty(value = "金额")
-    private Integer pMoney;
 
     /**
      * 部门

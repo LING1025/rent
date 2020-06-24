@@ -49,10 +49,6 @@
     <result column="paperLv" jdbcType="INTEGER" property="paperLv" />
     <result column="countLv" jdbcType="INTEGER" property="countLv" />
     <result column="volumeLv" jdbcType="INTEGER" property="volumeLv" />
-    <result column="MM" jdbcType="INTEGER" property="mm" />
-    <result column="DD" jdbcType="INTEGER" property="dd" />
-    <result column="P_Count" jdbcType="INTEGER" property="pCount" />
-    <result column="P_money" jdbcType="INTEGER" property="pMoney" />
   </resultMap>
   <select id="selectMode" resultMap="queryByMode">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
@@ -198,7 +194,7 @@
     ) a3
     end
 
-    select convert(varchar(7),b.YJCDT,120) MM,day(b.YJCDT) DD,count(*) P_Count,sum(b.MM*b.MAmt) P_money
+    select convert(varchar(7),b.YJCDT,120) yearMon,day(b.YJCDT) days,count(*) pCount,sum(b.MM*b.MAmt) pMoney
     from @Org a
     left join [order] b on b.YJOrg = a.Org_Auto and b.YJCDT between DATEADD(mm, DATEDIFF(mm,0,@StartDT)-1, 0) and @EndDT
     group by convert(varchar(7),b.YJCDT,120),day(b.YJCDT)
@@ -209,10 +205,10 @@
 
   <resultMap id="queryTrail" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.TrialForms">
     <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />
-    <result column="MM" jdbcType="INTEGER" property="mm" />
-    <result column="DD" jdbcType="INTEGER" property="dd" />
-    <result column="P_Count" jdbcType="INTEGER" property="pCount" />
-    <result column="P_money" jdbcType="INTEGER" property="pMoney" />
+    <result column="yearMon" jdbcType="VARCHAR" property="yearMon" />
+    <result column="days" jdbcType="VARCHAR" property="days" />
+    <result column="pCount" jdbcType="INTEGER" property="pCount" />
+    <result column="pMoney" jdbcType="INTEGER" property="pMoney" />
   </resultMap>
   <select id="selectTrail" resultMap="queryTrail">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
@@ -292,7 +288,7 @@
     end
     end
 
-    if @Mode > 0
+    <!--if @Mode > 0
     begin
     select Mode,Org_Auto,orgName,isnull(targetPaperNum,0) targetPaperNum,isnull(proPaperNum,0) proPaperNum,isnull(targetNum,0) targetNum
     ,isnull(realNum,0) realNum,isnull(targetVolume,0) targetVolume,isnull(realVolume,0) realVolume
@@ -356,9 +352,9 @@
     where isnull(a2.CustNum,0) + a2.ison + isnull(e.order_auto,0) > 0
     group by a2.Sales_Auto,a2.SalesName,a2.p_Count,a2.CustNum
     ) a3
-    end
+    end-->
 
-    select convert(varchar(7),b.YJCDT,120) MM,day(b.YJCDT) DD,count(*) P_Count,sum(b.MM*b.MAmt) P_money
+    select convert(varchar(7),b.YJCDT,120) yearMon,day(b.YJCDT) days,count(*) pCount,sum(b.MM*b.MAmt) pMoney
     from @Org a
     left join [order] b on b.YJOrg = a.Org_Auto and b.YJCDT between DATEADD(mm, DATEDIFF(mm,0,@StartDT)-1, 0) and @EndDT
     group by convert(varchar(7),b.YJCDT,120),day(b.YJCDT)
