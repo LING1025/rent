@@ -3,9 +3,7 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.*;
 import com.funtl.myshop.plus.provider.domain.*;
-import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
-import com.funtl.myshop.plus.provider.dto.RptQueryParam;
-import com.funtl.myshop.plus.provider.dto.RptQueryParams;
+import com.funtl.myshop.plus.provider.dto.*;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -81,11 +79,11 @@ public class TableController {
             @ApiImplicitParam(name = "orgUpAuto", value = "上级部门id", required = false, dataType = "long", paramType = "path")
     })
     @GetMapping(value = "queryTrail")
-    public ResponseResult<List<TrialForms>> queryTrail(@RequestParam(name = "userAuto",required = false) Long userAuto,
-                                                       @RequestParam(name = "startDate",required = false) String startDate,
-                                                       @RequestParam(name = "endDate",required = false) String endDate,
-                                                       @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
-                                                       @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
+    public ResponseResult<List<MonthListDto>> queryTrail(@RequestParam(name = "userAuto",required = false) Long userAuto,
+                                                         @RequestParam(name = "startDate",required = false) String startDate,
+                                                         @RequestParam(name = "endDate",required = false) String endDate,
+                                                         @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
+                                                         @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
         String startYear = startDate.split("-")[0];
         String endYear = endDate.split("-")[0];
         String startMon = startDate.split("-")[1];
@@ -94,106 +92,28 @@ public class TableController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
         }
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        List<TrialForms> list = vEmpService.selectTrail(lineChartQueryParam);
+        List<MonthListDto> list = vEmpService.selectTrail(lineChartQueryParam);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 
-/*
-
-    @ApiOperation(value = "获取业代营业报表信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
-    })
-    @GetMapping(value = "queryZero")
-    public ResponseResult<List<ReportForms>> queryZero(@RequestParam(name = "year",required = false) Integer year,
-                                                      @RequestParam(name = "month",required = false) Integer month,
-                                                      @RequestParam(name = "startDate",required = false) String startDate,
-                                                      @RequestParam(name = "endDate",required = false) String endDate){
-        //获取上级部门，reportFroms查询时条件改成emp.upUnit = org.orgAuto,获取该部门下的课的业代
-        List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
-        if(modeTwoLists.size() > 0){
-            List<Long> orgIds = Lists.newArrayList();
-            for(ModeTwoList dto : modeTwoLists){
-                orgIds.add(dto.getOrgAuto());
-            }
-            RptQueryParam rptQueryParam = new RptQueryParam(year,month,startDate,endDate,orgIds);
-            List<ReportForms> list1 = performanceService.selectModeZeros(rptQueryParam);
-            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list1);
+    @GetMapping(value = "queryLastMonth")
+    public ResponseResult<List<LastMonthListDto>> queryLastMonth(@RequestParam(name = "userAuto",required = false) Long userAuto,
+                                                         @RequestParam(name = "startDate",required = false) String startDate,
+                                                         @RequestParam(name = "endDate",required = false) String endDate,
+                                                         @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
+                                                         @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
         }
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
+        LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
+        List<LastMonthListDto> list = vEmpService.selectLastMonth(lineChartQueryParam);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 
-    @ApiOperation(value = "获取课营业报表信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
-    })
-    @GetMapping(value = "queryOne")
-    public ResponseResult<List<ReportForms>> queryOne(@RequestParam(name = "year",required = false) Integer year,
-                                                     @RequestParam(name = "month",required = false) Integer month,
-                                                    @RequestParam(name = "startDate",required = false) String startDate,
-                                                    @RequestParam(name = "endDate",required = false) String endDate){
-        */
-/*List<ModeTwoList> modeTwoLists = orgService.selectModeOne(1,5,0);
-        if(modeTwoLists.size() > 0){
-            List<ReportForms> list = Lists.newArrayList();
-            for(ModeTwoList dto : modeTwoLists){
-                ReportForms reportForms = performanceService.selectModeTwo(year,month,startDate,endDate,dto.getUserAuto());
-                if(reportForms != null){
-                    list.add(reportForms);
-                }
-            }
-            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
-        }*//*
-
-
-        //获取上级部门，reportFroms查询时条件改成emp.upUnit = org.orgAuto,获取该部门下的课
-        List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
-        if(modeTwoLists.size() > 0){
-            List<Long> orgIds = Lists.newArrayList();
-            for(ModeTwoList dto : modeTwoLists){
-                orgIds.add(dto.getOrgAuto());
-            }
-//            List<ReportForms> list = performanceService.selectModeOne(year,month,startDate,endDate,dto.getOrgAuto());
-            RptQueryParam rptQueryParam = new RptQueryParam(year,month,startDate,endDate,orgIds);
-            List<ReportForms> list = performanceService.selectModeOnes(rptQueryParam);
-            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
-        }
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
-    }
-
-    @ApiOperation(value = "获取部门营业报表信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
-    })
-    @GetMapping(value = "queryTwo")
-    public ResponseResult<List<ReportForms>> queryTwo(@RequestParam(name = "year",required = false) Integer year,
-                                                      @RequestParam(name = "month",required = false) Integer month,
-                                                      @RequestParam(name = "startDate",required = false) String startDate,
-                                                      @RequestParam(name = "endDate",required = false) String endDate){
-        List<ModeTwoList> modeTwoLists = orgService.selectModeTwo(1,4);
-        if(modeTwoLists.size() > 0){
-            List<ReportForms> list = Lists.newArrayList();
-            for(ModeTwoList dto : modeTwoLists){
-                RptQueryParams rptQueryParams = new RptQueryParams(year,month,startDate,endDate,dto.getOrgAuto());
-                ReportForms reportForms = performanceService.selectModeTwo(rptQueryParams);
-                if(reportForms != null){
-                    list.add(reportForms);
-                }
-            }
-            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
-        }
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"暂无数据",null);
-    }
-*/
 
 
 }
