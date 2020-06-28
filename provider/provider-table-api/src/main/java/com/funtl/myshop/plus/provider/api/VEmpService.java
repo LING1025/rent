@@ -21,6 +21,11 @@ public interface VEmpService{
 
     List<MonthListDto> selectTrail(LineChartQueryParam lineChartQueryParam);
 
+    /**
+     * 获取上个月营业报表
+     * @param lineChartQueryParam
+     * @return
+     */
     List<LastMonthListDto> selectLastMonth(LineChartQueryParam lineChartQueryParam);
 
 

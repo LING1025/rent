@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class PCountMoneys implements Serializable {
@@ -18,4 +19,9 @@ public class PCountMoneys implements Serializable {
 
     @ApiModelProperty(value = "金额")
     private Integer pMoney;
+
+    private Long orgAuto;
+    private Long salesAuto;
+
+    private String fName;
 }

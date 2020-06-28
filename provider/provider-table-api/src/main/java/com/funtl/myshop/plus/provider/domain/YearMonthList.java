@@ -1,5 +1,7 @@
-package com.funtl.myshop.plus.provider.dto;
+package com.funtl.myshop.plus.provider.domain;
 
+import com.funtl.myshop.plus.provider.dto.PCountMoneyLast;
+import com.funtl.myshop.plus.provider.dto.PCountMoneys;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -7,7 +9,19 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class LastMonthListDto implements Serializable {
+public class YearMonthList implements Serializable {
+    @ApiModelProperty(value = "年月")
+    private String yearMon;
+
+    @ApiModelProperty(value = "日")
+    private String days;
+
+    @ApiModelProperty(value = "台数")
+    private Integer pCount;
+
+    @ApiModelProperty(value = "金额")
+    private Integer pMoney;
+
     @ApiModelProperty(value = "年月")
     private String yearMonLast;
 
@@ -23,5 +37,4 @@ public class LastMonthListDto implements Serializable {
     private Long salesAuto;
 
     private String fName;
-
 }

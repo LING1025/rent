@@ -204,17 +204,11 @@
   </select>
 
   <resultMap id="queryTrail" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.dto.MonthListDto">
-    <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />
-    <collection property="thisMonth" ofType="com.funtl.myshop.plus.provider.dto.PCountMoneys">
-      <result column="yearMon" jdbcType="VARCHAR" property="yearMon" />
-      <result column="days" jdbcType="VARCHAR" property="days" />
-      <result column="pCount" jdbcType="INTEGER" property="pCount" />
-      <result column="pMoney" jdbcType="INTEGER" property="pMoney" />
-    </collection>
-    <!--<result column="yearMon" jdbcType="VARCHAR" property="yearMon" />
+    <result column="yearMon" jdbcType="VARCHAR" property="yearMon" />
     <result column="days" jdbcType="VARCHAR" property="days" />
     <result column="pCount" jdbcType="INTEGER" property="pCount" />
-    <result column="pMoney" jdbcType="INTEGER" property="pMoney" />-->
+    <result column="pMoney" jdbcType="INTEGER" property="pMoney" />
+    <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />
   </resultMap>
   <select id="selectTrail" resultMap="queryTrail">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
@@ -304,17 +298,11 @@
   </select>
 
   <resultMap id="queryLastMonth" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.dto.LastMonthListDto">
+    <result column="yearMonLast" jdbcType="VARCHAR" property="yearMonLast" />
+    <result column="daysLast" jdbcType="VARCHAR" property="daysLast" />
+    <result column="pCountLast" jdbcType="INTEGER" property="pCountLast" />
+    <result column="pMoneyLast" jdbcType="INTEGER" property="pMoneyLast" />
     <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />
-    <collection property="lastMonth" ofType="com.funtl.myshop.plus.provider.dto.PCountMoneyLast">
-      <result column="yearMonLast" jdbcType="VARCHAR" property="yearMonLast" />
-      <result column="daysLast" jdbcType="VARCHAR" property="daysLast" />
-      <result column="pCountLast" jdbcType="INTEGER" property="pCountLast" />
-      <result column="pMoneyLast" jdbcType="INTEGER" property="pMoneyLast" />
-    </collection>
-    <!--<result column="yearMon" jdbcType="VARCHAR" property="yearMon" />
-    <result column="days" jdbcType="VARCHAR" property="days" />
-    <result column="pCount" jdbcType="INTEGER" property="pCount" />
-    <result column="pMoney" jdbcType="INTEGER" property="pMoney" />-->
   </resultMap>
   <select id="selectLastMonth" resultMap="queryLastMonth">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int

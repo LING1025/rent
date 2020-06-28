@@ -92,10 +92,18 @@ public class TableController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
         }
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        List<MonthListDto> list = vEmpService.selectTrail(lineChartQueryParam);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+        List<MonthListDto> monthListDtos = vEmpService.selectTrail(lineChartQueryParam);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",monthListDtos);
     }
 
+    @ApiOperation(value = "获取上个月营业报表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "orgAuto", value = "部门id", required = false, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "orgUpAuto", value = "上级部门id", required = false, dataType = "long", paramType = "path")
+    })
     @GetMapping(value = "queryLastMonth")
     public ResponseResult<List<LastMonthListDto>> queryLastMonth(@RequestParam(name = "userAuto",required = false) Long userAuto,
                                                          @RequestParam(name = "startDate",required = false) String startDate,
