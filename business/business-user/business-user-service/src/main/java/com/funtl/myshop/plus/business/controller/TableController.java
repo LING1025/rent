@@ -80,24 +80,6 @@ public class TableController {
             @ApiImplicitParam(name = "orgAuto", value = "部门id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "orgUpAuto", value = "上级部门id", required = false, dataType = "long", paramType = "path")
     })
-    @GetMapping(value = "queryTrail")
-    public ResponseResult<List<MonthListDto>> queryTrail(@RequestParam(name = "userAuto",required = false) Long userAuto,
-                                                         @RequestParam(name = "startDate",required = false) String startDate,
-                                                         @RequestParam(name = "endDate",required = false) String endDate,
-                                                         @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
-                                                         @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
-        String startYear = startDate.split("-")[0];
-        String endYear = endDate.split("-")[0];
-        String startMon = startDate.split("-")[1];
-        String endMon = endDate.split("-")[1];
-        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
-        }
-        LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        List<MonthListDto> monthListDtos = vEmpService.selectTrail(lineChartQueryParam);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",monthListDtos);
-    }
-
     @GetMapping(value = "query")
     public ResponseResult<YearMonthList> query(@RequestParam(name = "userAuto",required = false) Long userAuto,
                                                          @RequestParam(name = "startDate",required = false) String startDate,
@@ -120,7 +102,6 @@ public class TableController {
             thisMonth.add(pCountMoneys);
         }
 
-
         List<LastMonthListDto> lastMonthListDtos = vEmpService.selectLastMonth(lineChartQueryParam);
         List<PCountMoneyLast> lastMonth = Lists.newArrayList();
         for(LastMonthListDto lastMonthListDto : lastMonthListDtos){
@@ -134,33 +115,4 @@ public class TableController {
         yearMonthList.setLastMonth(lastMonth);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",yearMonthList);
     }
-
-    @ApiOperation(value = "获取上个月营业报表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "orgAuto", value = "部门id", required = false, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "orgUpAuto", value = "上级部门id", required = false, dataType = "long", paramType = "path")
-    })
-    @GetMapping(value = "queryLastMonth")
-    public ResponseResult<List<LastMonthListDto>> queryLastMonth(@RequestParam(name = "userAuto",required = false) Long userAuto,
-                                                         @RequestParam(name = "startDate",required = false) String startDate,
-                                                         @RequestParam(name = "endDate",required = false) String endDate,
-                                                         @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
-                                                         @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
-        String startYear = startDate.split("-")[0];
-        String endYear = endDate.split("-")[0];
-        String startMon = startDate.split("-")[1];
-        String endMon = endDate.split("-")[1];
-        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
-        }
-        LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        List<LastMonthListDto> list = vEmpService.selectLastMonth(lineChartQueryParam);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
-    }
-
-
-
 }
