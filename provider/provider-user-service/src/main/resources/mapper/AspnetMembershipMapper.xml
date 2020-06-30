@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.AspnetMembershipMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.AspnetMembership">
+    <!--@mbg.generated-->
+    <!--@Table aspnet_Membership-->
+    <id column="UserId" jdbcType="OTHER" property="userId" />
+    <result column="ApplicationId" jdbcType="OTHER" property="applicationId" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="PasswordFormat" jdbcType="INTEGER" property="passwordFormat" />
+    <result column="PasswordSalt" jdbcType="VARCHAR" property="passwordSalt" />
+    <result column="MobilePIN" jdbcType="VARCHAR" property="mobilePIN" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+    <result column="LoweredEmail" jdbcType="VARCHAR" property="loweredEmail" />
+    <result column="PasswordQuestion" jdbcType="VARCHAR" property="passwordQuestion" />
+    <result column="PasswordAnswer" jdbcType="VARCHAR" property="passwordAnswer" />
+    <result column="IsApproved" jdbcType="BIT" property="isApproved" />
+    <result column="IsLockedOut" jdbcType="BIT" property="isLockedOut" />
+    <result column="CreateDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="LastLoginDate" jdbcType="TIMESTAMP" property="lastLoginDate" />
+    <result column="LastPasswordChangedDate" jdbcType="TIMESTAMP" property="lastPasswordChangedDate" />
+    <result column="LastLockoutDate" jdbcType="TIMESTAMP" property="lastLockoutDate" />
+    <result column="FailedPasswordAttemptCount" jdbcType="INTEGER" property="failedPasswordAttemptCount" />
+    <result column="FailedPasswordAttemptWindowStart" jdbcType="TIMESTAMP" property="failedPasswordAttemptWindowStart" />
+    <result column="FailedPasswordAnswerAttemptCount" jdbcType="INTEGER" property="failedPasswordAnswerAttemptCount" />
+    <result column="FailedPasswordAnswerAttemptWindowStart" jdbcType="TIMESTAMP" property="failedPasswordAnswerAttemptWindowStart" />
+    <result column="Comment" jdbcType="LONGVARCHAR" property="comment" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    UserId, ApplicationId, [Password], PasswordFormat, PasswordSalt, MobilePIN, Email,
+    LoweredEmail, PasswordQuestion, PasswordAnswer, IsApproved, IsLockedOut, CreateDate,
+    LastLoginDate, LastPasswordChangedDate, LastLockoutDate, FailedPasswordAttemptCount,
+    FailedPasswordAttemptWindowStart, FailedPasswordAnswerAttemptCount, FailedPasswordAnswerAttemptWindowStart,
+    [Comment]
+  </sql>
+</mapper>
