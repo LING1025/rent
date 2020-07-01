@@ -114,8 +114,8 @@ public class EmpBaseController {
         aspnetUsers.setUserId(UUID.randomUUID().toString());
         aspnetUsers.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
         aspnetUsers.setLoweredUserName(empParamDto.getUsername().toLowerCase());
-        aspnetUsers.setPassword(passwordEncoder.encode("123456"));
         aspnetUsers.setEmpBaseAuto(i2);
+        aspnetUsers.setIsEas(1);
         Long i1 = aspnetUsersService.insert(aspnetUsers);
         if(i1 == 0){
             empBaseService.deleteById(i2);
@@ -129,10 +129,12 @@ public class EmpBaseController {
         BeanUtils.copyProperties(empParamDto,aspnetMembership);
         aspnetMembership.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
         aspnetMembership.setUserId(a.getUserId());
-        aspnetMembership.setPasswordSalt(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        aspnetMembership.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        aspnetMembership.setPasswordSalt("/QJI/OYzoWZAiclktXY/sA==");
+        aspnetMembership.setPasswordFormat(1);
         aspnetMembership.setLoweredEmail(empParamDto.getEmail().toLowerCase());
-        aspnetMembership.setIsApproved(false);
-        aspnetMembership.setIsLockedOut(true);
+        aspnetMembership.setIsApproved(true);
+        aspnetMembership.setIsLockedOut(false);
         aspnetMembership.setCreateDate(new Date());
         aspnetMembership.setLastLoginDate(new Date());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
