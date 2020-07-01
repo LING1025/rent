@@ -1,2 +1,3 @@
 provider/provider-user-api/target/classes/
 provider/provider-user-service/target/classes/
+business/business-user/business-user-service/target/classes/

@@ -137,11 +137,13 @@ public class EmpBaseController {
         aspnetMembership.setLastLoginDate(new Date());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         aspnetMembership.setLastPasswordChangedDate(new Date());
-        aspnetMembership.setLastLoginDate(sdf.parse("1754-01-01"));
+        aspnetMembership.setLastLoginDate(new Date());
         aspnetMembership.setFailedPasswordAttemptCount(1);
+        aspnetMembership.setLastLockoutDate(sdf.parse("1754-01-01"));
         aspnetMembership.setFailedPasswordAttemptWindowStart(new Date());
         aspnetMembership.setFailedPasswordAnswerAttemptCount(0);
         aspnetMembership.setFailedPasswordAnswerAttemptWindowStart(sdf.parse("1754-01-01"));
+        aspnetMembership.setComment("备注");
         Object u = aspnetMembershipService.insert(aspnetMembership);
         if(u.equals(0)){
             aspnetUsersService.deleteById(i1);
