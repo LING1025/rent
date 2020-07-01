@@ -21,18 +21,7 @@ public class OKHttp3Tests {
 
     @Test
     public void test() throws NoSuchAlgorithmException {
-        // 生成一个16位的随机数
-        Random random = new Random();
-        StringBuilder sBuilder = new StringBuilder(16);
-        sBuilder.append(random.nextInt(99999999)).append(random.nextInt(99999999));
-        int len = sBuilder.length();
-        if (len < 16) {
-         for (int i = 0; i < 16 - len; i++) {
-            sBuilder.append("0");
-         }
-        }
-        // 生成最终的加密盐
-        String Salt = sBuilder.toString();
+        String Salt = "/QJI/OYzoWZAiclktXY/sA==";
         System.out.println(Salt);
         //定义一个密码，这里就不从数据库取了
         String p = "123456";
@@ -45,6 +34,7 @@ public class OKHttp3Tests {
         //使用md5验证
         System.out.println(DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(password));
         System.out.println(DigestUtils.md5DigestAsHex(pwd2.getBytes()).equals(password));
+
     }
 
     @Test
