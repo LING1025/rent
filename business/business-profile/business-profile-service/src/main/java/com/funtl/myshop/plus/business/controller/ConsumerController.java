@@ -7,7 +7,9 @@ import com.funtl.myshop.plus.business.dto.UsersParamDto;
 import com.funtl.myshop.plus.business.dto.params.ConsumerParam;
 import com.funtl.myshop.plus.business.dto.params.PasswordParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
+import com.funtl.myshop.plus.provider.api.AspnetMembershipService;
 import com.funtl.myshop.plus.provider.api.AspnetUsersService;
+import com.funtl.myshop.plus.provider.domain.AspnetMembership;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
 import com.funtl.myshop.plus.provider.dto.UserListDto;
 import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
@@ -38,6 +40,9 @@ public class ConsumerController {
     @Resource
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Reference(version = "1.0.0")
+    private AspnetMembershipService aspnetMembershipService;
+
     @ApiOperation(value = "获取个人信息")
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "string", paramType = "path")
     @GetMapping(value = "info/{username}")
@@ -51,7 +56,7 @@ public class ConsumerController {
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"获取个人信息",usersDto);
     }
 
-    @ApiOperation(value = "更新个人信息")
+    /*@ApiOperation(value = "更新个人信息")
     @PostMapping(value = "update")
     public ResponseResult<Void> update(@RequestBody ConsumerParam consumerParam) {
         AspnetUsers newUmsAdmin = new AspnetUsers();
@@ -67,16 +72,17 @@ public class ConsumerController {
         else {
             return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "更新个人信息失败");
         }
-    }
+    }*/
 
     @ApiOperation(value = "修改密码")
     @PostMapping(value = "modify/password")
     public ResponseResult<Void> modifyPassword(@RequestBody PasswordParam passwordParam) {
         AspnetUsers aspnetUsers = aspnetUsersService.get(passwordParam.getUsername());
+        AspnetMembership aspnetMembership = aspnetMembershipService.selectByUserId(aspnetUsers.getUserId());
 
         // 旧密码正确
-        if (passwordEncoder.matches(passwordParam.getOldPassword(), aspnetUsers.getPassword())) {
-            Integer result = aspnetUsersService.modifyPassword(aspnetUsers.getUsername(), passwordParam.getNewPassword());
+        if (passwordEncoder.matches(passwordParam.getOldPassword(), aspnetMembership.getPassword())) {
+            Integer result = aspnetMembershipService.modifyPassword(aspnetUsers.getUsername(), passwordParam.getNewPassword());
             if (result > 0) {
                 return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "修改密码成功");
             }
@@ -131,15 +137,16 @@ public class ConsumerController {
         if(aspnetUsers == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户不存在", null);
         }
-        aspnetUsers.setPassword(passwordEncoder.encode("123456"));
-        Integer i = aspnetUsersService.update(aspnetUsers);
+        AspnetMembership aspnetMembership = aspnetMembershipService.selectByUserId(aspnetUsers.getUserId());
+        aspnetMembership.setPassword(passwordEncoder.encode("123456"));
+        Integer i = aspnetMembershipService.update(aspnetMembership);
         if(i == 0){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "重置密码失败", null);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "重置后密码:123456", null);
     }
 
-    public ResponseResult<AspnetUsers> patch(Integer isOn, Long userAuto) {
+    /*public ResponseResult<AspnetUsers> patch(Integer isOn, Long userAuto) {
         AspnetUsers aspnetUsers = aspnetUsersService.selectById(userAuto);
         if (aspnetUsers == null) {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户不存在", null);
@@ -174,5 +181,5 @@ public class ConsumerController {
         return patch(2, userAuto);
     }
 
-
+*/
 }

@@ -58,34 +58,10 @@ public class AspnetUsers implements Serializable {
     private Integer isEas;
 
     /**
-     * 分机
-     */
-    @Column(name = "MobilePIN")
-    private String mobilePIN;
-
-    /**
-     * 邮箱
-     */
-    @Column(name = "Email")
-    private String email;
-
-    /**
-     * 密码
-     */
-    @Column(name = "Password")
-    private String password;
-
-    /**
      * 员工id
      */
     @Column(name = "EmpBase_Auto")
     private Long empBaseAuto;
-
-    /**
-     * 启用状态0停用 1启用 2删除
-     */
-    @Column(name = "IsOn")
-    private Integer isOn;
 
     /**
      * 修改日期
