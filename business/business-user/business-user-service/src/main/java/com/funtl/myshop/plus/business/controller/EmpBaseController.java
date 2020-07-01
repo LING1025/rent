@@ -3,6 +3,7 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.business.BusinessException;
 import com.funtl.myshop.plus.business.BusinessStatus;
 import com.funtl.myshop.plus.business.dto.EmpParamDto;
+import com.funtl.myshop.plus.business.dto.EmpUpdateParamDto;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.*;
 import com.funtl.myshop.plus.provider.domain.*;
@@ -12,10 +13,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,12 +59,15 @@ public class EmpBaseController {
     @Reference(version = "1.0.0")
     private AspnetUsersInRolesService aspnetUsersInRolesService;
 
+    @Reference(version = "1.0.0")
+    private AspnetMembershipService aspnetMembershipService;
+
     @Resource
     public BCryptPasswordEncoder passwordEncoder;
 
     @ApiOperation(value = "新建员工")
     @PostMapping(value = "insert")
-    public ResponseResult<String> insert(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto){
+    public ResponseResult<String> insert(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto) throws ParseException {
         if(empParamDto.getEmpBaseAuto() != 0){
             throw new BusinessException(BusinessStatus.PARAM_ERROR);
         }
@@ -115,6 +122,35 @@ public class EmpBaseController {
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
+        AspnetUsers a = aspnetUsersService.selectById(i1);
+
+        //aspnetMembership插入数据
+        AspnetMembership aspnetMembership = new AspnetMembership();
+        BeanUtils.copyProperties(empParamDto,aspnetMembership);
+        aspnetMembership.setApplicationId("73663109-DDA2-4C2D-8311-337946B5C373");
+        aspnetMembership.setUserId(a.getUserId());
+        aspnetMembership.setPasswordSalt(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        aspnetMembership.setLoweredEmail(empParamDto.getEmail().toLowerCase());
+        aspnetMembership.setIsApproved(false);
+        aspnetMembership.setIsLockedOut(true);
+        aspnetMembership.setCreateDate(new Date());
+        aspnetMembership.setLastLoginDate(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        aspnetMembership.setLastPasswordChangedDate(new Date());
+        aspnetMembership.setLastLoginDate(new Date());
+        aspnetMembership.setFailedPasswordAttemptCount(1);
+        aspnetMembership.setLastLockoutDate(sdf.parse("1754-01-01"));
+        aspnetMembership.setFailedPasswordAttemptWindowStart(new Date());
+        aspnetMembership.setFailedPasswordAnswerAttemptCount(0);
+        aspnetMembership.setFailedPasswordAnswerAttemptWindowStart(sdf.parse("1754-01-01"));
+        aspnetMembership.setComment("备注");
+        Object u = aspnetMembershipService.insert(aspnetMembership);
+        if(u.equals(0)){
+            aspnetUsersService.deleteById(i1);
+            empBaseService.deleteById(i2);
+            throw new BusinessException(BusinessStatus.SAVE_FAILURE);
+        }
+
         //Org2Emp插入数据
         Org2Emp org2Emp = new Org2Emp();
         org2Emp.setOrgAuto(org.getOrgAuto());
@@ -124,6 +160,7 @@ public class EmpBaseController {
         if(i3 == 0){
             aspnetUsersService.deleteById(i1);
             empBaseService.deleteById(i2);
+            aspnetMembershipService.deleteByUserId(u);
             throw new BusinessException(BusinessStatus.SAVE_FAILURE);
         }
 
@@ -133,6 +170,7 @@ public class EmpBaseController {
             if(aspnetRoles == null){
                 aspnetUsersService.deleteById(i1);
                 empBaseService.deleteById(i2);
+                aspnetMembershipService.deleteByUserId(u);
                 return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "角色'"+role+"'不存在", null);
             }
             //Roles2Emp插入数据
@@ -143,10 +181,9 @@ public class EmpBaseController {
             if(i4 == 0){
                 aspnetUsersService.deleteById(i1);
                 empBaseService.deleteById(i2);
+                aspnetMembershipService.deleteByUserId(u);
                 throw new BusinessException(BusinessStatus.SAVE_FAILURE);
             }
-            AspnetUsers a = aspnetUsersService.selectById(i1);
-            System.out.println(a.getUserId());
 
             //aspnetUsersInRoles插入数据
             AspnetUsersInRoles aspnetUsersInRoles = new AspnetUsersInRoles();
@@ -154,6 +191,9 @@ public class EmpBaseController {
             aspnetUsersInRoles.setRoleId(aspnetRoles.getRoleId());
             Integer i5 = aspnetUsersInRolesService.insert(aspnetUsersInRoles);
             if (i5 == 0){
+                aspnetUsersService.deleteById(i1);
+                empBaseService.deleteById(i2);
+                aspnetMembershipService.deleteByUserId(u);
                 throw new BusinessException(BusinessStatus.SAVE_FAILURE);
             }
 
@@ -163,7 +203,7 @@ public class EmpBaseController {
 
     @ApiOperation(value = "编辑员工")
     @PutMapping(value = "update")
-    public ResponseResult<String> update(@ApiParam(value = "员工数据") @Valid @RequestBody EmpParamDto empParamDto){
+    public ResponseResult<String> update(@ApiParam(value = "员工数据") @Valid @RequestBody EmpUpdateParamDto empParamDto){
         empParamDto.setCDT(new Date());
         empParamDto.setMDT(new Date());
         EmpBase empBase = empBaseService.selectById(empParamDto.getEmpBaseAuto());
@@ -186,6 +226,8 @@ public class EmpBaseController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "所属组不存在", null);
         }
 
+        /*
+        //公司系统的员工姓名、用户名、分机、邮箱都是不能修改的
         //判断是否修改了用户名
         if(!empBase.getUsername().equals(empParamDto.getUsername())){
             EmpBase eb = empBaseService.selectUsername(empParamDto.getUsername());
@@ -200,7 +242,7 @@ public class EmpBaseController {
                 throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
             }
 
-        }
+        }*/
 
         //判断是否修改了部门
         if(!empBase.getOrgAuto().equals(empParamDto.getOrgAuto())){

@@ -10,9 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@ApiModel(value = "新增员工数据")
-public class EmpParamDto implements Serializable {
-
+@ApiModel(value = "编辑员工数据")
+public class EmpUpdateParamDto implements Serializable {
     @ApiModelProperty(value = "员工id")
     private Long empBaseAuto;
 
@@ -27,12 +26,6 @@ public class EmpParamDto implements Serializable {
 
     @ApiModelProperty(value = "职位")
     private String title;
-
-    @ApiModelProperty(value = "员工姓名")
-    private String fName;
-
-    @ApiModelProperty(value = "用户名")
-    private String username;
 
     @ApiModelProperty(value = "启用状态0停用 1启用 2删除")
     private Integer isOn;
@@ -51,10 +44,4 @@ public class EmpParamDto implements Serializable {
 
     @JsonIgnore
     private Date cDT;
-
-    @ApiModelProperty(value = "分机")
-    private String mobilePIN;
-
-    @ApiModelProperty(value = "邮箱")
-    private String email;
 }

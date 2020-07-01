@@ -7,10 +7,10 @@
         <option name="generateService" value="true" />
         <option name="generateServiceInterface" value="true" />
         <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-        <option name="javaMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
+        <option name="javaMapperPath" value="D:\twoWork\rent\provider\provider-user-service\src\main\java" />
         <option name="javaModelPackage" value="com.funtl.myshop.plus.provider.domain" />
-        <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-table-api/src/main/java" />
-        <option name="lastDatabaseCrudChooseModuleName" value="provider-table-api" />
+        <option name="javaModelPath" value="D:\twoWork\rent\provider\provider-user-api\src\main\java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="provider-user-api" />
         <option name="lombokDataAnnotation" value="true" />
         <option name="moduleNameToPackageAndPathMap">
           <map>
@@ -50,15 +50,15 @@
               <value>
                 <UserPackageAndPathInfoByModule>
                   <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-                  <option name="javaMapperPath" value="D:\Work\rent\provider\provider-user-service\src\main\java" />
+                  <option name="javaMapperPath" value="D:\twoWork\rent\provider\provider-user-service\src\main\java" />
                   <option name="javaModelPacakge" value="com.funtl.myshop.plus.provider.domain" />
-                  <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-user-api/src/main/java" />
+                  <option name="javaModelPath" value="D:\twoWork\rent\provider\provider-user-api\src\main\java" />
                   <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.service" />
                   <option name="javaServiceInterfacePath" value="$PROJECT_DIR$/provider/provider-user-api/src/main/java" />
                   <option name="javaServicePackage" value="com.funtl.myshop.plus.provider.service" />
-                  <option name="javaServicePath" value="D:\Work\rent\provider\provider-user-service\src\main\java" />
+                  <option name="javaServicePath" value="D:\twoWork\rent\provider\provider-user-service\src\main\java" />
                   <option name="xmlPackage" value="mapper" />
-                  <option name="xmlPath" value="D:\Work\rent\provider\provider-user-service\src\main\resources" />
+                  <option name="xmlPath" value="D:\twoWork\rent\provider\provider-user-service\src\main\resources" />
                 </UserPackageAndPathInfoByModule>
               </value>
             </entry>
@@ -1706,6 +1706,102 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="dbo:aspnet_Membership">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="ApplicationId" />
+                        <option name="javaProperty" value="applicationId" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="UserId" />
+                        <option name="javaProperty" value="userId" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Password" />
+                        <option name="javaProperty" value="password" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PasswordFormat" />
+                        <option name="javaProperty" value="passwordFormat" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PasswordSalt" />
+                        <option name="javaProperty" value="passwordSalt" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="MobilePIN" />
+                        <option name="javaProperty" value="mobilePIN" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="Email" />
+                        <option name="javaProperty" value="email" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="LoweredEmail" />
+                        <option name="javaProperty" value="loweredEmail" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PasswordQuestion" />
+                        <option name="javaProperty" value="passwordQuestion" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="PasswordAnswer" />
+                        <option name="javaProperty" value="passwordAnswer" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="IsApproved" />
+                        <option name="javaProperty" value="isApproved" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="IsLockedOut" />
+                        <option name="javaProperty" value="isLockedOut" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="CreateDate" />
+                        <option name="javaProperty" value="createDate" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="LastLoginDate" />
+                        <option name="javaProperty" value="lastLoginDate" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="LastPasswordChangedDate" />
+                        <option name="javaProperty" value="lastPasswordChangedDate" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="LastLockoutDate" />
+                        <option name="javaProperty" value="lastLockoutDate" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FailedPasswordAttemptCount" />
+                        <option name="javaProperty" value="failedPasswordAttemptCount" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FailedPasswordAttemptWindowStart" />
+                        <option name="javaProperty" value="failedPasswordAttemptWindowStart" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FailedPasswordAnswerAttemptCount" />
+                        <option name="javaProperty" value="failedPasswordAnswerAttemptCount" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="FailedPasswordAnswerAttemptWindowStart" />
+                        <option name="javaProperty" value="failedPasswordAnswerAttemptWindowStart" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AspnetMembership" />
+                  <option name="moduleName" value="provider-user-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="dbo:aspnet_Roles">
               <value>
                 <TableGenerateConfig>
@@ -1914,7 +2010,7 @@
         </option>
         <option name="useActualColumnNames" value="true" />
         <option name="xmlMapperPackage" value="mapper" />
-        <option name="xmlMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\resources" />
+        <option name="xmlMapperPath" value="D:\twoWork\rent\provider\provider-user-service\src\main\resources" />
       </ProjectProfile>
     </option>
   </component>
