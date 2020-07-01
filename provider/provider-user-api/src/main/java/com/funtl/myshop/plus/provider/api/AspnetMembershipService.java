@@ -22,4 +22,14 @@ public interface AspnetMembershipService{
      * @return
      */
     Object deleteByUserId(Object userId);
+
+    Integer update(AspnetMembership aspnetMembership);
+
+    /**
+     * 修改密码
+     * @param username 用户名
+     * @param password 明文密码
+     * @return
+     */
+    Integer modifyPassword(String username, String password);
 }

@@ -56,7 +56,7 @@ public class ConsumerController {
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"获取个人信息",usersDto);
     }
 
-    @ApiOperation(value = "更新个人信息")
+    /*@ApiOperation(value = "更新个人信息")
     @PostMapping(value = "update")
     public ResponseResult<Void> update(@RequestBody ConsumerParam consumerParam) {
         AspnetUsers newUmsAdmin = new AspnetUsers();
@@ -72,7 +72,7 @@ public class ConsumerController {
         else {
             return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "更新个人信息失败");
         }
-    }
+    }*/
 
     @ApiOperation(value = "修改密码")
     @PostMapping(value = "modify/password")
@@ -82,7 +82,7 @@ public class ConsumerController {
 
         // 旧密码正确
         if (passwordEncoder.matches(passwordParam.getOldPassword(), aspnetMembership.getPassword())) {
-            Integer result = aspnetUsersService.modifyPassword(aspnetUsers.getUsername(), passwordParam.getNewPassword());
+            Integer result = aspnetMembershipService.modifyPassword(aspnetUsers.getUsername(), passwordParam.getNewPassword());
             if (result > 0) {
                 return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "修改密码成功");
             }

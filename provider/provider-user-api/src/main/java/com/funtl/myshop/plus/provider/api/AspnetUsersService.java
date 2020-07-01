@@ -19,7 +19,7 @@ public interface AspnetUsersService {
      * @param aspnetUsers
      * @return
      */
-    Integer updateUser(AspnetUsers aspnetUsers);
+//    Integer updateUser(AspnetUsers aspnetUsers);
 
     /**
      * 修改密码
@@ -27,7 +27,7 @@ public interface AspnetUsersService {
      * @param password 明文密码
      * @return
      */
-    Integer modifyPassword(String username, String password);
+//    Integer modifyPassword(String username, String password);
 
     /**
      * 根据用户名/状态获取用户信息
