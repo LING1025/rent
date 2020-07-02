@@ -4,13 +4,16 @@ import com.funtl.myshop.plus.business.BusinessException;
 import com.funtl.myshop.plus.business.BusinessStatus;
 import com.funtl.myshop.plus.business.dto.UsersDto;
 import com.funtl.myshop.plus.business.dto.UsersParamDto;
+import com.funtl.myshop.plus.business.dto.params.ChangePwdParam;
 import com.funtl.myshop.plus.business.dto.params.ConsumerParam;
 import com.funtl.myshop.plus.business.dto.params.PasswordParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.AspnetMembershipService;
 import com.funtl.myshop.plus.provider.api.AspnetUsersService;
+import com.funtl.myshop.plus.provider.api.EmpBaseService;
 import com.funtl.myshop.plus.provider.domain.AspnetMembership;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
+import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.dto.UserListDto;
 import com.funtl.myshop.plus.provider.dto.UserListQueryParams;
 import com.github.pagehelper.PageInfo;
@@ -43,16 +46,19 @@ public class ConsumerController {
     @Reference(version = "1.0.0")
     private AspnetMembershipService aspnetMembershipService;
 
+    @Reference(version = "1.0.0")
+    private EmpBaseService empBaseService;
+
     @ApiOperation(value = "获取个人信息")
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "string", paramType = "path")
     @GetMapping(value = "info/{username}")
     public ResponseResult<UsersDto> info(@PathVariable String username){
         AspnetUsers aspnetUsers = aspnetUsersService.get(username);
-        UsersDto usersDto = new UsersDto();
-        BeanUtils.copyProperties(aspnetUsers,usersDto);
         if(aspnetUsers == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"用户不存在",null);
         }
+        UsersDto usersDto = new UsersDto();
+        BeanUtils.copyProperties(aspnetUsers,usersDto);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"获取个人信息",usersDto);
     }
 
@@ -73,6 +79,20 @@ public class ConsumerController {
             return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "更新个人信息失败");
         }
     }*/
+
+    @ApiOperation(value = "修改密码(提供给郭主任使用，记录密码并修改加密)")
+    @PutMapping(value = "changePwd")
+    public ResponseResult<Void> changePwd(@RequestBody ChangePwdParam passwordParam) {
+        AspnetUsers aspnetUsers = aspnetUsersService.get(passwordParam.getUsername());
+        AspnetMembership aspnetMembership = aspnetMembershipService.selectByUserId(aspnetUsers.getUserId());
+        aspnetMembership.setPassword(passwordEncoder.encode(passwordParam.getNewPassword()));
+        aspnetMembership.setLastPasswordChangedDate(new Date());
+        Integer i = aspnetMembershipService.update(aspnetMembership);
+        if(i == 0){
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+        return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "修改密码成功");
+    }
 
     @ApiOperation(value = "修改密码")
     @PostMapping(value = "modify/password")
@@ -118,12 +138,22 @@ public class ConsumerController {
     public ResponseResult<String> updateUser(@RequestBody UsersParamDto usersParamDto) {
         AspnetUsers aspnetUsers = aspnetUsersService.selectById(usersParamDto.getUserAuto());
         if (aspnetUsers == null){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "未找到用户信息", null);
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL, "用户不存在", null);
         }
-        BeanUtils.copyProperties(usersParamDto,aspnetUsers);
-        aspnetUsers.setMDT(new Date());
-        Integer i = aspnetUsersService.update(aspnetUsers);
+
+        AspnetMembership aspnetMembership = aspnetMembershipService.selectByUserId(aspnetUsers.getUserId());
+        aspnetMembership.setMobilePIN(usersParamDto.getMobilePIN());
+        aspnetMembership.setEmail(usersParamDto.getEmail());
+        Integer i = aspnetMembershipService.update(aspnetMembership);
         if(i == 0){
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+
+        EmpBase empBase = empBaseService.selectById(aspnetUsers.getEmpBaseAuto());
+        empBase.setIsOn(usersParamDto.getIsOn());
+        empBase.setMDT(new Date());
+        Integer i1 = empBaseService.update(empBase);
+        if(i1 == 0){
             throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "修改成功", null);
