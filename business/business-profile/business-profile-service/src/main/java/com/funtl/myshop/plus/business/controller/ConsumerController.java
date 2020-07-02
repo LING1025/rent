@@ -48,11 +48,11 @@ public class ConsumerController {
     @GetMapping(value = "info/{username}")
     public ResponseResult<UsersDto> info(@PathVariable String username){
         AspnetUsers aspnetUsers = aspnetUsersService.get(username);
-        UsersDto usersDto = new UsersDto();
-        BeanUtils.copyProperties(aspnetUsers,usersDto);
         if(aspnetUsers == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"用户不存在",null);
         }
+        UsersDto usersDto = new UsersDto();
+        BeanUtils.copyProperties(aspnetUsers,usersDto);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"获取个人信息",usersDto);
     }
 
