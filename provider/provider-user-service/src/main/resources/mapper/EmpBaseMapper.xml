@@ -61,7 +61,7 @@
     <if test="param.orgName != null and param.orgName != ''">
       AND eb.OrgName = #{param.orgName}
     </if>
-    AND eb.IsOn = 1
+    AND eb.IsOn != 2
     ORDER BY eb.EmpBase_Auto DESC
   </select>
 
