@@ -2,3 +2,8 @@ provider/provider-user-api/target/classes/
 provider/provider-user-service/target/classes/
 business/business-user/business-user-service/target/classes/
 business/business-profile/business-profile-feign/target/classes/
+provider/provider-table-api/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+provider/provider-user-api/target/provider-user-api-0.0.1-SNAPSHOT.jar
+provider/provider-table-api/target/maven-archiver/pom.properties
+provider/provider-user-api/target/
+provider/provider-table-api/target/
