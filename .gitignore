@@ -7,3 +7,4 @@ provider/provider-user-api/target/provider-user-api-0.0.1-SNAPSHOT.jar
 provider/provider-table-api/target/maven-archiver/pom.properties
 provider/provider-user-api/target/
 provider/provider-table-api/target/
+configuration/configuration-feign/target/classes/

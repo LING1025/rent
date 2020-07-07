@@ -4,8 +4,6 @@ import com.funtl.myshop.plus.business.BusinessException;
 import com.funtl.myshop.plus.business.BusinessStatus;
 import com.funtl.myshop.plus.business.dto.UsersDto;
 import com.funtl.myshop.plus.business.dto.UsersParamDto;
-import com.funtl.myshop.plus.business.dto.params.ChangePwdParam;
-import com.funtl.myshop.plus.business.dto.params.ConsumerParam;
 import com.funtl.myshop.plus.business.dto.params.PasswordParam;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.AspnetMembershipService;
@@ -79,20 +77,6 @@ public class ConsumerController {
             return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "更新个人信息失败");
         }
     }*/
-
-    @ApiOperation(value = "修改密码(提供给郭主任使用，记录密码并修改加密)")
-    @PutMapping(value = "changePwd")
-    public ResponseResult<Void> changePwd(@RequestBody ChangePwdParam passwordParam) {
-        AspnetUsers aspnetUsers = aspnetUsersService.get(passwordParam.getUsername());
-        AspnetMembership aspnetMembership = aspnetMembershipService.selectByUserId(aspnetUsers.getUserId());
-        aspnetMembership.setPassword(passwordEncoder.encode(passwordParam.getNewPassword()));
-        aspnetMembership.setLastPasswordChangedDate(new Date());
-        Integer i = aspnetMembershipService.update(aspnetMembership);
-        if(i == 0){
-            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
-        }
-        return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "修改密码成功");
-    }
 
     @ApiOperation(value = "修改密码")
     @PostMapping(value = "modify/password")

@@ -1,14 +1,22 @@
 package com.funtl.myshop.plus.business.controller;
 
+import com.funtl.myshop.plus.business.BusinessException;
+import com.funtl.myshop.plus.business.BusinessStatus;
 import com.funtl.myshop.plus.business.dto.LoginInfo;
 import com.funtl.myshop.plus.business.dto.LoginParam;
+import com.funtl.myshop.plus.business.dto.params.ChangePwdParam;
 import com.funtl.myshop.plus.business.feign.ConsumerFeign;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.commons.utils.MapperUtils;
 import com.funtl.myshop.plus.commons.utils.OkHttpClientUtil;
+import com.funtl.myshop.plus.provider.api.AspnetMembershipService;
+import com.funtl.myshop.plus.provider.api.AspnetUsersService;
+import com.funtl.myshop.plus.provider.domain.AspnetMembership;
 import com.funtl.myshop.plus.provider.domain.AspnetUsers;
 import com.google.common.collect.Maps;
+import io.swagger.annotations.ApiOperation;
 import okhttp3.Response;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 /**
@@ -52,6 +61,12 @@ public class LoginController {
 
     @Resource
     private ConsumerFeign consumerFeign;
+
+    @Reference(version = "1.0.0")
+    private AspnetUsersService aspnetUsersService;
+
+    @Reference(version = "1.0.0")
+    private AspnetMembershipService aspnetMembershipService;
 
     /**
      * 登录
@@ -131,5 +146,22 @@ public class LoginController {
         OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(token);
         tokenStore.removeAccessToken(oAuth2AccessToken);
         return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "用户已注销");
+    }
+
+    @ApiOperation(value = "修改密码(提供给郭主任使用，记录密码并修改加密)")
+    @PutMapping(value = "/user/changePwd")
+    public ResponseResult<Void> changePwd(@RequestBody ChangePwdParam passwordParam) {
+        AspnetUsers aspnetUsers = aspnetUsersService.get(passwordParam.getUsername());
+        if(aspnetUsers == null){
+            return new ResponseResult<Void>(ResponseResult.CodeStatus.FAIL, "用户不存在");
+        }
+        AspnetMembership aspnetMembership = aspnetMembershipService.selectByUserId(aspnetUsers.getUserId());
+        aspnetMembership.setPassword(passwordEncoder.encode(passwordParam.getNewPassword()));
+        aspnetMembership.setLastPasswordChangedDate(new Date());
+        Integer i = aspnetMembershipService.update(aspnetMembership);
+        if(i == 0){
+            throw new BusinessException(BusinessStatus.UPDATE_FAILURE);
+        }
+        return new ResponseResult<Void>(ResponseResult.CodeStatus.OK, "修改密码成功");
     }
 }
