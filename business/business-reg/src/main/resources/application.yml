@@ -39,6 +39,8 @@ dubbo:
     name: dubbo
     port: -1
     serialization: kryo
+  provider:
+    timeout: 2500
 
 server:
   # ${random.int[9000,9999]} 随机端口
