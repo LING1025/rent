@@ -1,4 +1,4 @@
-package com.funtl.myshop.plus.business.dto.params;
+package com.funtl.myshop.plus.business.dto;
 
 import lombok.Data;
 
