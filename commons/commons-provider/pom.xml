@@ -45,11 +45,25 @@
             <artifactId>mapper-spring-boot-starter</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!--pagehelper-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>5.1.8</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!--分页要再放以下两个包，不然会全部查出，没有分页效果-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-autoconfigure</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.5</version>
         </dependency>
     </dependencies>
 </project>
