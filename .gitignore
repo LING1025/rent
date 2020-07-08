@@ -8,3 +8,5 @@ provider/provider-table-api/target/maven-archiver/pom.properties
 provider/provider-user-api/target/
 provider/provider-table-api/target/
 configuration/configuration-feign/target/classes/
+business/business-oauth2/target/
+.idea/libraries/
