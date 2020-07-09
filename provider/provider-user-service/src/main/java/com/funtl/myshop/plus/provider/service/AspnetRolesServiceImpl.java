@@ -35,7 +35,7 @@ public class AspnetRolesServiceImpl implements AspnetRolesService{
     }
 
     @Override
-    public List<AspnetRoles> selectByUserId(Object roleId) {
-        return aspnetRolesMapper.selectByUserId(roleId);
+    public List<AspnetRoles> selectByUserId(Object userId) {
+        return aspnetRolesMapper.selectByUserId(userId);
     }
 }
