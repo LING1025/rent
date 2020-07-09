@@ -29,8 +29,8 @@ public interface AspnetRolesService{
 
     /**
      * 根据UserId获取角色信息
-     * @param roleId
+     * @param userId
      * @return
      */
-    List<AspnetRoles> selectByUserId(Object roleId);
+    List<AspnetRoles> selectByUserId(Object userId);
 }
