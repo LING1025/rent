@@ -57,6 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
+        // 忽略的访问路径
         web.ignoring()
                 .antMatchers("/user/login","/user/changePwd");
     }
