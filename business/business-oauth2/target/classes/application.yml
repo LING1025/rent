@@ -50,6 +50,7 @@ feign:
 server:
   port: 9001
 
+# 刷新配置，在spring boot 2.x 之前1.x的management.security.enabled失效，新的配置为
 management:
   endpoints:
     web:
