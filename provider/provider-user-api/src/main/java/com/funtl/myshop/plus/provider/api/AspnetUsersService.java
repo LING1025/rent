@@ -63,5 +63,7 @@ public interface AspnetUsersService {
      * @return
      */
     AspnetUsers selectById(Long userAuto);
+
+    AspnetUsers selectByEmpAuto(Long empBaseAuto);
 }
 

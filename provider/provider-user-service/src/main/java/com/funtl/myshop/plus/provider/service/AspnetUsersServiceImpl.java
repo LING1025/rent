@@ -83,5 +83,10 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         return aspnetUsersMapper.selectByPrimaryKey(userAuto);
     }
 
+    @Override
+    public AspnetUsers selectByEmpAuto(Long empBaseAuto) {
+        return null;
+    }
+
 }
 
