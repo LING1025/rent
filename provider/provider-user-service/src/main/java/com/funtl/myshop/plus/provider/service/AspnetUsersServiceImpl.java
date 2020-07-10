@@ -83,11 +83,5 @@ public class AspnetUsersServiceImpl implements AspnetUsersService {
         return aspnetUsersMapper.selectByPrimaryKey(userAuto);
     }
 
-    @Override
-    public AspnetUsers selectByEmpAuto(Long empBaseAuto) {
-        Example example = new Example(AspnetUsers.class);
-        example.createCriteria().andEqualTo("empBaseAuto",empBaseAuto);
-        return aspnetUsersMapper.selectOneByExample(example);
-    }
 }
 
