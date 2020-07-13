@@ -15,4 +15,6 @@ public interface VEmpMapper extends MyMapper<VEmp> {
     List<MonthListDto> selectTrail(@Param("param") LineChartQueryParam lineChartQueryParam);
 
     List<LastMonthListDto> selectLastMonth(@Param("param") LineChartQueryParam lineChartQueryParam);
+
+    List<MonthListDto> selectTest(@Param("param") LineChartQueryParam lineChartQueryParam);
 }

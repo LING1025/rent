@@ -24,5 +24,6 @@ public interface VEmpService{
      */
     List<LastMonthListDto> selectLastMonth(LineChartQueryParam lineChartQueryParam);
 
+    List<MonthListDto> selectTest(LineChartQueryParam lineChartQueryParam);
 
 }
