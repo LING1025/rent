@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,9 +72,9 @@ public class TableController {
         }
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
         List<ReportForms> list = vEmpService.selectMode(lineChartQueryParam);
-        NumberFormat nt = NumberFormat.getPercentInstance();
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
         // 设置百分数精确度2即保留两位小数
-        //nt.setMinimumFractionDigits(2);
+//        nt.setMinimumFractionDigits(2);
         List<ReportFormTwo> reportFormsList = Lists.newArrayList();
         for(ReportForms reportForms : list){
             ReportFormTwo rs = new ReportFormTwo();
@@ -135,48 +136,4 @@ public class TableController {
         yearMonthList.setLastMonth(lastMonth);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",yearMonthList);
     }
-
-    /*@ApiOperation(value = "获取试算营业报表信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path"),
-            @ApiImplicitParam(name = "orgAuto", value = "部门id", required = false, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "orgUpAuto", value = "上级部门id", required = false, dataType = "long", paramType = "path")
-    })
-    @GetMapping(value = "query")
-    public ResponseResult<YearMonthList> query(@RequestParam(name = "userAuto",required = false) Long userAuto,
-                                                         @RequestParam(name = "startDate",required = false) String startDate,
-                                                         @RequestParam(name = "endDate",required = false) String endDate,
-                                                         @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
-                                                         @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
-        String startYear = startDate.split("-")[0];
-        String endYear = endDate.split("-")[0];
-        String startMon = startDate.split("-")[1];
-        String endMon = endDate.split("-")[1];
-        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
-        }
-        LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        List<MonthListDto> monthListDtos = vEmpService.selectTrail(lineChartQueryParam);
-        List<PCountMoneys> thisMonth = Lists.newArrayList();
-        for(MonthListDto monthListDto : monthListDtos){
-            PCountMoneys pCountMoneys = new PCountMoneys();
-            BeanUtils.copyProperties(monthListDto,pCountMoneys);
-            thisMonth.add(pCountMoneys);
-        }
-
-        List<LastMonthListDto> lastMonthListDtos = vEmpService.selectLastMonth(lineChartQueryParam);
-        List<PCountMoneyLast> lastMonth = Lists.newArrayList();
-        for(LastMonthListDto lastMonthListDto : lastMonthListDtos){
-            PCountMoneyLast pCountMoneyLast = new PCountMoneyLast();
-            BeanUtils.copyProperties(lastMonthListDto,pCountMoneyLast);
-            lastMonth.add(pCountMoneyLast);
-        }
-
-        YearMonthList yearMonthList = new YearMonthList();
-        yearMonthList.setThisMonth(thisMonth);
-        yearMonthList.setLastMonth(lastMonth);
-        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",yearMonthList);
-    }*/
 }
