@@ -39,6 +39,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         // 用于支持密码模式
         endpoints.authenticationManager(authenticationManager)
+                // 增加 TokenStore 配置
         .tokenStore(tokenStore());
     }
 
