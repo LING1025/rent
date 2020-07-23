@@ -3,7 +3,9 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.CreditAgentService;
 import com.funtl.myshop.plus.provider.api.EmpBaseService;
+import com.funtl.myshop.plus.provider.api.VEmpService;
 import com.funtl.myshop.plus.provider.domain.EmpBase;
+import com.funtl.myshop.plus.provider.domain.VEmp;
 import com.funtl.myshop.plus.provider.dto.SelfAgentListDto;
 import com.funtl.myshop.plus.provider.dto.SelfAgentQueryParam;
 import com.github.pagehelper.PageInfo;
@@ -30,30 +32,30 @@ public class AgentQueryController {
     private CreditAgentService creditAgentService;
 
     @Reference(version = "1.0.0")
-    private EmpBaseService empBaseService;
+    private VEmpService vEmpService;
 
     @ApiOperation(value = " 根据本人id获取代理数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "empBaseAuto", value = "本人id", required = false, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "userAuto", value = "本人id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "pageNum", value = "页码", required = false, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", value = "笔数", required = false, dataType = "int", paramType = "path")
     })
     @GetMapping(value = "queryBySelf")
-    public ResponseResult<PageInfo<SelfAgentListDto>> queryBySelf(@RequestParam(name = "empBaseAuto",required = false) Long empBaseAuto,
+    public ResponseResult<PageInfo<SelfAgentListDto>> queryBySelf(@RequestParam(name = "userAuto",required = false) Long userAuto,
                                                             @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                                                             @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
         //本人姓名查询
-        PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectSelf(empBaseAuto, pageNum, pageSize);
+        PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectSelf(userAuto, pageNum, pageSize);
         for(SelfAgentListDto dto : pageInfo.getList()){
-            EmpBase empBase = empBaseService.selectById(dto.getSelfUser());
-            if (empBase != null){
-                dto.setSelfName(empBase.getFName());
-                dto.setSelfDept(empBase.getOrgName());
+            VEmp vEmp = vEmpService.selectByUserAuto(dto.getSelfUser());
+            if (vEmp != null){
+                dto.setSelfName(vEmp.getFName());
+                dto.setSelfDept(vEmp.getDepName());
             }
-            EmpBase eb = empBaseService.selectById(dto.getAgentUser());
-            if(eb != null){
-                dto.setAgentName(eb.getFName());
-                dto.setAgentDept(eb.getOrgName());
+            VEmp vEmp2 = vEmpService.selectByUserAuto(dto.getAgentUser());
+            if (vEmp2 != null){
+                dto.setAgentName(vEmp2.getFName());
+                dto.setAgentDept(vEmp2.getDepName());
             }
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
@@ -61,26 +63,26 @@ public class AgentQueryController {
 
     @ApiOperation(value = " 根据代理人id获取代理数据")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "empBaseAuto", value = "代理人id", required = false, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "userAuto", value = "代理人id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "pageNum", value = "页码", required = false, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", value = "笔数", required = false, dataType = "int", paramType = "path")
     })
     @GetMapping(value = "queryByAgent")
-    public ResponseResult<PageInfo<SelfAgentListDto>> queryByAgent(@RequestParam(name = "empBaseAuto",required = false) Long empBaseAuto,
+    public ResponseResult<PageInfo<SelfAgentListDto>> queryByAgent(@RequestParam(name = "userAuto",required = false) Long userAuto,
                                                                    @RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                                                                    @RequestParam(name = "pageSize", defaultValue = "20") Integer pageSize){
                 //代理人姓名查询
-                PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectAgent(empBaseAuto, pageNum, pageSize);
+                PageInfo<SelfAgentListDto> pageInfo = creditAgentService.selectAgent(userAuto, pageNum, pageSize);
                 for(SelfAgentListDto dto : pageInfo.getList()){
-                    EmpBase empBase = empBaseService.selectById(dto.getAgentUser());
-                    if (empBase != null){
-                        dto.setAgentName(empBase.getFName());
-                        dto.setAgentDept(empBase.getOrgName());
+                    VEmp vEmp = vEmpService.selectByUserAuto(dto.getAgentUser());
+                    if (vEmp != null){
+                        dto.setAgentName(vEmp.getFName());
+                        dto.setAgentDept(vEmp.getDepName());
                     }
-                    EmpBase eb = empBaseService.selectById(dto.getSelfUser());
-                    if(eb != null){
-                        dto.setSelfName(eb.getFName());
-                        dto.setSelfDept(eb.getOrgName());
+                    VEmp vEmp2 = vEmpService.selectByUserAuto(dto.getSelfUser());
+                    if (vEmp2 != null){
+                        dto.setSelfName(vEmp2.getFName());
+                        dto.setSelfDept(vEmp2.getDepName());
                     }
                 }
                 return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
