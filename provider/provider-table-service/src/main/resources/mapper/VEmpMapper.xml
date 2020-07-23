@@ -25,7 +25,6 @@
     <result column="DepName" jdbcType="VARCHAR" property="depName" />
     <result column="TitleName" jdbcType="VARCHAR" property="titleName" />
     <result column="FName" jdbcType="VARCHAR" property="fName" />
-    <result column="Expr1" jdbcType="VARCHAR" property="expr1" />
     <result column="IsOn" jdbcType="INTEGER" property="isOn" />
     <result column="IsEas" jdbcType="INTEGER" property="isEas" />
     <result column="AccCode" jdbcType="VARCHAR" property="accCode" />
@@ -35,7 +34,7 @@
     <!--@mbg.generated-->
     UPOrg4Name, UPOrg5, UPOrg3Name, UPOrg4, UPOrg2Name, UPOrg3, UPOrgName, UPOrg2, TradeItem_Auto,
     UserId, User_Auto, UserName, Org_Auto, DepCode, Lev, UpUnit, TitleLevel, EmpBase_Auto,
-    DepName, TitleName, FName, Expr1, IsOn, IsEas, AccCode, IsSalesDep
+    DepName, TitleName, FName, IsOn, IsEas, AccCode, IsSalesDep
   </sql>
   <resultMap id="queryByMode" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ReportForms">
     <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />

@@ -73,9 +73,6 @@ public class VEmp implements Serializable {
     @Column(name = "FName")
     private String fName;
 
-    @Column(name = "Expr1")
-    private String expr1;
-
     @Column(name = "IsOn")
     private Integer isOn;
 

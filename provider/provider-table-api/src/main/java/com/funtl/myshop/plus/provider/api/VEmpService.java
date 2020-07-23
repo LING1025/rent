@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.api;
 
 import com.funtl.myshop.plus.provider.domain.ReportForms;
+import com.funtl.myshop.plus.provider.domain.VEmp;
 import com.funtl.myshop.plus.provider.dto.LastMonthListDto;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.dto.MonthListDto;
@@ -17,4 +18,10 @@ public interface VEmpService{
 
     List<MonthListDto> selectTest(LineChartQueryParam lineChartQueryParam);
 
+    /**
+     * 根据userAuto获取业务员、所在部门
+     * @param userAuto
+     * @return
+     */
+    VEmp selectByUserAuto(Long userAuto);
 }
