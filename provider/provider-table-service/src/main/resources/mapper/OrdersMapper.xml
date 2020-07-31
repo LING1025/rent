@@ -17,7 +17,7 @@
     <result column="Clasen_Auto" jdbcType="INTEGER" property="clasenAuto" />
     <result column="ClasenCode" jdbcType="VARCHAR" property="clasenCode" />
     <result column="CarColor" jdbcType="VARCHAR" property="carColor" />
-    <result column="CarDT" jdbcType="TIMESTAMP" property="carDT" />
+    <result column="CarDT" jdbcType="TIMESTAMP" property="cardt" />
     <result column="CC" jdbcType="INTEGER" property="cc" />
     <result column="MakNo" jdbcType="VARCHAR" property="makNo" />
     <result column="ListPrice" jdbcType="DECIMAL" property="listPrice" />
@@ -27,7 +27,7 @@
     <result column="PushMoney" jdbcType="DECIMAL" property="pushMoney" />
     <result column="PushMan" jdbcType="VARCHAR" property="pushMan" />
     <result column="PushMan_Auto" jdbcType="INTEGER" property="pushManAuto" />
-    <result column="PushTEL" jdbcType="VARCHAR" property="pushTEL" />
+    <result column="PushTEL" jdbcType="VARCHAR" property="pushtel" />
     <result column="CarTax" jdbcType="DECIMAL" property="carTax" />
     <result column="CarCost" jdbcType="DECIMAL" property="carCost" />
     <result column="OverAmt" jdbcType="DECIMAL" property="overAmt" />
@@ -52,21 +52,21 @@
     <result column="RateMCost" jdbcType="DECIMAL" property="rateMCost" />
     <result column="RateYCost" jdbcType="DECIMAL" property="rateYCost" />
     <result column="RateTCost" jdbcType="DECIMAL" property="rateTCost" />
-    <result column="RateM" jdbcType="DECIMAL" property="rateM" />
-    <result column="RateY" jdbcType="DECIMAL" property="rateY" />
-    <result column="RateT" jdbcType="DECIMAL" property="rateT" />
+    <result column="RateM" jdbcType="DECIMAL" property="ratem" />
+    <result column="RateY" jdbcType="DECIMAL" property="ratey" />
+    <result column="RateT" jdbcType="DECIMAL" property="ratet" />
     <result column="RateCost" jdbcType="DECIMAL" property="rateCost" />
-    <result column="RateDPN" jdbcType="DECIMAL" property="rateDPN" />
+    <result column="RateDPN" jdbcType="DECIMAL" property="rateDpn" />
     <result column="RateTax" jdbcType="DECIMAL" property="rateTax" />
     <result column="RateAmt" jdbcType="DECIMAL" property="rateAmt" />
     <result column="FinalMCost" jdbcType="DECIMAL" property="finalMCost" />
     <result column="FinalYCost" jdbcType="DECIMAL" property="finalYCost" />
     <result column="FinalTCost" jdbcType="DECIMAL" property="finalTCost" />
-    <result column="FinalM" jdbcType="DECIMAL" property="finalM" />
-    <result column="FinalY" jdbcType="DECIMAL" property="finalY" />
-    <result column="FinalT" jdbcType="DECIMAL" property="finalT" />
+    <result column="FinalM" jdbcType="DECIMAL" property="finalm" />
+    <result column="FinalY" jdbcType="DECIMAL" property="finaly" />
+    <result column="FinalT" jdbcType="DECIMAL" property="finalt" />
     <result column="FinalCost" jdbcType="DECIMAL" property="finalCost" />
-    <result column="FinalDPN" jdbcType="DECIMAL" property="finalDPN" />
+    <result column="FinalDPN" jdbcType="DECIMAL" property="finalDpn" />
     <result column="FinalTax" jdbcType="DECIMAL" property="finalTax" />
     <result column="FinalAmt" jdbcType="DECIMAL" property="finalAmt" />
     <result column="MAmt" jdbcType="DECIMAL" property="mAmt" />
@@ -79,11 +79,11 @@
     <result column="TaxMode" jdbcType="INTEGER" property="taxMode" />
     <result column="TaxRate" jdbcType="DECIMAL" property="taxRate" />
     <result column="chkListPrice" jdbcType="INTEGER" property="chkListPrice" />
-    <result column="CUser" jdbcType="INTEGER" property="cUser" />
-    <result column="CDT" jdbcType="TIMESTAMP" property="cDT" />
-    <result column="MUser" jdbcType="INTEGER" property="mUser" />
-    <result column="MDT" jdbcType="TIMESTAMP" property="mDT" />
-    <result column="LinceKM" jdbcType="INTEGER" property="linceKM" />
+    <result column="CUser" jdbcType="INTEGER" property="cuser" />
+    <result column="CDT" jdbcType="TIMESTAMP" property="cdt" />
+    <result column="MUser" jdbcType="INTEGER" property="muser" />
+    <result column="MDT" jdbcType="TIMESTAMP" property="mdt" />
+    <result column="LinceKM" jdbcType="INTEGER" property="linceKm" />
     <result column="AppDate" jdbcType="TIMESTAMP" property="appDate" />
     <result column="A1" jdbcType="VARCHAR" property="a1" />
     <result column="A2" jdbcType="VARCHAR" property="a2" />
@@ -92,14 +92,14 @@
     <result column="A5" jdbcType="VARCHAR" property="a5" />
     <result column="Orders_Old" jdbcType="BIGINT" property="ordersOld" />
     <result column="PostType" jdbcType="INTEGER" property="postType" />
-    <result column="ISContractLock" jdbcType="INTEGER" property="iSContractLock" />
+    <result column="ISContractLock" jdbcType="INTEGER" property="isContractLock" />
     <result column="LockUser" jdbcType="BIGINT" property="lockUser" />
-    <result column="LockDT" jdbcType="TIMESTAMP" property="lockDT" />
-    <result column="ISThirdParty" jdbcType="INTEGER" property="iSThirdParty" />
+    <result column="LockDT" jdbcType="TIMESTAMP" property="lockDt" />
+    <result column="ISThirdParty" jdbcType="INTEGER" property="isThirdParty" />
     <result column="BsType" jdbcType="INTEGER" property="bsType" />
     <result column="NoInsure" jdbcType="INTEGER" property="noInsure" />
-    <result column="IRR" jdbcType="DECIMAL" property="iRR" />
-    <result column="NPV" jdbcType="DECIMAL" property="nPV" />
+    <result column="IRR" jdbcType="DECIMAL" property="irr" />
+    <result column="NPV" jdbcType="DECIMAL" property="npv" />
     <result column="IsCredit" jdbcType="INTEGER" property="isCredit" />
     <result column="IsCreditUser" jdbcType="INTEGER" property="isCreditUser" />
     <result column="DptType" jdbcType="INTEGER" property="dptType" />
@@ -107,35 +107,37 @@
     <result column="Project_Auto" jdbcType="BIGINT" property="projectAuto" />
     <result column="Onetime" jdbcType="INTEGER" property="onetime" />
     <result column="RepurchaseAmt" jdbcType="DECIMAL" property="repurchaseAmt" />
-    <result column="ISInsureOffer" jdbcType="INTEGER" property="iSInsureOffer" />
+    <result column="ISInsureOffer" jdbcType="INTEGER" property="isInsureOffer" />
     <result column="CostAdjustment" jdbcType="DECIMAL" property="costAdjustment" />
     <result column="DptTaxPay" jdbcType="INTEGER" property="dptTaxPay" />
     <result column="DptTax" jdbcType="DECIMAL" property="dptTax" />
     <result column="oil" jdbcType="INTEGER" property="oil" />
     <result column="IsCustomerCare" jdbcType="INTEGER" property="isCustomerCare" />
-    <result column="ReletMakno" jdbcType="VARCHAR" property="reletMakno" />
+    <result column="ReletMakno" jdbcType="VARCHAR" property="reletMakNo" />
     <result column="IsRelet" jdbcType="INTEGER" property="isRelet" />
     <result column="OnetimeTransfer" jdbcType="DECIMAL" property="onetimeTransfer" />
     <result column="OnetimePoundage" jdbcType="DECIMAL" property="onetimePoundage" />
-    <result column="OverAmt_Y" jdbcType="DECIMAL" property="overAmt_Y" />
-    <result column="Budget01_Y" jdbcType="DECIMAL" property="budget01_Y" />
+    <result column="OverAmt_Y" jdbcType="DECIMAL" property="overAmtY" />
+    <result column="Budget01_Y" jdbcType="DECIMAL" property="budget01Y" />
     <result column="CarTransfer" jdbcType="INTEGER" property="carTransfer" />
-    <result column="MakNo_INC" jdbcType="VARCHAR" property="makNo_INC" />
+    <result column="MakNo_INC" jdbcType="VARCHAR" property="makNoInc" />
     <result column="Weight" jdbcType="VARCHAR" property="weight" />
     <result column="MM2" jdbcType="INTEGER" property="mm2" />
-    <result column="UseKM" jdbcType="INTEGER" property="useKM" />
+    <result column="UseKM" jdbcType="INTEGER" property="usekm" />
     <result column="ServiceAmt" jdbcType="DECIMAL" property="serviceAmt" />
     <result column="OutFee" jdbcType="DECIMAL" property="outFee" />
     <result column="FinanceFee" jdbcType="DECIMAL" property="financeFee" />
     <result column="UrgentFee" jdbcType="DECIMAL" property="urgentFee" />
     <result column="MortgageAddr" jdbcType="INTEGER" property="mortgageAddr" />
     <result column="CommissionRate" jdbcType="DECIMAL" property="commissionRate" />
-    <result column="RateTaxY" jdbcType="DECIMAL" property="rateTaxY" />
+    <result column="RateTaxY" jdbcType="DECIMAL" property="rateTaxy" />
     <result column="A6" jdbcType="VARCHAR" property="a6" />
     <result column="A7" jdbcType="VARCHAR" property="a7" />
     <result column="InsureAnomalyType" jdbcType="INTEGER" property="insureAnomalyType" />
     <result column="CarPriceRef" jdbcType="DECIMAL" property="carPriceRef" />
     <result column="IsBigTradeItem" jdbcType="INTEGER" property="isBigTradeItem" />
+    <result column="CarExtensionAmt" jdbcType="DECIMAL" property="carExtensionAmt" />
+    <result column="Discount" jdbcType="DECIMAL" property="discount" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
@@ -154,6 +156,6 @@
     DptTaxPay, DptTax, oil, IsCustomerCare, ReletMakno, IsRelet, OnetimeTransfer, OnetimePoundage,
     OverAmt_Y, Budget01_Y, CarTransfer, MakNo_INC, Weight, MM2, UseKM, ServiceAmt, OutFee,
     FinanceFee, UrgentFee, MortgageAddr, CommissionRate, RateTaxY, A6, A7, InsureAnomalyType,
-    CarPriceRef, IsBigTradeItem
+    CarPriceRef, IsBigTradeItem, CarExtensionAmt, Discount
   </sql>
 </mapper>
