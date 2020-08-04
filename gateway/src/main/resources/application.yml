@@ -50,12 +50,6 @@ spring:
             - Path=/api/**
           filters:
             - StripPrefix=1
-        - id: BUSINESS-RENTAL
-          uri: lb://business-rental
-          predicates:
-            - Path=/api/table/**
-          filters:
-            - StripPrefix=1
 
 server:
   port: 8888
