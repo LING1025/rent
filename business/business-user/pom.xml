@@ -11,24 +11,6 @@
 
     <artifactId>business-user</artifactId>
     <packaging>pom</packaging>
-    <url>http://www.funtl.com</url>
-    <inceptionYear>2018-Now</inceptionYear>
-
-    <licenses>
-        <license>
-            <name>Apache 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>liwemin</id>
-            <name>Lusifer Lee</name>
-            <email>lee.lusifer@gmail.com</email>
-        </developer>
-    </developers>
-
     <modules>
         <module>business-user-feign</module>
         <module>business-user-service</module>
