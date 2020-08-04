@@ -26,13 +26,13 @@
         <option value="$PROJECT_DIR$/business/business-user/business-user-service/pom.xml" />
         <option value="$PROJECT_DIR$/provider/provider-rental-api/pom.xml" />
         <option value="$PROJECT_DIR$/provider/provider-rental-service/pom.xml" />
-        <option value="$PROJECT_DIR$/business/business-rental/pom.xml" />
         <option value="$PROJECT_DIR$/provider/provider-table-api/pom.xml" />
         <option value="$PROJECT_DIR$/provider/provider-table-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/business/business-reg/pom.xml" />
         <option value="$PROJECT_DIR$/provider/ums-admin-provider-api/pom.xml" />
         <option value="$PROJECT_DIR$/provider/ums-admin-provider-service/pom.xml" />
       </set>
