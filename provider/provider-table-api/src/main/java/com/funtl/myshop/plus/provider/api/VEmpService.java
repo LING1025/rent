@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.api;
 
+import com.funtl.myshop.plus.provider.domain.AgentList;
 import com.funtl.myshop.plus.provider.domain.ReportForms;
 import com.funtl.myshop.plus.provider.domain.VEmp;
 import com.funtl.myshop.plus.provider.dto.LastMonthListDto;
@@ -24,4 +25,6 @@ public interface VEmpService{
      * @return
      */
     VEmp selectByUserAuto(Long userAuto);
+
+    List<AgentList> selectAgentList(Long userAuto);
 }

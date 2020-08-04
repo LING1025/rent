@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.service;
 
+import com.funtl.myshop.plus.provider.domain.AgentList;
 import com.funtl.myshop.plus.provider.domain.ReportForms;
 import com.funtl.myshop.plus.provider.dto.LastMonthListDto;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
@@ -36,5 +37,10 @@ public class VEmpServiceImpl implements VEmpService{
         Example example = new Example(VEmp.class);
         example.createCriteria().andEqualTo("userAuto",userAuto);
         return vEmpMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<AgentList> selectAgentList(Long userAuto) {
+        return vEmpMapper.selectAgentList(userAuto);
     }
 }

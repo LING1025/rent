@@ -4,6 +4,7 @@ import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.CreditAgentService;
 import com.funtl.myshop.plus.provider.api.EmpBaseService;
 import com.funtl.myshop.plus.provider.api.VEmpService;
+import com.funtl.myshop.plus.provider.domain.AgentList;
 import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.domain.VEmp;
 import com.funtl.myshop.plus.provider.dto.SelfAgentListDto;
@@ -86,6 +87,16 @@ public class AgentQueryController {
                     }
                 }
                 return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", pageInfo);
+    }
+
+    @ApiOperation(value = " 根据userAuto获取用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path")
+    })
+    @GetMapping(value = "queryByUserAuto")
+    public ResponseResult<List<AgentList>> queryByUserAuto(@RequestParam(name = "userAuto",required = false) Long userAuto){
+        List<AgentList> lists = vEmpService.selectAgentList(userAuto);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK, "查询成功", lists);
     }
 
 }
