@@ -2,7 +2,7 @@ base:
   config:
     nacos:
       #      开发用
-      hostname: 192.168.168.93
+      hostname: 192.168.168.70
       #      服务器
       #      hostname: 192.168.168.208
       port: 8848
@@ -48,12 +48,6 @@ spring:
           uri: lb://business-user
           predicates:
             - Path=/api/**
-          filters:
-            - StripPrefix=1
-        - id: BUSINESS-RENTAL
-          uri: lb://business-rental
-          predicates:
-            - Path=/api/table/**
           filters:
             - StripPrefix=1
 
