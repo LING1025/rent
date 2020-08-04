@@ -12,6 +12,7 @@
     <artifactId>provider</artifactId>
     <packaging>pom</packaging>
 
+
     <modules>
         <module>provider-user-api</module>
         <module>provider-user-service</module>
