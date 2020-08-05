@@ -10,3 +10,11 @@ provider/provider-table-api/target/
 configuration/configuration-feign/target/classes/
 business/business-oauth2/target/
 .idea/libraries/
+business/business-profile/business-profile-feign/target/
+business/business-profile/business-profile-service/target/
+business/business-user/business-user-feign/target/
+business/business-user/business-user-service/target/
+provider/provider-rental-api/target/
+provider/provider-rental-service/target/
+gateway/target/
+provider/provider-table-service/target/
