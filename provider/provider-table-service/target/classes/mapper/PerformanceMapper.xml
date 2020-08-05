@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.PerformanceMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.Performance">
+    <!--@mbg.generated-->
+    <!--@Table Performance-->
+    <id column="Performance_Auto" jdbcType="BIGINT" property="performanceAuto" />
+    <result column="Sales_Auto" jdbcType="BIGINT" property="salesAuto" />
+    <result column="P_Year" jdbcType="INTEGER" property="pYear" />
+    <result column="P_Month" jdbcType="INTEGER" property="pMonth" />
+    <result column="P_Count" jdbcType="INTEGER" property="p_Count" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Performance_Auto, Sales_Auto, P_Year, P_Month, P_Count
+  </sql>
+</mapper>
