@@ -33,7 +33,7 @@ dubbo:
     port: -1
     serialization: kryo
   provider:
-    timeout: 5000
+    timeout: 10000
 #  protocol:
 #    name: dubbo
 #    port: -1
