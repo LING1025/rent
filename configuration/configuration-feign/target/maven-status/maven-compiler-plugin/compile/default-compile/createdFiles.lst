@@ -1,0 +1,2 @@
+com\funtl\myshop\plus\configuration\FeignRequestConfiguration.class
+com\funtl\myshop\plus\interceptor\FeignRequestInterceptor.class
