@@ -18,3 +18,6 @@ provider/provider-rental-api/target/
 provider/provider-rental-service/target/
 gateway/target/
 provider/provider-table-service/target/
+commons/commons-provider/target/classes/
+commons/commons-dto/target/classes/
+commons/commons-utils/target/classes/
