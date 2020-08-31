@@ -12,6 +12,6 @@ public interface ConsumerFeign {
      * @param username
      * @return
      */
-    @GetMapping(value = "info/{username}")
-    String info(@PathVariable String username);
+    @GetMapping(value = "infos/{username}")
+    String infos(@PathVariable String username);
 }
