@@ -49,8 +49,8 @@ public class ConsumerController {
 
     @ApiOperation(value = "获取个人信息")
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "string", paramType = "path")
-    @GetMapping(value = "info/{username}")
-    public ResponseResult<UsersDto> info(@PathVariable String username){
+    @GetMapping(value = "infos/{username}")
+    public ResponseResult<UsersDto> infos(@PathVariable String username){
         AspnetUsers aspnetUsers = aspnetUsersService.get(username);
         if(aspnetUsers == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"用户不存在",null);
