@@ -125,7 +125,7 @@ public class LoginController {
      *
      * @return {@link ResponseResult}
      */
-    @GetMapping(value = "/user/info")
+    @GetMapping(value = "/user/infos")
     public ResponseResult<LoginInfo> info(HttpServletRequest request) throws Exception {
         // 获取认证信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -133,7 +133,7 @@ public class LoginController {
         // 获取个人信息
 //        String jsonString = profileFeign.info(authentication.getName());
 //        User user = MapperUtils.json2pojoByTree(jsonString,"data",User.class);
-        String jsonString = consumerFeign.info(authentication.getName());
+        String jsonString = consumerFeign.infos(authentication.getName());
         AspnetUsers aspnetUsers = MapperUtils.json2pojoByTree(jsonString,"data",AspnetUsers.class);
         if(aspnetUsers == null){
             return MapperUtils.json2pojo(jsonString, ResponseResult.class);

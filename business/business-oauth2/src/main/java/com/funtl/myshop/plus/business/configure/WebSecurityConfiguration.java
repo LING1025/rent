@@ -70,7 +70,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 增加了授权访问配置
-                .antMatchers("/user/info").hasAuthority("USER")
+                .antMatchers("/user/infos").hasAuthority("USER")
                 .antMatchers("/user/logout").hasAuthority("USER");
     }
 }
