@@ -2,7 +2,6 @@ package com.funtl.myshop.plus.provider.service;
 
 import com.funtl.myshop.plus.provider.domain.AgentList;
 import com.funtl.myshop.plus.provider.domain.ReportForms;
-import com.funtl.myshop.plus.provider.dto.LastMonthListDto;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 
 import javax.annotation.Resource;
@@ -17,7 +16,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 
 @Service(version = "1.0.0")
-public class VEmpServiceImpl implements VEmpService{
+public class VEmpServiceImpl implements VEmpService {
 
     @Resource
     private VEmpMapper vEmpMapper;

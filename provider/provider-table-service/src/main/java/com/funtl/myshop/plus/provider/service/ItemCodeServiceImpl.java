@@ -9,7 +9,7 @@ import org.apache.dubbo.config.annotation.Service;
 import java.util.List;
 
 @Service(version = "1.0.0")
-public class ItemCodeServiceImpl implements ItemCodeService{
+public class ItemCodeServiceImpl implements ItemCodeService {
 
     @Resource
     private ItemCodeMapper itemCodeMapper;
