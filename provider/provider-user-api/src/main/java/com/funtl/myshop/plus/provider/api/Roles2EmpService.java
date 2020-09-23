@@ -13,13 +13,6 @@ public interface Roles2EmpService{
     Long insert(Roles2Emp roles2Emp);
 
     /**
-     * 根据主键删除员工角色绑定数据
-     * @param roles2EmpAuto
-     * @return
-     */
-    Integer deleteById(Long roles2EmpAuto);
-
-    /**
      * 根据员工id删除员工角色绑定数据
      * @param empBaseAuto
      * @return

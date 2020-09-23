@@ -27,40 +27,4 @@
       WHERE
       DepName LIKE '%${depName}%'
     </select>
-    <select id="selectModeOne" resultMap="queryModeTwo">
-      SELECT
-      DISTINCT b.Org_Auto,b.DepName
-      FROM
-      [Org] b
-      INNER JOIN [Org2Emp] a ON b.Org_Auto = a.Org_Auto
-      WHERE
-      1 = 1
-      <if test="isSalesDep != null">
-        AND b.IsSalesDep = 1
-      </if>
-      <if test="lev != null">
-        AND b.Lev = 5
-      </if>
-      <if test="ACLType != null">
-        AND a.ACLType = 0
-      </if>
-    </select>
-  <resultMap id="queryModeTwo" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ModeTwoList">
-    <result column="User_Auto" jdbcType="BIGINT" property="userAuto" />
-  </resultMap>
-  <select id="selectModeTwo" resultMap="queryModeTwo">
-    SELECT
-    DISTINCT b.Org_Auto,b.DepName
-    FROM
-    [Org] b
-    INNER JOIN [Org2Emp] a ON b.Org_Auto = a.Org_Auto
-    WHERE
-    1 = 1
-    <if test="isSalesDep != null">
-      AND b.IsSalesDep = 1
-    </if>
-    <if test="lev != null">
-      AND b.Lev = 4
-    </if>
-  </select>
 </mapper>

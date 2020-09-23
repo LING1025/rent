@@ -22,11 +22,6 @@ public class Roles2EmpServiceImpl implements Roles2EmpService{
     }
 
     @Override
-    public Integer deleteById(Long roles2EmpAuto) {
-        return roles2EmpMapper.deleteByPrimaryKey(roles2EmpAuto);
-    }
-
-    @Override
     public Integer deleteByEmpAuto(Long empBaseAuto) {
         Example example = new Example(Roles2Emp.class);
         example.createCriteria().andEqualTo("empBaseAuto",empBaseAuto);

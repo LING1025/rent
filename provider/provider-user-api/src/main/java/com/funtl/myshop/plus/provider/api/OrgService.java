@@ -1,6 +1,5 @@
 package com.funtl.myshop.plus.provider.api;
 
-import com.funtl.myshop.plus.provider.domain.ModeTwoList;
 import com.funtl.myshop.plus.provider.domain.Org;
 import com.funtl.myshop.plus.provider.domain.Org2Emp;
 import com.funtl.myshop.plus.provider.domain.OrgNameList;
@@ -21,23 +20,5 @@ public interface OrgService{
      * @return
      */
     Org selectById(Long orgAuto);
-
-
-    /**
-     * 获取下级课数据
-     * @param isSalesDep
-     * @param lev
-     * @param ACLType
-     * @return
-     */
-    List<ModeTwoList> selectModeOne(Integer isSalesDep, Integer lev,Integer ACLType);
-
-    /**
-     * 获取部门数据
-     * @param isSalesDep
-     * @param lev
-     * @return
-     */
-    List<ModeTwoList> selectModeTwo(Integer isSalesDep, Integer lev);
 
 }

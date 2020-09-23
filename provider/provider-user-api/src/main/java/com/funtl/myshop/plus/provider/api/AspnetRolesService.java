@@ -21,13 +21,6 @@ public interface AspnetRolesService{
     AspnetRoles selectByRoleName(String roleName);
 
     /**
-     * 根据角色id集合获取角色信息
-     * @param roleIds
-     * @return
-     */
-    List<RolesNameList> selectByRolesId(List<Long> roleIds);
-
-    /**
      * 根据UserId获取角色信息
      * @param userId
      * @return
