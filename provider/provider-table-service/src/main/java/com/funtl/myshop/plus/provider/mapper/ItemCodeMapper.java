@@ -7,5 +7,4 @@ import tk.mybatis.mapper.MyMapper;
 import java.util.List;
 
 public interface ItemCodeMapper extends MyMapper<ItemCode> {
-    List<ItemCode> selectByYear(@Param("year") Integer year);
 }

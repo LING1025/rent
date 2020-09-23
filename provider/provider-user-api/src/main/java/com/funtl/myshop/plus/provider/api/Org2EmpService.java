@@ -13,12 +13,6 @@ public interface Org2EmpService{
      */
     Long insert(Org2Emp org2Emp);
 
-    /**
-     * 根据主键删除部门员工绑定数据
-     * @param org2EmpAuto
-     * @return
-     */
-    Integer deleteById(Long org2EmpAuto);
 
     Integer update(Org2Emp org2Emp);
 

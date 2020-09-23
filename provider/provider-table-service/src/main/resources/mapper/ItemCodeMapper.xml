@@ -19,15 +19,4 @@
     <!--@mbg.generated-->
     ItemCode_Auto, ItemType, Num, ItemName, Memo, IsActive, Seq, V1, V2, A1
   </sql>
-    <select id="selectByYear" resultMap="BaseResultMap">
-      select
-      *
-      from
-      ItemCode
-      where
-      1 = 1
-      <if test="year != null and year != ''">
-        AND ItemType = 10000 + #{year}
-      </if>
-    </select>
 </mapper>

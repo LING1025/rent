@@ -14,9 +14,4 @@ public class ItemCodeServiceImpl implements ItemCodeService {
     @Resource
     private ItemCodeMapper itemCodeMapper;
 
-
-    @Override
-    public List<ItemCode> selectByYear(Integer year) {
-        return itemCodeMapper.selectByYear(year);
-    }
 }

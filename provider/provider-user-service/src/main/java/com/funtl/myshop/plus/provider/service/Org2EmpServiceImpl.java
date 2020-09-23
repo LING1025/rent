@@ -23,11 +23,6 @@ public class Org2EmpServiceImpl implements Org2EmpService{
     }
 
     @Override
-    public Integer deleteById(Long org2EmpAuto) {
-        return org2EmpMapper.deleteByPrimaryKey(org2EmpAuto);
-    }
-
-    @Override
     public Integer update(Org2Emp org2Emp) {
         return org2EmpMapper.updateByPrimaryKeySelective(org2Emp);
     }

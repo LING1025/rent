@@ -2,13 +2,10 @@ package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.CreditAgentService;
-import com.funtl.myshop.plus.provider.api.EmpBaseService;
 import com.funtl.myshop.plus.provider.api.VEmpService;
 import com.funtl.myshop.plus.provider.domain.AgentList;
-import com.funtl.myshop.plus.provider.domain.EmpBase;
 import com.funtl.myshop.plus.provider.domain.VEmp;
 import com.funtl.myshop.plus.provider.dto.SelfAgentListDto;
-import com.funtl.myshop.plus.provider.dto.SelfAgentQueryParam;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
