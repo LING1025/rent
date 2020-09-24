@@ -1,10 +1,12 @@
 package com.funtl.myshop.plus.provider.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
+@ApiModel(value = "营业报表查询参数")
 public class LineChartQueryParam implements Serializable {
     private Long userAuto;
     private String startDate;
