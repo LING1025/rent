@@ -78,7 +78,7 @@ public class CaseProList implements Serializable {
 
     @ApiModelProperty(value = "交车日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date jCDT;
+    private Date jcDT;
 
     @ApiModelProperty(value = "合约用印日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
@@ -90,10 +90,10 @@ public class CaseProList implements Serializable {
 
     @ApiModelProperty(value = "业绩日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date yjCDT;
+    private Date yjcDT;
 
     @ApiModelProperty(value = "状态")
-    private Integer orderStatus;
+    private String orderStatus;
 
     @ApiModelProperty(value = "贷款金额")
     private BigDecimal qiPiao;

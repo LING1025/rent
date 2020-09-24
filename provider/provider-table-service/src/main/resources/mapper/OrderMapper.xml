@@ -186,34 +186,28 @@
   </sql>
 
   <resultMap id="queryCaseProList" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.CaseProList">
-    <result column="CompanyName" jdbcType="VARCHAR" property="clasenName" />
+    <result column="CompanyName" jdbcType="VARCHAR" property="companyName" />
     <result column="DepNAme" jdbcType="VARCHAR" property="depNAme" />
     <result column="FNAme" jdbcType="VARCHAR" property="fNAme" />
     <result column="CustName" jdbcType="VARCHAR" property="custName" />
     <result column="SName" jdbcType="VARCHAR" property="sName" />
     <result column="ClasenName" jdbcType="VARCHAR" property="clasenName" />
-<!--    <result column="Order_Auto" jdbcType="BIGINT" property="orderAuto" />-->
     <result column="CustSourceName" jdbcType="VARCHAR" property="custSourceName" />
     <result column="RentTypeName" jdbcType="VARCHAR" property="rentTypeName" />
     <result column="OrderTypeName" jdbcType="VARCHAR" property="orderTypeName" />
     <result column="ListPrice" jdbcType="DECIMAL" property="listPrice" />
-<!--    <result column="MM" jdbcType="INTEGER" property="mm" />-->
-<!--    <result column="MAmt" jdbcType="DECIMAL" property="mAmt" />-->
     <result column="SalesAMT" jdbcType="DECIMAL" property="salesAMT" />
     <result column="CarMtnAmt" jdbcType="DECIMAL" property="carMtnAmt" />
     <result column="EndDT" jdbcType="TIMESTAMP" property="endDT" />
     <result column="RealDptDT" jdbcType="TIMESTAMP" property="realDptDT" />
     <result column="MakDT" jdbcType="TIMESTAMP" property="makDT" />
-    <result column="JCDT" jdbcType="TIMESTAMP" property="jCDT" />
+    <result column="JCDT" jdbcType="TIMESTAMP" property="jcDT" />
     <result column="ContractSignet" jdbcType="TIMESTAMP" property="contractSignet" />
-<!--    <result column="BoundDT" jdbcType="TIMESTAMP" property="boundDT" />-->
-<!--    <result column="YJCDT" jdbcType="TIMESTAMP" property="yjCDT" />-->
-    <result column="OrderStatus" jdbcType="INTEGER" property="orderStatus" />
+    <result column="OrderStatus" jdbcType="VARCHAR" property="orderStatus" />
     <result column="QiPiao" jdbcType="DECIMAL" property="qiPiao" />
-    <result column="IsTruck" jdbcType="VARCHAR" property="insureMM" />
-    <result column="InsureMM" jdbcType="INTEGER" property="insureAmt" />
+    <result column="IsTruck" jdbcType="VARCHAR" property="isTruck" />
+    <result column="InsureMM" jdbcType="INTEGER" property="insureMM" />
     <result column="InsureAmt" jdbcType="DECIMAL" property="insureAmt" />
-<!--    <result column="BonusStatus" jdbcType="INTEGER" property="bonusStatus" />-->
   </resultMap>
     <select id="selectCaseProList" resultMap="queryCaseProList">
       declare
@@ -223,12 +217,12 @@
       @month int,--月份
       @flag int,--单选按钮
       @customer varchar(100)--输入条件
-      set @inc=0
-      set	@type=4
-      set	@year=2020
-      set	@month=9
-      set	@flag=1
-      set	@customer=''
+      set   @inc = #{caseProQueryParam.inc}
+      set	@type = #{caseProQueryParam.type}
+      set	@year = #{caseProQueryParam.year}
+      set	@month = #{caseProQueryParam.year}
+      set	@flag = #{caseProQueryParam.flag}
+      set	@customer = #{caseProQueryParam.customer}
 
       BEGIN
       declare @order table(
