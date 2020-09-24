@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,7 +35,7 @@ public class CaseProList implements Serializable {
     private String makNo;
 
     @ApiModelProperty(value = "契约单号")
-    private String orderAuto;
+    private Long orderAuto;
 
     @ApiModelProperty(value = "客户来源")
     private String custSourceName;
@@ -77,7 +78,7 @@ public class CaseProList implements Serializable {
 
     @ApiModelProperty(value = "交车日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date jCDT;
+    private Date jcDT;
 
     @ApiModelProperty(value = "合约用印日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
@@ -89,10 +90,10 @@ public class CaseProList implements Serializable {
 
     @ApiModelProperty(value = "业绩日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date yjCDT;
+    private Date yjcDT;
 
     @ApiModelProperty(value = "状态")
-    private Integer orderStatus;
+    private String orderStatus;
 
     @ApiModelProperty(value = "贷款金额")
     private BigDecimal qiPiao;
@@ -108,4 +109,10 @@ public class CaseProList implements Serializable {
 
     @ApiModelProperty(value = "奖金发放 0未选中 1已选中")
     private Integer chkBonusStatus;
+
+    /**
+     * 用于判断奖金发放
+     */
+    @JsonIgnore
+    private Integer bonusStatus;
 }

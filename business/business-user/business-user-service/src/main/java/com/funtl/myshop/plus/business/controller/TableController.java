@@ -29,7 +29,7 @@ import java.util.List;
  * 报表信息管理
  */
 
-@Api(tags = "报表相关操作")
+@Api(tags = "营业报表相关操作")
 @RestController
 @RequestMapping(value = "table")
 public class TableController {
