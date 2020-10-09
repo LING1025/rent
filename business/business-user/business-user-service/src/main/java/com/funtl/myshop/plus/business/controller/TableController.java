@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,20 +30,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "table")
 public class TableController {
-    @Reference(version = "1.0.0")
-    private PerformanceService performanceService;
-
-    @Reference(version = "1.0.0")
-    private Org2EmpService org2EmpService;
-
-    @Reference(version = "1.0.0")
-    private OrgService orgService;
-
-    @Reference(version = "1.0.0")
-    private ItemCodeService itemCodeService;
-
-    @Reference(version = "1.0.0")
-    private AspnetUsersService aspnetUsersService;
 
     @Reference(version = "1.0.0")
     private VEmpService vEmpService;
