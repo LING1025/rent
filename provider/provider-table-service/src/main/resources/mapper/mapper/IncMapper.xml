@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.IncMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.Inc">
+    <!--@mbg.generated-->
+    <!--@Table Inc-->
+    <id column="Inc_Auto" jdbcType="BIGINT" property="incAuto" />
+    <result column="TradeItem_Auto" jdbcType="BIGINT" property="tradeItemAuto" />
+    <result column="FName" jdbcType="VARCHAR" property="fName" />
+    <result column="SName" jdbcType="VARCHAR" property="sName" />
+    <result column="TaxCode" jdbcType="VARCHAR" property="taxCode" />
+    <result column="CarTaxMode" jdbcType="INTEGER" property="carTaxMode" />
+    <result column="AccMemo" jdbcType="VARCHAR" property="accMemo" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="CDT" jdbcType="TIMESTAMP" property="CDT" />
+    <result column="CUser" jdbcType="INTEGER" property="CUser" />
+    <result column="MDT" jdbcType="TIMESTAMP" property="MDT" />
+    <result column="MUser" jdbcType="INTEGER" property="MUser" />
+    <result column="IncVirBankNo" jdbcType="VARCHAR" property="incVirBankNo" />
+    <result column="IncVirBankNm" jdbcType="VARCHAR" property="incVirBankNm" />
+    <result column="oldBankNo" jdbcType="VARCHAR" property="oldBankNo" />
+    <result column="oldBankNm" jdbcType="VARCHAR" property="oldBankNm" />
+    <result column="LicensePlate" jdbcType="VARCHAR" property="licensePlate" />
+    <result column="EASCode" jdbcType="VARCHAR" property="EASCode" />
+    <result column="ISLimitedLicense" jdbcType="INTEGER" property="ISLimitedLicense" />
+    <result column="Area" jdbcType="INTEGER" property="area" />
+    <result column="Inc_Addr" jdbcType="VARCHAR" property="incAddr" />
+    <result column="Inc_Tel" jdbcType="VARCHAR" property="incTel" />
+    <result column="Inc_Fax" jdbcType="VARCHAR" property="incFax" />
+    <result column="CityCode" jdbcType="VARCHAR" property="cityCode" />
+    <result column="Mortgage" jdbcType="INTEGER" property="mortgage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Inc_Auto, TradeItem_Auto, FName, SName, TaxCode, CarTaxMode, AccMemo, [Status], CDT,
+    CUser, MDT, MUser, IncVirBankNo, IncVirBankNm, oldBankNo, oldBankNm, LicensePlate,
+    EASCode, ISLimitedLicense, Area, Inc_Addr, Inc_Tel, Inc_Fax, CityCode, Mortgage
+  </sql>
+</mapper>

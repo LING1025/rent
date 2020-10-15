@@ -7,10 +7,10 @@
         <option name="generateService" value="true" />
         <option name="generateServiceInterface" value="true" />
         <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-        <option name="javaMapperPath" value="D:\twoWork\rent\provider\provider-user-service\src\main\java" />
+        <option name="javaMapperPath" value="D:\twoWork\rent\provider\provider-table-service\src\main\java" />
         <option name="javaModelPackage" value="com.funtl.myshop.plus.provider.domain" />
-        <option name="javaModelPath" value="D:\twoWork\rent\provider\provider-user-api\src\main\java" />
-        <option name="lastDatabaseCrudChooseModuleName" value="provider-user-api" />
+        <option name="javaModelPath" value="D:\twoWork\rent\provider\provider-table-api\src\main\java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="provider-table-api" />
         <option name="lombokDataAnnotation" value="true" />
         <option name="moduleNameToPackageAndPathMap">
           <map>
@@ -34,15 +34,15 @@
               <value>
                 <UserPackageAndPathInfoByModule>
                   <option name="javaMapperPackage" value="com.funtl.myshop.plus.provider.mapper" />
-                  <option name="javaMapperPath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
+                  <option name="javaMapperPath" value="D:\twoWork\rent\provider\provider-table-service\src\main\java" />
                   <option name="javaModelPacakge" value="com.funtl.myshop.plus.provider.domain" />
-                  <option name="javaModelPath" value="$PROJECT_DIR$/provider/provider-table-api/src/main/java" />
-                  <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.service" />
-                  <option name="javaServiceInterfacePath" value="D:\Work\rent\provider\provider-table-api\src\main\java" />
+                  <option name="javaModelPath" value="D:\twoWork\rent\provider\provider-table-api\src\main\java" />
+                  <option name="javaServiceInterfacePackage" value="com.funtl.myshop.plus.provider.api" />
+                  <option name="javaServiceInterfacePath" value="D:\twoWork\rent\provider\provider-table-api\src\main\java" />
                   <option name="javaServicePackage" value="com.funtl.myshop.plus.provider.service" />
-                  <option name="javaServicePath" value="D:\Work\rent\provider\provider-table-service\src\main\java" />
+                  <option name="javaServicePath" value="D:\twoWork\rent\provider\provider-table-service\src\main\java" />
                   <option name="xmlPackage" value="mapper" />
-                  <option name="xmlPath" value="D:\Work\rent\provider\provider-table-service\src\main\resources" />
+                  <option name="xmlPath" value="D:\twoWork\rent\provider\provider-table-service\src\main\resources\mapper" />
                 </UserPackageAndPathInfoByModule>
               </value>
             </entry>
@@ -280,6 +280,18 @@
                   <option name="generatedKey" value="ITRequirement_Auto" />
                   <option name="javaModelName" value="ITRequirement" />
                   <option name="moduleName" value="provider-rental-api" />
+                  <option name="sequenceColumn" value="" />
+                  <option name="sequenceId" value="" />
+                  <option name="useActualColumnName" value="true" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="dbo:Inc">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="Inc_Auto" />
+                  <option name="javaModelName" value="Inc" />
+                  <option name="moduleName" value="provider-table-api" />
                   <option name="sequenceColumn" value="" />
                   <option name="sequenceId" value="" />
                   <option name="useActualColumnName" value="true" />
@@ -2010,7 +2022,7 @@
         </option>
         <option name="useActualColumnNames" value="true" />
         <option name="xmlMapperPackage" value="mapper" />
-        <option name="xmlMapperPath" value="D:\twoWork\rent\provider\provider-user-service\src\main\resources" />
+        <option name="xmlMapperPath" value="D:\twoWork\rent\provider\provider-table-service\src\main\resources\mapper" />
       </ProjectProfile>
     </option>
   </component>
