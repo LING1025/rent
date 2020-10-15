@@ -16,7 +16,7 @@ public class IncServiceImpl implements IncService{
     private IncMapper incMapper;
 
     @Override
-    public List<CompanyNameList> selectCompanyName(Integer mode, String searchWord) {
-        return incMapper.selectCompanyName(mode,searchWord);
+    public List<CompanyNameList> selectCompanyNameList(Integer mode, String searchWord) {
+        return incMapper.selectCompanyNameList(mode,searchWord);
     }
 }

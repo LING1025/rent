@@ -12,6 +12,6 @@ public interface IncService{
      * @param searchWord
      * @return
      */
-    List<CompanyNameList> selectCompanyName(Integer mode,String searchWord);
+    List<CompanyNameList> selectCompanyNameList(Integer mode,String searchWord);
 
 }

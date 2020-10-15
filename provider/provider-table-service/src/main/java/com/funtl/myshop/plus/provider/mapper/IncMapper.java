@@ -8,5 +8,5 @@ import tk.mybatis.mapper.MyMapper;
 import java.util.List;
 
 public interface IncMapper extends MyMapper<Inc> {
-    List<CompanyNameList> selectCompanyName(@Param("mode") Integer mode, @Param("searchWord") String searchWord);
+    List<CompanyNameList> selectCompanyNameList(@Param("mode") Integer mode, @Param("searchWord") String searchWord);
 }

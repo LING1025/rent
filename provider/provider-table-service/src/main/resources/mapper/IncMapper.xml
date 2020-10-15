@@ -36,7 +36,56 @@
     CUser, MDT, MUser, IncVirBankNo, IncVirBankNm, oldBankNo, oldBankNm, LicensePlate,
     EASCode, ISLimitedLicense, Area, Inc_Addr, Inc_Tel, Inc_Fax, CityCode, Mortgage
   </sql>
-  <select id="selectCompanyName" resultType="com.funtl.myshop.plus.provider.domain.CompanyNameList">
+  <resultMap id="queryCompanyNameList" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.CompanyNameList">
+    <result column="Inc_Auto" jdbcType="BIGINT" property="incAuto" />
+    <result column="SName" jdbcType="VARCHAR" property="sName" />
+  </resultMap>
+  <select id="selectCompanyNameList" resultMap="queryCompanyNameList">
+declare @Mode int ,@SearchWord NvarChar(20)
+set  @Mode=#{mode}
+set  @SearchWord=#{searchWord}
+--全部
+If @Mode=0
+Begin
+ Select '全部'SName,0 Inc_Auto
+ union all
+ Select SName,Inc_Auto
+ from Inc
+End
+--steve 2008/3/21
+If @Mode=1
+Begin
+ Select *
+ from Inc a
+End
 
+--依據Inc_Auto查詢
+--steve 2008/3/21
+IF @Mode=2 And Len(@SearchWord) > 0
+Begin
+ Select *
+ from Inc a
+ Where Inc_Auto = Cast(@SearchWord as BigInt)
+End
+
+--以TradeItem_Auto查詢。
+--steve 2008/3/21
+IF @Mode=3 And Len(@SearchWord) > 0
+Begin
+ Select *
+ from Inc a
+ Where TradeItem_Auto = Cast(@SearchWord as BigInt)
+End
+
+--以公司名稱查詢。
+--steve 2008/3/21
+IF @Mode=4 And Len(@SearchWord) > 0
+Begin
+ Set @SearchWord = @SearchWord+'%'
+ Select *
+ from Inc a
+ Where FName like @SearchWord
+ Or SName like @SearchWord
+End
   </select>
 </mapper>
