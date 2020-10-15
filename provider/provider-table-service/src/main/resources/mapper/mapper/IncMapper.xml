@@ -36,4 +36,7 @@
     CUser, MDT, MUser, IncVirBankNo, IncVirBankNm, oldBankNo, oldBankNm, LicensePlate,
     EASCode, ISLimitedLicense, Area, Inc_Addr, Inc_Tel, Inc_Fax, CityCode, Mortgage
   </sql>
+  <select id="selectCompanyName" resultType="com.funtl.myshop.plus.provider.domain.CompanyNameList">
+
+  </select>
 </mapper>
