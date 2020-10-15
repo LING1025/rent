@@ -223,7 +223,9 @@
       set	@month = #{caseProQueryParam.year}
       set	@flag = #{caseProQueryParam.flag}
       set	@customer = #{caseProQueryParam.customer}
-
+      <!--<if test="caseProQueryParam.customer == null or caseProQueryParam.customer == ''">
+        set @customer = ''
+      </if>-->
       BEGIN
       declare @order table(
       order_auto bigint,
