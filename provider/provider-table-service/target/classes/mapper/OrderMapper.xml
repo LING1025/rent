@@ -404,12 +404,12 @@
       @month int,--月份
       @flag int,--单选按钮
       @customer varchar(100)--输入条件
-      set   @inc = 0
-      set	@type = 4
-      set	@year = 2020
-      set	@month = 10
-      set	@flag = 1
-      set	@customer = ''
+      set   @inc = #{param.inc}
+      set	@type = #{param.type}
+      set	@year = #{param.year}
+      set	@month = #{param.month}
+      set	@flag = #{param.flag}
+      set	@customer = #{param.customer}
 BEGIN
 	declare @order table(
 	order_auto bigint,
