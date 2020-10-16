@@ -1,6 +1,7 @@
 package com.funtl.myshop.plus.provider.service;
 
 import com.funtl.myshop.plus.provider.api.OrderService;
+import com.funtl.myshop.plus.provider.domain.CaseExecList;
 import com.funtl.myshop.plus.provider.domain.CaseProList;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.mapper.OrderMapper;
@@ -17,5 +18,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<CaseProList> selectCaseProList(CaseProQueryParam caseProQueryParam) {
         return orderMapper.selectCaseProList(caseProQueryParam);
+    }
+
+    @Override
+    public List<CaseExecList> selectCaseExecList(CaseProQueryParam caseProQueryParam) {
+        return orderMapper.selectCaseExecList(caseProQueryParam);
     }
 }

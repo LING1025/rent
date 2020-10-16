@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.funtl.myshop.plus.provider.mapper.IncMapper">
+  <resultMap id="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.Inc">
+    <!--@mbg.generated-->
+    <!--@Table Inc-->
+    <id column="Inc_Auto" jdbcType="BIGINT" property="incAuto" />
+    <result column="TradeItem_Auto" jdbcType="BIGINT" property="tradeItemAuto" />
+    <result column="FName" jdbcType="VARCHAR" property="fName" />
+    <result column="SName" jdbcType="VARCHAR" property="sName" />
+    <result column="TaxCode" jdbcType="VARCHAR" property="taxCode" />
+    <result column="CarTaxMode" jdbcType="INTEGER" property="carTaxMode" />
+    <result column="AccMemo" jdbcType="VARCHAR" property="accMemo" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="CDT" jdbcType="TIMESTAMP" property="CDT" />
+    <result column="CUser" jdbcType="INTEGER" property="CUser" />
+    <result column="MDT" jdbcType="TIMESTAMP" property="MDT" />
+    <result column="MUser" jdbcType="INTEGER" property="MUser" />
+    <result column="IncVirBankNo" jdbcType="VARCHAR" property="incVirBankNo" />
+    <result column="IncVirBankNm" jdbcType="VARCHAR" property="incVirBankNm" />
+    <result column="oldBankNo" jdbcType="VARCHAR" property="oldBankNo" />
+    <result column="oldBankNm" jdbcType="VARCHAR" property="oldBankNm" />
+    <result column="LicensePlate" jdbcType="VARCHAR" property="licensePlate" />
+    <result column="EASCode" jdbcType="VARCHAR" property="EASCode" />
+    <result column="ISLimitedLicense" jdbcType="INTEGER" property="ISLimitedLicense" />
+    <result column="Area" jdbcType="INTEGER" property="area" />
+    <result column="Inc_Addr" jdbcType="VARCHAR" property="incAddr" />
+    <result column="Inc_Tel" jdbcType="VARCHAR" property="incTel" />
+    <result column="Inc_Fax" jdbcType="VARCHAR" property="incFax" />
+    <result column="CityCode" jdbcType="VARCHAR" property="cityCode" />
+    <result column="Mortgage" jdbcType="INTEGER" property="mortgage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Inc_Auto, TradeItem_Auto, FName, SName, TaxCode, CarTaxMode, AccMemo, [Status], CDT,
+    CUser, MDT, MUser, IncVirBankNo, IncVirBankNm, oldBankNo, oldBankNm, LicensePlate,
+    EASCode, ISLimitedLicense, Area, Inc_Addr, Inc_Tel, Inc_Fax, CityCode, Mortgage
+  </sql>
+  <resultMap id="queryCompanyNameList" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.CompanyNameList">
+    <result column="Inc_Auto" jdbcType="BIGINT" property="incAuto" />
+    <result column="SName" jdbcType="VARCHAR" property="sName" />
+  </resultMap>
+  <select id="selectCompanyNameList" resultMap="queryCompanyNameList">
+declare @Mode int ,@SearchWord NvarChar(20)
+set  @Mode=#{mode}
+set  @SearchWord=#{searchWord}
+--全部
+If @Mode=0
+Begin
+ Select '全部'SName,0 Inc_Auto
+ union all
+ Select SName,Inc_Auto
+ from Inc
+End
+--steve 2008/3/21
+If @Mode=1
+Begin
+ Select *
+ from Inc a
+End
+
+--依據Inc_Auto查詢
+--steve 2008/3/21
+IF @Mode=2 And Len(@SearchWord) > 0
+Begin
+ Select *
+ from Inc a
+ Where Inc_Auto = Cast(@SearchWord as BigInt)
+End
+
+--以TradeItem_Auto查詢。
+--steve 2008/3/21
+IF @Mode=3 And Len(@SearchWord) > 0
+Begin
+ Select *
+ from Inc a
+ Where TradeItem_Auto = Cast(@SearchWord as BigInt)
+End
+
+--以公司名稱查詢。
+--steve 2008/3/21
+IF @Mode=4 And Len(@SearchWord) > 0
+Begin
+ Set @SearchWord = @SearchWord+'%'
+ Select *
+ from Inc a
+ Where FName like @SearchWord
+ Or SName like @SearchWord
+End
+  </select>
+</mapper>
