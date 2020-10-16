@@ -33,7 +33,7 @@ public class CaseExecList implements Serializable {
     private String sName;
 
     @ApiModelProperty(value = "状态")
-    private String status;
+    private String statusName;
 
     @ApiModelProperty(value = "牌照号码")
     private String makNo;
@@ -63,7 +63,7 @@ public class CaseExecList implements Serializable {
     private String sellerFName;
 
     @ApiModelProperty(value = "每月租金")
-    private String mAmt;
+    private BigDecimal mAmt;
 
     @ApiModelProperty(value = "总租金=a.MAmt*a.MM ")
     private String totalAmt;
@@ -172,4 +172,24 @@ public class CaseExecList implements Serializable {
 
     @ApiModelProperty(value = "公司型态")
     private String comType;
+
+    @ApiModelProperty(value = "保险期数")
+    private Integer insureMM;
+
+    @ApiModelProperty(value = "保险金额")
+    private BigDecimal insureAmt;
+
+    @ApiModelProperty(value = "试算购置税金额")
+    private BigDecimal carTax;
+
+    @ApiModelProperty(value = "营业额")
+    private BigDecimal inCome;
+
+    @ApiModelProperty(value = "营业成本")
+    private BigDecimal carCost;
+
+    @ApiModelProperty(value = "营业费用")
+    private BigDecimal budgetAmt;
+
+
 }

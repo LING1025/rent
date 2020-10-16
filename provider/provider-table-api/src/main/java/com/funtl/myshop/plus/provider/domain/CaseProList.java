@@ -17,10 +17,10 @@ public class CaseProList implements Serializable {
     private String companyName;
 
     @ApiModelProperty(value = "部门")
-    private String depNAme;
+    private String depName;
 
     @ApiModelProperty(value = "业务员")
-    private String fNAme;
+    private String fName;
 
     @ApiModelProperty(value = "客户名称")
     private String custName;

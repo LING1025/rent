@@ -3,6 +3,7 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.IncService;
 import com.funtl.myshop.plus.provider.api.OrderService;
+import com.funtl.myshop.plus.provider.domain.CaseExecList;
 import com.funtl.myshop.plus.provider.domain.CaseProList;
 import com.funtl.myshop.plus.provider.domain.CompanyNameList;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
@@ -70,5 +71,26 @@ public class TableTwoController {
             }
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",caseProLists);
+    }
+
+    @ApiOperation(value = "案件维护汇出表格数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "inc", value = "公司别", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "type", value = "查询类别", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "year", value = "年份", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "month", value = "月份", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "flag", value = "单选按钮", required = false, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "customer", value = "客户名称", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryCaseExecList")
+    public ResponseResult<List<CaseExecList>> queryCaseExecList(@RequestParam(name = "inc",required = false) Integer inc,
+                                                                @RequestParam(name = "type",required = false) Integer type,
+                                                                @RequestParam(name = "year",required = false) Integer year,
+                                                                @RequestParam(name = "month",required = false) Integer month,
+                                                                @RequestParam(name = "flag",required = false) Integer flag,
+                                                                @RequestParam(name = "customer", defaultValue = "") String customer) throws ParseException {
+        CaseProQueryParam caseProQueryParam = new CaseProQueryParam(inc,type,year,month,flag,customer);
+        List<CaseExecList> lists = orderService.selectCaseExecList(caseProQueryParam);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
     }
 }
