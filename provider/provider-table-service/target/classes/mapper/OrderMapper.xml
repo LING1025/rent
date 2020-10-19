@@ -400,12 +400,12 @@
   </resultMap>
   <select id="selectCaseExecList" resultMap="queryCaseExecList">
     declare
-      @inc int,--公司别
-      @type int,--查询类别
-      @year int,--年份
-      @month int,--月份
-      @flag int,--单选按钮
-      @customer varchar(100)--输入条件
+    @inc int,<!--公司别-->
+      @type int,<!--查询类别-->
+      @year int,<!--年份-->
+      @month int,<!--月份-->
+      @flag int,<!--单选按钮-->
+      @customer varchar(100)<!--输入条件-->
       set   @inc = #{param.inc}
       set	@type = #{param.type}
       set	@year = #{param.year}

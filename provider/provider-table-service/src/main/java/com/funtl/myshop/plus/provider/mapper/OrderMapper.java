@@ -13,4 +13,6 @@ public interface OrderMapper extends MyMapper<Order> {
     List<CaseProList> selectCaseProList(@Param("param") CaseProQueryParam caseProQueryParam);
 
     List<CaseExecList> selectCaseExecList(@Param("param")CaseProQueryParam caseProQueryParam);
+
+//    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
 }

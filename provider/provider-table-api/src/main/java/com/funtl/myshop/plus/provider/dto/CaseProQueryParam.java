@@ -14,6 +14,8 @@ public class CaseProQueryParam implements Serializable {
     private Integer month;
     private Integer flag;
     private String customer;
+    /*private Integer pageNum;
+    private Integer pageSize;*/
 
     public CaseProQueryParam(Integer inc, Integer type, Integer year, Integer month, Integer flag, String customer) {
         this.inc = inc;
