@@ -34,5 +34,7 @@ public interface OrderService{
      * @param lineChartQueryParam
      * @return
      */
-    List<ThisMonthTar> selectByDate(LineChartQueryParam lineChartQueryParam);
+    ThisMonthTar selectThisMonGoal(LineChartQueryParam lineChartQueryParam);
+
+    ThisMonthTar selectThisMonReal(CaseProQueryParam caseProQueryParam);
 }

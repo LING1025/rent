@@ -9,6 +9,7 @@ import com.funtl.myshop.plus.provider.domain.CompanyNameList;
 import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -100,7 +101,7 @@ public class TableTwoController {
     }
 
 
-    @ApiOperation(value = "获取业绩周报表当月目标信息")
+    @ApiOperation(value = "获取业绩周报表信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
@@ -114,8 +115,11 @@ public class TableTwoController {
                                                           @RequestParam(name = "endDate",required = false) String endDate,
                                                           @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
                                                           @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
+        List<ThisMonthTar> list = Lists.newArrayList();//todo：将查到的数据插入列表中
+        //当月目标
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        List<ThisMonthTar> list = orderService.selectByDate(lineChartQueryParam);
+        ThisMonthTar thisMonthTar = orderService.selectThisMonGoal(lineChartQueryParam);
+        //当月实绩 todo：开始时间结束时间截取
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }

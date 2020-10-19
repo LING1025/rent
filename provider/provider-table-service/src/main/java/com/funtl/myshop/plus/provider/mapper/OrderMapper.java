@@ -16,7 +16,9 @@ public interface OrderMapper extends MyMapper<Order> {
 
     List<CaseExecList> selectCaseExecList(@Param("param")CaseProQueryParam caseProQueryParam);
 
-    List<ThisMonthTar> selectByDate(@Param("param") LineChartQueryParam lineChartQueryParam);
+    ThisMonthTar selectThisMonGoal(@Param("param") LineChartQueryParam lineChartQueryParam);
+
+    ThisMonthTar selectThisMonReal(@Param("param") CaseProQueryParam caseProQueryParam);
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
 }

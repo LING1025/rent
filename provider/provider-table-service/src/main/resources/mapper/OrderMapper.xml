@@ -567,13 +567,13 @@ BEGIN
 end
   </select>
 
-  <resultMap id="queryByDate" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ThisMonthTar">
+  <resultMap id="queryThisMonGoal" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ThisMonthTar">
     <result column="newExs" jdbcType="INTEGER" property="newExs" />
     <result column="retain" jdbcType="INTEGER" property="retain" />
     <result column="introduce" jdbcType="INTEGER" property="introduce" />
     <result column="totalNumAmt" jdbcType="INTEGER" property="totalNumAmt" />
   </resultMap>
-  <select id="selectByDate" resultMap="queryByDate">
+  <select id="selectThisMonGoal" resultMap="queryThisMonGoal">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
     set @User_Auto = #{param.userAuto}
     set @StartDT = #{param.startDate}
@@ -706,6 +706,9 @@ select newExs,retain,introduce,(newExs+retain+introduce) totalNumAmt from #D
 drop table #C
 drop table #D
     drop table #Roles
+
+  </select>
+  <select id="selectThisMonReal" resultMap="queryThisMonGoal">
 
   </select>
 </mapper>

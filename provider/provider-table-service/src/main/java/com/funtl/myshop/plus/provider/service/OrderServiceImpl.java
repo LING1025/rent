@@ -32,8 +32,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ThisMonthTar> selectByDate(LineChartQueryParam lineChartQueryParam) {
-        return orderMapper.selectByDate(lineChartQueryParam);
+    public ThisMonthTar selectThisMonGoal(LineChartQueryParam lineChartQueryParam) {
+        return orderMapper.selectThisMonGoal(lineChartQueryParam);
+    }
+
+    @Override
+    public ThisMonthTar selectThisMonReal(CaseProQueryParam caseProQueryParam) {
+        return orderMapper.selectThisMonReal(caseProQueryParam);
     }
 
     /*@Override
