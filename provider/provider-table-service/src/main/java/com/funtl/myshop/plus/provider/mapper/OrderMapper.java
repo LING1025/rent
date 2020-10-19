@@ -3,7 +3,9 @@ package com.funtl.myshop.plus.provider.mapper;
 import com.funtl.myshop.plus.provider.domain.CaseExecList;
 import com.funtl.myshop.plus.provider.domain.CaseProList;
 import com.funtl.myshop.plus.provider.domain.Order;
+import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
+import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.MyMapper;
 
@@ -13,6 +15,8 @@ public interface OrderMapper extends MyMapper<Order> {
     List<CaseProList> selectCaseProList(@Param("param") CaseProQueryParam caseProQueryParam);
 
     List<CaseExecList> selectCaseExecList(@Param("param")CaseProQueryParam caseProQueryParam);
+
+    List<ThisMonthTar> selectByDate(@Param("param") LineChartQueryParam lineChartQueryParam);
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
 }

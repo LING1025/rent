@@ -566,4 +566,146 @@ BEGIN
 	drop table #D
 end
   </select>
+
+  <resultMap id="queryByDate" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ThisMonthTar">
+    <result column="newExs" jdbcType="INTEGER" property="newExs" />
+    <result column="retain" jdbcType="INTEGER" property="retain" />
+    <result column="introduce" jdbcType="INTEGER" property="introduce" />
+    <result column="totalNumAmt" jdbcType="INTEGER" property="totalNumAmt" />
+  </resultMap>
+  <select id="selectByDate" resultMap="queryByDate">
+    declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
+    set @User_Auto = #{param.userAuto}
+    set @StartDT = #{param.startDate}
+    set @EndDT = #{param.endDate}
+    set @Org_auto =  0
+    set @OrgUp =  0
+    set @Mode =  0  -- 2部 1课  0业代
+
+    select @Amt = num from ItemCode where ItemType = (10000+year(@StartDT))
+
+    declare @Org table(
+    Org_Auto bigint
+    )
+
+    select c.Roles_Auto
+    into #Roles
+    from AspNet.dbo.aspnet_Users a
+    inner join AspNet.dbo.aspnet_UsersInRoles b on b.UserId = a.UserId
+    inner join AspNet.dbo.aspnet_Roles c on c.RoleId = b.RoleId and c.Roles_Auto in(16,12,22,83,7,3,11)
+    where a.User_Auto = @User_Auto
+
+    if @OrgUp + @Org_auto > 0
+    begin
+    if Exists (select * from #Roles where Roles_Auto in(3,11,7))
+    begin
+    set @User_Auto = 0
+    end
+    if @OrgUp > 0
+    begin
+    set @Mode = 1
+    insert into @Org(Org_Auto)
+    select distinct b.Org_Auto
+    from AspNet.dbo.Org2Emp a
+    left join AspNet.dbo.Org b on b.Org_Auto = a.Org_Auto
+    where (a.User_Auto = @User_Auto or @User_Auto= 0) and a.acltype = 0 and b.Lev = 5 and b.UpUnit = @OrgUp
+    end
+    else
+    begin
+    set @Mode = 0
+    insert into @Org(Org_Auto)
+    select distinct b.Org_Auto
+    from AspNet.dbo.Org2Emp a
+    left join AspNet.dbo.Org b on b.Org_Auto = a.Org_Auto
+    where (a.User_Auto = @User_Auto or @User_Auto= 0) and a.acltype = 0 and b.Lev = 5 and a.Org_auto = @Org_auto
+    end
+    end
+    else
+    begin
+    if Exists (select * from #Roles where Roles_Auto in(3,11,7))
+    begin
+    set @Mode = 2
+    insert into @Org(Org_Auto)
+    select distinct b.Org_Auto
+    from AspNet.dbo.Org a
+    left join AspNet.dbo.Org b on b.UpUnit = a.Org_Auto
+    where a.IsSalesDep = 1 and a.Lev = 4  and a.iszf = 1 and (a.depname like '%华东%' or a.depname like '%华南%')
+    end
+    else if Exists (select * from #Roles where Roles_Auto in(12,22,83,7))
+    begin
+    set @Mode = 2
+    insert into @Org(Org_Auto)
+    select distinct b.Org_Auto
+    from AspNet.dbo.Org2Emp a
+    left join AspNet.dbo.Org b on b.Org_Auto = a.Org_Auto
+    where a.User_Auto = @User_Auto and a.acltype = 0 and b.Lev = 5 and b.IsSalesDep = 1 and b.iszf = 1 and (b.depname like '%华东%' or b.depname like '%华南%')
+    end
+    else if Exists (select * from #Roles where Roles_Auto in(16))
+    begin
+    set @Mode = 1
+    insert into @Org(Org_Auto)
+    select distinct b.Org_Auto
+    from AspNet.dbo.Org2Emp a
+    left join AspNet.dbo.Org b on b.Org_Auto = a.Org_Auto
+    where a.User_Auto = @User_Auto and a.acltype = 0 and b.Lev = 5 and b.IsSalesDep = 1 and b.iszf = 1 and (b.depname like '%华东%' or b.depname like '%华南%')
+    end
+    end
+
+    if @Mode > 0
+    begin
+    select Mode,Org_Auto,orgName,isnull(targetPaperNum,0) targetPaperNum,isnull(proPaperNum,0) proPaperNum,isnull(targetNum,0) targetNum
+    ,isnull(realNum,0) realNum,isnull(targetVolume,0) targetVolume,isnull(realVolume,0) realVolume
+    ,case when isnull(targetPaperNum,0) > 0 then isnull(proPaperNum,0) *1.0 / targetPaperNum  else 0 end paperLv
+    ,case when isnull(targetNum,0) > 0 then isnull(realNum,0) *1.0 / targetNum  else 0 end countLv
+    ,case when isnull(targetVolume,0) > 0 then isnull(realVolume,0) *1.0 / targetVolume  else 0 end volumeLv
+	into #C
+    from (
+    select @Mode Mode,case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end Org_Auto
+    ,case when @Mode = 1 then a4.DepName else f.DepName end orgName
+    ,convert(int,round(sum(p_Count * 3.33),0)) targetPaperNum,sum(CustNum) proPaperNum,sum(p_Count) targetNum,sum(p_RealCount) realNum,sum(p_Count * @Amt) targetVolume,sum(RealAmt) realVolume
+
+    from (
+    select a3.Org_Auto,a3.DepName,p_Count,CustNum,count(e.order_auto) p_RealCount,sum(e.MM*e.MAmt) RealAmt
+    from (
+    select a2.Org_Auto,a2.DepName,sum(a2.p_Count)p_Count,sum(CustNum) CustNum
+    from (
+    select a1.Org_Auto,a1.DepName,a1.Sales_Auto,a1.p_Count ,count(TradeItem_Auto) CustNum
+    from(
+    select distinct a.Org_Auto,b.DepName
+    ,b.user_auto Sales_Auto,c.p_Count,d.TradeItem_Auto
+    from @Org a
+    left join v_Emp b on b.Org_Auto = a.Org_Auto
+    left join Performance c on c.Sales_Auto = b.User_Auto and P_Year = year(@StartDT) and P_Month =month(@StartDT)
+    left join orders d on d.Sales_Auto = b.User_Auto and d.OrderStatus = 20 and d.PostType = 4 and convert(varchar(10),d.AppDate,120) between @StartDT and @EndDT
+    ) a1
+    group by a1.Org_Auto,a1.DepName,a1.Sales_Auto,a1.p_Count
+    )a2
+    group by a2.Org_Auto,a2.DepName
+    )a3
+    left join [order] e on e.YJOrg = a3.Org_Auto and e.YJCDT between @StartDT and @EndDT
+    group by a3.Org_Auto,a3.DepName,p_Count,CustNum
+    ) a4
+    left join AspNet.dbo.Org g on g.Org_Auto = a4.Org_Auto
+    left join AspNet.dbo.Org f on f.Org_Auto = g.UpUnit
+    group by case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end,case when @Mode = 1 then a4.DepName else f.DepName end
+    ) a5
+    order by replace (replace (replace (replace (replace (replace (replace (replace (replace (orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
+
+    end
+
+--当月目标
+select
+sum(case when Mode = 2 then targetNum else 0 end)*194770*0.25 newExs,
+sum(case when Mode = 2 then targetNum else 0 end)*194770 - sum(case when Mode = 2 then targetNum else 0 end)*194770*0.25*2 retain,
+sum(case when Mode = 2 then targetNum else 0 end)*194770*0.25 introduce
+into #D
+from #C
+
+select newExs,retain,introduce,(newExs+retain+introduce) totalNumAmt from #D
+
+drop table #C
+drop table #D
+    drop table #Roles
+
+  </select>
 </mapper>

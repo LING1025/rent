@@ -6,7 +6,9 @@ import com.funtl.myshop.plus.provider.api.OrderService;
 import com.funtl.myshop.plus.provider.domain.CaseExecList;
 import com.funtl.myshop.plus.provider.domain.CaseProList;
 import com.funtl.myshop.plus.provider.domain.CompanyNameList;
+import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
+import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -91,6 +93,29 @@ public class TableTwoController {
                                                                 @RequestParam(name = "customer", defaultValue = "") String customer) throws ParseException {
         CaseProQueryParam caseProQueryParam = new CaseProQueryParam(inc,type,year,month,flag,customer);
         List<CaseExecList> lists = orderService.selectCaseExecList(caseProQueryParam);
+        if (lists.size() == 0){
+            return new ResponseResult<>(ResponseResult.CodeStatus.OK,"无数据",null);
+        }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
+    }
+
+
+    @ApiOperation(value = "获取业绩周报表当月目标信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "orgAuto", value = "部门id", required = false, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "orgUpAuto", value = "上级部门id", required = false, dataType = "long", paramType = "path")
+    })
+    @GetMapping(value = "queryThisMonthTar")
+    public ResponseResult<List<ThisMonthTar>> queryThisMonthTar(@RequestParam(name = "userAuto",required = false) Long userAuto,
+                                                          @RequestParam(name = "startDate",required = false) String startDate,
+                                                          @RequestParam(name = "endDate",required = false) String endDate,
+                                                          @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
+                                                          @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
+        LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
+        List<ThisMonthTar> list = orderService.selectByDate(lineChartQueryParam);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }

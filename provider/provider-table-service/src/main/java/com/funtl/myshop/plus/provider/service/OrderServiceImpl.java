@@ -4,8 +4,10 @@ import com.funtl.myshop.plus.commons.utils.PageInfoUtils;
 import com.funtl.myshop.plus.provider.api.OrderService;
 import com.funtl.myshop.plus.provider.domain.CaseExecList;
 import com.funtl.myshop.plus.provider.domain.CaseProList;
+import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseExecListDto;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
+import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.mapper.OrderMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,6 +29,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<CaseExecList> selectCaseExecList(CaseProQueryParam caseProQueryParam) {
         return orderMapper.selectCaseExecList(caseProQueryParam);
+    }
+
+    @Override
+    public List<ThisMonthTar> selectByDate(LineChartQueryParam lineChartQueryParam) {
+        return orderMapper.selectByDate(lineChartQueryParam);
     }
 
     /*@Override
