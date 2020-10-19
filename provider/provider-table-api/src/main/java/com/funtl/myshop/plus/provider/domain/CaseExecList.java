@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -69,6 +70,7 @@ public class CaseExecList implements Serializable {
     private String totalAmt;
 
     @ApiModelProperty(value = "领照日")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date makDT;
 
     @ApiModelProperty(value = "牌价")
@@ -102,10 +104,12 @@ public class CaseExecList implements Serializable {
     private BigDecimal loanAmount;
 
     @ApiModelProperty(value = "起租日")
-    private Date StartDT;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date startDT;
 
     @ApiModelProperty(value = "到期日")
-    private Date EndDT;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date endDT;
 
     @ApiModelProperty(value = "期数")
     private Integer mm;
@@ -123,6 +127,7 @@ public class CaseExecList implements Serializable {
     private String contractNo;
 
     @ApiModelProperty(value = "交车日期")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date forDT;
 
     @ApiModelProperty(value = "付款方式")
@@ -156,6 +161,7 @@ public class CaseExecList implements Serializable {
     private BigDecimal accRealAmt;
 
     @ApiModelProperty(value = "业绩日")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date yjCDT;
 
     @ApiModelProperty(value = "使用性质")
