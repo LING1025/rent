@@ -197,17 +197,21 @@ public class TableTwoController {
         String lastStartYear = lastY.toString();
         String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
         String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
-        System.out.println(lastStartDate);
-        System.out.println(lastEndDate);
 
         MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate);
         ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
+        thisMonthTar5.setTableName("上月实绩");
+        thisMonthTar5.setTotalNew(thisMonthTar5.getTotalNumAmt().toString());
+        thisMonthTar5.setNewExsNew(thisMonthTar5.getNewExs().toString());
+        thisMonthTar5.setRetainNew(thisMonthTar5.getRetain().toString());
+        thisMonthTar5.setIntroduceNew(thisMonthTar5.getIntroduce().toString());
 
         //todo：将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
         list.add(thisMonthTar3);
         list.add(thisMonthTar4);
+        list.add(thisMonthTar5);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
