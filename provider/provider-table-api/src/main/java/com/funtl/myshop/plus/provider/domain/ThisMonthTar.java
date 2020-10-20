@@ -22,6 +22,18 @@ public class ThisMonthTar implements Serializable {
     @ApiModelProperty(value = "新增契约租金(①+②+③)")
     private BigDecimal totalNumAmt;
 
+    @ApiModelProperty(value = "最终%计算客户来源-新拓①")
+    private String newExsNew;
+
+    @ApiModelProperty(value = "最终%计算客户来源-保有②")
+    private String retainNew;
+
+    @ApiModelProperty(value = "最终%计算客户来源-介绍③")
+    private String introduceNew;
+
+    @ApiModelProperty(value = "最终%计算新增契约租金(①+②+③)")
+    private String totalNew;
+
     @ApiModelProperty(value = "新增契约租金（交车）")
     private String tableName;
 

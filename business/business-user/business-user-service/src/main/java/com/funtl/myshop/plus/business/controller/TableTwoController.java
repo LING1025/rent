@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -139,6 +141,10 @@ public class TableTwoController {
         //当月目标
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
         ThisMonthTar thisMonthTar1 = orderService.selectThisMonGoal(lineChartQueryParam);
+        thisMonthTar1.setNewExsNew(thisMonthTar1.getNewExs().toString());
+        thisMonthTar1.setRetainNew(thisMonthTar1.getRetain().toString());
+        thisMonthTar1.setIntroduceNew(thisMonthTar1.getIntroduce().toString());
+        thisMonthTar1.setTotalNew(thisMonthTar1.getTotalNumAmt().toString());
         if (thisMonthTar1.getTableName() == null){
             thisMonthTar1.setTableName("当月目标");
         }
@@ -146,13 +152,31 @@ public class TableTwoController {
         //当月实绩
         MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
         ThisMonthTar thisMonthTar2 = orderService.selectThisMonReal(monGoalQueryParam);
+        thisMonthTar2.setNewExsNew(thisMonthTar2.getNewExs().toString());
+        thisMonthTar2.setRetainNew(thisMonthTar2.getRetain().toString());
+        thisMonthTar2.setIntroduceNew(thisMonthTar2.getIntroduce().toString());
+        thisMonthTar2.setTotalNew(thisMonthTar2.getTotalNumAmt().toString());
         if (thisMonthTar2.getTableName() == null){
             thisMonthTar2.setTableName("当月实绩");
         }
 
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+        ThisMonthTar thisMonthTar3 = new ThisMonthTar();
+        thisMonthTar3.setTableName("结构比");
+        thisMonthTar3.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar2.getTotalNumAmt()));
+        thisMonthTar3.setTotalNew(nt.format(thisMonthTar3.getTotalNumAmt()));
+        thisMonthTar3.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
+        thisMonthTar3.setNewExsNew(nt.format(thisMonthTar3.getNewExs()));
+        thisMonthTar3.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar3.setRetainNew(nt.format(thisMonthTar3.getRetain()));
+        thisMonthTar3.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar3.setIntroduceNew(nt.format(thisMonthTar3.getIntroduce()));
+
         //todo：将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
+        list.add(thisMonthTar3);
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
