@@ -206,12 +206,26 @@ public class TableTwoController {
         thisMonthTar5.setRetainNew(thisMonthTar5.getRetain().toString());
         thisMonthTar5.setIntroduceNew(thisMonthTar5.getIntroduce().toString());
 
+        //环比
+        ThisMonthTar thisMonthTar6 = new ThisMonthTar();
+        thisMonthTar6.setTableName("环比");
+        thisMonthTar6.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setTotalNew(nt.format(thisMonthTar6.getTotalNumAmt()));
+        thisMonthTar6.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar5.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setNewExsNew(nt.format(thisMonthTar6.getNewExs()));
+        thisMonthTar6.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setRetainNew(nt.format(thisMonthTar6.getRetain()));
+        thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setIntroduceNew(nt.format(thisMonthTar6.getIntroduce()));
+
         //todo：将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
         list.add(thisMonthTar3);
         list.add(thisMonthTar4);
         list.add(thisMonthTar5);
+        list.add(thisMonthTar6);
+
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
