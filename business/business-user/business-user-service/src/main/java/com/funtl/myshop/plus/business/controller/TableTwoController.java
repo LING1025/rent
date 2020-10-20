@@ -243,6 +243,17 @@ public class TableTwoController {
         thisMonthTar8.setIntroduce(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
         thisMonthTar8.setIntroduceNew(nt.format(thisMonthTar8.getIntroduce()));
 
+        //同期对比
+        ThisMonthTar thisMonthTar9 = new ThisMonthTar();
+        thisMonthTar9.setTableName("同期对比");
+        thisMonthTar9.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setTotalNew(nt.format(thisMonthTar9.getTotalNumAmt()));
+        thisMonthTar9.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar7.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setNewExsNew(nt.format(thisMonthTar9.getNewExs()));
+        thisMonthTar9.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar7.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setRetainNew(nt.format(thisMonthTar9.getRetain()));
+        thisMonthTar9.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setIntroduceNew(nt.format(thisMonthTar9.getIntroduce()));
 
         //将查到的数据插入列表中
         list.add(thisMonthTar1);
@@ -253,10 +264,7 @@ public class TableTwoController {
         list.add(thisMonthTar6);
         list.add(thisMonthTar7);
         list.add(thisMonthTar8);
-
-
-
-
+        list.add(thisMonthTar9);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
