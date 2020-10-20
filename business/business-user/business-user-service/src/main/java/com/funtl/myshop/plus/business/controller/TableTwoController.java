@@ -106,7 +106,7 @@ public class TableTwoController {
     }
 
 
-    @ApiOperation(value = "获取业绩周报表信息")
+    @ApiOperation(value = "新增契约租金-客户来源")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
