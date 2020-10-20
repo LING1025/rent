@@ -716,8 +716,8 @@ drop table #D
       @month varchar(10),
       @flag int,
       @customer varchar(100),
-      @StartDT datetime,
-      @EndDT datetime
+      @StartDT varchar(50),
+      @EndDT varchar(50)
     set @inc = #{param.inc}
     set	@type = #{param.type}
     set	@year = #{param.year}

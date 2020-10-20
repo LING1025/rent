@@ -186,6 +186,23 @@ public class TableTwoController {
         thisMonthTar4.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP));
         thisMonthTar4.setIntroduceNew(nt.format(thisMonthTar4.getIntroduce()));
 
+        //上月实绩
+        Integer lastY = Integer.valueOf(startYear);
+        Integer lastM = Integer.valueOf(startMon) - 1;
+        if (lastM == 0){
+            lastM = 12;
+            lastY = Integer.valueOf(startYear) - 1;
+        }
+        String lastStartMon = lastM.toString();
+        String lastStartYear = lastY.toString();
+        String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
+        String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
+        System.out.println(lastStartDate);
+        System.out.println(lastEndDate);
+
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate);
+        ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
+
         //todo：将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
