@@ -9,6 +9,7 @@ import com.funtl.myshop.plus.provider.domain.CompanyNameList;
 import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
+import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Api(tags = "大陆出行事业业绩周报表相关操作")
@@ -114,12 +117,42 @@ public class TableTwoController {
                                                           @RequestParam(name = "startDate",required = false) String startDate,
                                                           @RequestParam(name = "endDate",required = false) String endDate,
                                                           @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
-                                                          @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
-        List<ThisMonthTar> list = Lists.newArrayList();//todo：将查到的数据插入列表中
+                                                          @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto) throws ParseException {
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
+        }
+        List<ThisMonthTar> list = Lists.newArrayList();
+
         //当月目标
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        ThisMonthTar thisMonthTar = orderService.selectThisMonGoal(lineChartQueryParam);
-        //当月实绩 todo：开始时间结束时间截取
+        ThisMonthTar thisMonthTar1 = orderService.selectThisMonGoal(lineChartQueryParam);
+        if (thisMonthTar1.getTableName() == null){
+            thisMonthTar1.setTableName("当月目标");
+        }
+
+        //当月实绩
+        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
+        ThisMonthTar thisMonthTar2 = orderService.selectThisMonReal(monGoalQueryParam);
+        if (thisMonthTar2.getTableName() == null){
+            thisMonthTar2.setTableName("当月实绩");
+        }
+
+        //todo：将查到的数据插入列表中
+        list.add(thisMonthTar1);
+        list.add(thisMonthTar2);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }

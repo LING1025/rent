@@ -23,6 +23,6 @@ public class ThisMonthTar implements Serializable {
     private BigDecimal totalNumAmt;
 
     @ApiModelProperty(value = "新增契约租金（交车）")
-    private String tableName="当月目标";
+    private String tableName;
 
 }

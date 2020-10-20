@@ -7,6 +7,7 @@ import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseExecListDto;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
+import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -36,5 +37,10 @@ public interface OrderService{
      */
     ThisMonthTar selectThisMonGoal(LineChartQueryParam lineChartQueryParam);
 
-    ThisMonthTar selectThisMonReal(CaseProQueryParam caseProQueryParam);
+    /**
+     * 周报表当月实绩数据
+     * @param monGoalQueryParam
+     * @return
+     */
+    ThisMonthTar selectThisMonReal(MonGoalQueryParam monGoalQueryParam);
 }
