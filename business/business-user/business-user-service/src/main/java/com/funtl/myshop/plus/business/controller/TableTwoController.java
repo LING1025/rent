@@ -218,6 +218,18 @@ public class TableTwoController {
         thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
         thisMonthTar6.setIntroduceNew(nt.format(thisMonthTar6.getIntroduce()));
 
+        //去年实绩
+        Integer lYear = Integer.valueOf(startYear) - 1;
+        String lastYear = lYear.toString();
+        String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
+        String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
+        System.out.println(lastSD);
+        System.out.println(lastED);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,lastStartMon,1,"",lastSD,lastED);
+        ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
+        thisMonthTar7.setTableName("去年实绩");
+
+
         //todo：将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
