@@ -161,6 +161,8 @@ public class TableTwoController {
         }
 
         NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+
+        //结构比
         ThisMonthTar thisMonthTar3 = new ThisMonthTar();
         thisMonthTar3.setTableName("结构比");
         thisMonthTar3.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar2.getTotalNumAmt()));
@@ -172,10 +174,23 @@ public class TableTwoController {
         thisMonthTar3.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
         thisMonthTar3.setIntroduceNew(nt.format(thisMonthTar3.getIntroduce()));
 
+        //达成率
+        ThisMonthTar thisMonthTar4 = new ThisMonthTar();
+        thisMonthTar4.setTableName("达成率");
+        thisMonthTar4.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setTotalNew(nt.format(thisMonthTar4.getTotalNumAmt()));
+        thisMonthTar4.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar1.getNewExs(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setNewExsNew(nt.format(thisMonthTar4.getNewExs()));
+        thisMonthTar4.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar1.getRetain(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setRetainNew(nt.format(thisMonthTar4.getRetain()));
+        thisMonthTar4.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setIntroduceNew(nt.format(thisMonthTar4.getIntroduce()));
+
         //todo：将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
         list.add(thisMonthTar3);
+        list.add(thisMonthTar4);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
