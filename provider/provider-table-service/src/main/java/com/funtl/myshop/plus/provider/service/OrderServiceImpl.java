@@ -8,6 +8,7 @@ import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseExecListDto;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
+import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
 import com.funtl.myshop.plus.provider.mapper.OrderMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -37,8 +38,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ThisMonthTar selectThisMonReal(CaseProQueryParam caseProQueryParam) {
-        return orderMapper.selectThisMonReal(caseProQueryParam);
+    public ThisMonthTar selectThisMonReal(MonGoalQueryParam monGoalQueryParam) {
+        return orderMapper.selectThisMonReal(monGoalQueryParam);
     }
 
     /*@Override

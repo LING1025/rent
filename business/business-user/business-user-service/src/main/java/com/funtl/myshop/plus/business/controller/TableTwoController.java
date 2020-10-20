@@ -9,6 +9,7 @@ import com.funtl.myshop.plus.provider.domain.CompanyNameList;
 import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
+import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,7 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Api(tags = "大陆出行事业业绩周报表相关操作")
@@ -114,12 +119,126 @@ public class TableTwoController {
                                                           @RequestParam(name = "startDate",required = false) String startDate,
                                                           @RequestParam(name = "endDate",required = false) String endDate,
                                                           @RequestParam(name = "orgAuto",defaultValue = "0") Long orgAuto,
-                                                          @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto){
-        List<ThisMonthTar> list = Lists.newArrayList();//todo：将查到的数据插入列表中
+                                                          @RequestParam(name = "orgUpAuto",defaultValue = "0") Long orgUpAuto) throws ParseException {
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
+        }
+        List<ThisMonthTar> list = Lists.newArrayList();
+
         //当月目标
         LineChartQueryParam lineChartQueryParam = new LineChartQueryParam(userAuto,startDate,endDate,orgAuto,orgUpAuto);
-        ThisMonthTar thisMonthTar = orderService.selectThisMonGoal(lineChartQueryParam);
-        //当月实绩 todo：开始时间结束时间截取
+        ThisMonthTar thisMonthTar1 = orderService.selectThisMonGoal(lineChartQueryParam);
+        thisMonthTar1.setNewExsNew(thisMonthTar1.getNewExs().toString());
+        thisMonthTar1.setRetainNew(thisMonthTar1.getRetain().toString());
+        thisMonthTar1.setIntroduceNew(thisMonthTar1.getIntroduce().toString());
+        thisMonthTar1.setTotalNew(thisMonthTar1.getTotalNumAmt().toString());
+        if (thisMonthTar1.getTableName() == null){
+            thisMonthTar1.setTableName("当月目标");
+        }
+
+        //当月实绩
+        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
+        ThisMonthTar thisMonthTar2 = orderService.selectThisMonReal(monGoalQueryParam);
+        thisMonthTar2.setNewExsNew(thisMonthTar2.getNewExs().toString());
+        thisMonthTar2.setRetainNew(thisMonthTar2.getRetain().toString());
+        thisMonthTar2.setIntroduceNew(thisMonthTar2.getIntroduce().toString());
+        thisMonthTar2.setTotalNew(thisMonthTar2.getTotalNumAmt().toString());
+        if (thisMonthTar2.getTableName() == null){
+            thisMonthTar2.setTableName("当月实绩");
+        }
+
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+
+        //结构比
+        ThisMonthTar thisMonthTar3 = new ThisMonthTar();
+        thisMonthTar3.setTableName("结构比");
+        thisMonthTar3.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar2.getTotalNumAmt()));
+        thisMonthTar3.setTotalNew(nt.format(thisMonthTar3.getTotalNumAmt()));
+        thisMonthTar3.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
+        thisMonthTar3.setNewExsNew(nt.format(thisMonthTar3.getNewExs()));
+        thisMonthTar3.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar3.setRetainNew(nt.format(thisMonthTar3.getRetain()));
+        thisMonthTar3.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar3.setIntroduceNew(nt.format(thisMonthTar3.getIntroduce()));
+
+        //达成率
+        ThisMonthTar thisMonthTar4 = new ThisMonthTar();
+        thisMonthTar4.setTableName("达成率");
+        thisMonthTar4.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setTotalNew(nt.format(thisMonthTar4.getTotalNumAmt()));
+        thisMonthTar4.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar1.getNewExs(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setNewExsNew(nt.format(thisMonthTar4.getNewExs()));
+        thisMonthTar4.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar1.getRetain(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setRetainNew(nt.format(thisMonthTar4.getRetain()));
+        thisMonthTar4.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar4.setIntroduceNew(nt.format(thisMonthTar4.getIntroduce()));
+
+        //上月实绩
+        Integer lastY = Integer.valueOf(startYear);
+        Integer lastM = Integer.valueOf(startMon) - 1;
+        if (lastM == 0){
+            lastM = 12;
+            lastY = Integer.valueOf(startYear) - 1;
+        }
+        String lastStartMon = lastM.toString();
+        String lastStartYear = lastY.toString();
+        String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
+        String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
+
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate);
+        ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
+        thisMonthTar5.setTableName("上月实绩");
+        thisMonthTar5.setTotalNew(thisMonthTar5.getTotalNumAmt().toString());
+        thisMonthTar5.setNewExsNew(thisMonthTar5.getNewExs().toString());
+        thisMonthTar5.setRetainNew(thisMonthTar5.getRetain().toString());
+        thisMonthTar5.setIntroduceNew(thisMonthTar5.getIntroduce().toString());
+
+        //环比
+        ThisMonthTar thisMonthTar6 = new ThisMonthTar();
+        thisMonthTar6.setTableName("环比");
+        thisMonthTar6.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setTotalNew(nt.format(thisMonthTar6.getTotalNumAmt()));
+        thisMonthTar6.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar5.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setNewExsNew(nt.format(thisMonthTar6.getNewExs()));
+        thisMonthTar6.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setRetainNew(nt.format(thisMonthTar6.getRetain()));
+        thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar6.setIntroduceNew(nt.format(thisMonthTar6.getIntroduce()));
+
+        //去年实绩
+        Integer lYear = Integer.valueOf(startYear) - 1;
+        String lastYear = lYear.toString();
+        String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
+        String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
+        System.out.println(lastSD);
+        System.out.println(lastED);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,lastStartMon,1,"",lastSD,lastED);
+        ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
+        thisMonthTar7.setTableName("去年实绩");
+
+
+        //todo：将查到的数据插入列表中
+        list.add(thisMonthTar1);
+        list.add(thisMonthTar2);
+        list.add(thisMonthTar3);
+        list.add(thisMonthTar4);
+        list.add(thisMonthTar5);
+        list.add(thisMonthTar6);
+
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
