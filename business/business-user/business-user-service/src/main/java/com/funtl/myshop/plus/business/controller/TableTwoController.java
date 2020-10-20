@@ -225,9 +225,13 @@ public class TableTwoController {
         String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
         System.out.println(lastSD);
         System.out.println(lastED);
-        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,lastStartMon,1,"",lastSD,lastED);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
         thisMonthTar7.setTableName("去年实绩");
+        thisMonthTar7.setTotalNew(thisMonthTar7.getTotalNumAmt().toString());
+        thisMonthTar7.setNewExsNew(thisMonthTar7.getNewExs().toString());
+        thisMonthTar7.setRetainNew(thisMonthTar7.getRetain().toString());
+        thisMonthTar7.setIntroduceNew(thisMonthTar7.getIntroduce().toString());
 
 
         //todo：将查到的数据插入列表中
@@ -237,6 +241,8 @@ public class TableTwoController {
         list.add(thisMonthTar4);
         list.add(thisMonthTar5);
         list.add(thisMonthTar6);
+        list.add(thisMonthTar7);
+
 
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
