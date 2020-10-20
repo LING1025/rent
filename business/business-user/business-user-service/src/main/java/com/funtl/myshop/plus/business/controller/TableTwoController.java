@@ -223,8 +223,6 @@ public class TableTwoController {
         String lastYear = lYear.toString();
         String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
         String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
-        System.out.println(lastSD);
-        System.out.println(lastED);
         MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
         thisMonthTar7.setTableName("去年实绩");
@@ -233,8 +231,20 @@ public class TableTwoController {
         thisMonthTar7.setRetainNew(thisMonthTar7.getRetain().toString());
         thisMonthTar7.setIntroduceNew(thisMonthTar7.getIntroduce().toString());
 
+        //结构比
+        ThisMonthTar thisMonthTar8 = new ThisMonthTar();
+        thisMonthTar8.setTableName("结构比");
+        thisMonthTar8.setTotalNumAmt(thisMonthTar7.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt()));
+        thisMonthTar8.setTotalNew(nt.format(thisMonthTar8.getTotalNumAmt()));
+        thisMonthTar8.setNewExs(thisMonthTar7.getNewExs().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
+        thisMonthTar8.setNewExsNew(nt.format(thisMonthTar8.getNewExs()));
+        thisMonthTar8.setRetain(thisMonthTar7.getRetain().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar8.setRetainNew(nt.format(thisMonthTar8.getRetain()));
+        thisMonthTar8.setIntroduce(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar8.setIntroduceNew(nt.format(thisMonthTar8.getIntroduce()));
 
-        //todo：将查到的数据插入列表中
+
+        //将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
         list.add(thisMonthTar3);
@@ -242,6 +252,8 @@ public class TableTwoController {
         list.add(thisMonthTar5);
         list.add(thisMonthTar6);
         list.add(thisMonthTar7);
+        list.add(thisMonthTar8);
+
 
 
 
