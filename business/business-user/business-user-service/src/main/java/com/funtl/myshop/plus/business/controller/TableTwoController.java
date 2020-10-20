@@ -106,7 +106,7 @@ public class TableTwoController {
     }
 
 
-    @ApiOperation(value = "获取业绩周报表信息")
+    @ApiOperation(value = "新增契约租金-客户来源")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
@@ -145,9 +145,8 @@ public class TableTwoController {
         thisMonthTar1.setRetainNew(thisMonthTar1.getRetain().toString());
         thisMonthTar1.setIntroduceNew(thisMonthTar1.getIntroduce().toString());
         thisMonthTar1.setTotalNew(thisMonthTar1.getTotalNumAmt().toString());
-        if (thisMonthTar1.getTableName() == null){
-            thisMonthTar1.setTableName("当月目标");
-        }
+        thisMonthTar1.setTableName("当月目标");
+
 
         //当月实绩
         MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
@@ -156,9 +155,8 @@ public class TableTwoController {
         thisMonthTar2.setRetainNew(thisMonthTar2.getRetain().toString());
         thisMonthTar2.setIntroduceNew(thisMonthTar2.getIntroduce().toString());
         thisMonthTar2.setTotalNew(thisMonthTar2.getTotalNumAmt().toString());
-        if (thisMonthTar2.getTableName() == null){
-            thisMonthTar2.setTableName("当月实绩");
-        }
+        thisMonthTar2.setTableName("当月实绩");
+
 
         NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
 
@@ -215,30 +213,60 @@ public class TableTwoController {
         thisMonthTar6.setNewExsNew(nt.format(thisMonthTar6.getNewExs()));
         thisMonthTar6.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
         thisMonthTar6.setRetainNew(nt.format(thisMonthTar6.getRetain()));
-        thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar6.setIntroduceNew(nt.format(thisMonthTar6.getIntroduce()));
+        if(thisMonthTar5.getIntroduceNew().equals("0.00")){
+            thisMonthTar6.setIntroduceNew("-");
+        }else {
+            thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar6.setIntroduceNew(nt.format(thisMonthTar6.getIntroduce()));
+        }
 
         //去年实绩
         Integer lYear = Integer.valueOf(startYear) - 1;
         String lastYear = lYear.toString();
         String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
         String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
-        System.out.println(lastSD);
-        System.out.println(lastED);
-        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,lastStartMon,1,"",lastSD,lastED);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
         thisMonthTar7.setTableName("去年实绩");
+        thisMonthTar7.setTotalNew(thisMonthTar7.getTotalNumAmt().toString());
+        thisMonthTar7.setNewExsNew(thisMonthTar7.getNewExs().toString());
+        thisMonthTar7.setRetainNew(thisMonthTar7.getRetain().toString());
+        thisMonthTar7.setIntroduceNew(thisMonthTar7.getIntroduce().toString());
 
+        //结构比
+        ThisMonthTar thisMonthTar8 = new ThisMonthTar();
+        thisMonthTar8.setTableName("结构比");
+        thisMonthTar8.setTotalNumAmt(thisMonthTar7.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt()));
+        thisMonthTar8.setTotalNew(nt.format(thisMonthTar8.getTotalNumAmt()));
+        thisMonthTar8.setNewExs(thisMonthTar7.getNewExs().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
+        thisMonthTar8.setNewExsNew(nt.format(thisMonthTar8.getNewExs()));
+        thisMonthTar8.setRetain(thisMonthTar7.getRetain().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar8.setRetainNew(nt.format(thisMonthTar8.getRetain()));
+        thisMonthTar8.setIntroduce(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        thisMonthTar8.setIntroduceNew(nt.format(thisMonthTar8.getIntroduce()));
 
-        //todo：将查到的数据插入列表中
+        //同期对比
+        ThisMonthTar thisMonthTar9 = new ThisMonthTar();
+        thisMonthTar9.setTableName("同期比较");
+        thisMonthTar9.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setTotalNew(nt.format(thisMonthTar9.getTotalNumAmt()));
+        thisMonthTar9.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar7.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setNewExsNew(nt.format(thisMonthTar9.getNewExs()));
+        thisMonthTar9.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar7.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setRetainNew(nt.format(thisMonthTar9.getRetain()));
+        thisMonthTar9.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        thisMonthTar9.setIntroduceNew(nt.format(thisMonthTar9.getIntroduce()));
+
+        //将查到的数据插入列表中
         list.add(thisMonthTar1);
         list.add(thisMonthTar2);
         list.add(thisMonthTar3);
         list.add(thisMonthTar4);
         list.add(thisMonthTar5);
         list.add(thisMonthTar6);
-
-
+        list.add(thisMonthTar7);
+        list.add(thisMonthTar8);
+        list.add(thisMonthTar9);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }

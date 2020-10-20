@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-@ApiModel(value = "当月目标")
+@ApiModel(value = "新增契约租金-客户来源")
 public class ThisMonthTar implements Serializable {
     @ApiModelProperty(value = "客户来源-新拓①")
     private BigDecimal newExs;
