@@ -409,6 +409,42 @@ public class TableTwoController {
         carSourceRent6.setSouthOldCarN(nt.format(carSourceRent6.getSouthOldCar()));
         list.add(carSourceRent6);
 
+        //同期比较
+        CarSourceRent carSourceRent7 = new CarSourceRent();
+        carSourceRent7.setTableTwoName("同期比较");
+
+        if (carSourceRent5.getEastNewCarN().equals("0.00")){
+            carSourceRent7.setEastNewCarN("-");
+        }else {
+            carSourceRent7.setEastNewCar(carSourceRent1.getEastNewCar().divide(carSourceRent5.getEastNewCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            carSourceRent7.setEastNewCarN(nt.format(carSourceRent7.getEastNewCar()));
+        }
+
+        if (carSourceRent5.getEastOldCarN().equals("0.00")){
+            carSourceRent7.setEastOldCarN("-");
+        }else {
+            carSourceRent7.setEastOldCar(carSourceRent1.getEastOldCar().divide(carSourceRent5.getEastOldCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            carSourceRent7.setEastOldCarN(nt.format(carSourceRent7.getEastOldCar()));
+        }
+
+        if (carSourceRent5.getSouthNewCarN().equals("0.00")){
+            carSourceRent7.setSouthNewCarN("-");
+        }else {
+            carSourceRent7.setSouthNewCar(carSourceRent1.getSouthNewCar().divide(carSourceRent5.getSouthNewCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            carSourceRent7.setSouthNewCarN(nt.format(carSourceRent7.getSouthNewCar()));
+        }
+
+        if (carSourceRent5.getSouthOldCarN().equals("0.00")){
+            carSourceRent7.setSouthOldCarN("-");
+        }else {
+            carSourceRent7.setSouthOldCar(carSourceRent1.getSouthOldCar().divide(carSourceRent5.getSouthOldCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            carSourceRent7.setSouthOldCarN(nt.format(carSourceRent7.getSouthOldCar()));
+        }
+
+        carSourceRent7.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+        carSourceRent7.setTotalNumAmtN(nt.format(carSourceRent7.getTotalNumAmt()));
+        list.add(carSourceRent7);
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
