@@ -145,7 +145,7 @@ public class TableTwoController {
 
 
         //当月实绩
-        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
+        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate,3);
         ThisMonthTar thisMonthTar2 = orderService.selectThisMonReal(monGoalQueryParam);
         thisMonthTar2.setNewExsNew(thisMonthTar2.getNewExs().toString());
         thisMonthTar2.setRetainNew(thisMonthTar2.getRetain().toString());
@@ -192,7 +192,7 @@ public class TableTwoController {
         String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
         String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
 
-        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate);
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate,3);
         ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
         thisMonthTar5.setTableName("上月实绩");
         thisMonthTar5.setTotalNew(thisMonthTar5.getTotalNumAmt().toString());
@@ -231,7 +231,7 @@ public class TableTwoController {
         String lastYear = lYear.toString();
         String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
         String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
-        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED,3);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
         thisMonthTar7.setTableName("去年实绩");
         thisMonthTar7.setTotalNew(thisMonthTar7.getTotalNumAmt().toString());
@@ -297,7 +297,8 @@ public class TableTwoController {
     })
     @GetMapping(value = "queryCarSourceRent")
     public ResponseResult<List<CarSourceRent>> queryCarSourceRent(@RequestParam(name = "startDate",required = false) String startDate,
-                                                                 @RequestParam(name = "endDate",required = false) String endDate) throws ParseException {
+                                                                 @RequestParam(name = "endDate",required = false) String endDate,
+                                                                  @RequestParam(name = "typeQuery",required = false) Integer typeQuery) throws ParseException {
 
         if(startDate == null || endDate == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
@@ -318,11 +319,21 @@ public class TableTwoController {
         List<CarSourceRent> list = Lists.newArrayList();
 
         //当月实绩
-        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
+        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate,typeQuery);
         CarSourceRent carSourceRent1 = orderService.selectCarSourceRent(monGoalQueryParam);
         carSourceRent1.setTableTwoName("当月实绩");
-        carSourceRent1.setEastNewCarN(carSourceRent1.getEastNewCar().toString());
-        carSourceRent1.setEastOldCarN(carSourceRent1.getEastOldCar().toString());
+        if (carSourceRent1.getEastNewCar() == null){
+            carSourceRent1.setEastNewCarN(String.valueOf(0));
+        }else{
+            carSourceRent1.setEastNewCarN(carSourceRent1.getEastNewCar().toString());
+        }
+
+        if (carSourceRent1.getEastOldCar() == null){
+            carSourceRent1.setEastOldCarN(String.valueOf(0));
+        }else{
+            carSourceRent1.setEastOldCarN(carSourceRent1.getEastOldCar().toString());
+        }
+
         carSourceRent1.setSouthNewCarN(carSourceRent1.getSouthNewCar().toString());
         carSourceRent1.setSouthOldCarN(carSourceRent1.getSouthOldCar().toString());
         carSourceRent1.setTotalNumAmtN(carSourceRent1.getTotalNumAmt().toString());
@@ -357,7 +368,7 @@ public class TableTwoController {
         String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
         String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
 
-        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate);
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate,typeQuery);
         CarSourceRent carSourceRent3 = orderService.selectCarSourceRent(monGoalQueryParam2);
         carSourceRent3.setTableTwoName("上月实绩");
         carSourceRent3.setEastNewCarN(carSourceRent3.getEastNewCar().toString());
@@ -408,7 +419,7 @@ public class TableTwoController {
         String lastYear = lYear.toString();
         String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
         String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
-        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED,typeQuery);
         CarSourceRent carSourceRent5 = orderService.selectCarSourceRent(monGoalQueryParam3);
         carSourceRent5.setTableTwoName("去年实绩");
         carSourceRent5.setEastNewCarN(carSourceRent5.getEastNewCar().toString());

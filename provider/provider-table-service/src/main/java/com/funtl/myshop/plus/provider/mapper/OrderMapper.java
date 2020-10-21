@@ -20,5 +20,8 @@ public interface OrderMapper extends MyMapper<Order> {
 
     CarSourceRent selectCarSourceRent(@Param("param") MonGoalQueryParam monGoalQueryParam);
 
+    CarSourceRent selectCarSourceNum(@Param("param") MonGoalQueryParam monGoalQueryParam);
+
+
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
 }

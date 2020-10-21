@@ -1,10 +1,7 @@
 package com.funtl.myshop.plus.provider.api;
 
 
-import com.funtl.myshop.plus.provider.domain.CarSourceRent;
-import com.funtl.myshop.plus.provider.domain.CaseExecList;
-import com.funtl.myshop.plus.provider.domain.CaseProList;
-import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
+import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.*;
 import com.github.pagehelper.PageInfo;
 
@@ -48,4 +45,11 @@ public interface OrderService{
      * @return
      */
     CarSourceRent selectCarSourceRent(MonGoalQueryParam monGoalQueryParam);
+
+    /**
+     * 周报表新增契约台数-车辆来源当月实绩数据
+     * @param monGoalQueryParam
+     * @return
+     */
+    CarSourceRent selectCarSourceNum(MonGoalQueryParam monGoalQueryParam);
 }
