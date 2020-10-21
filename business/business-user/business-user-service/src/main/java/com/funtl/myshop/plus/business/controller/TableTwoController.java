@@ -3,10 +3,7 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.IncService;
 import com.funtl.myshop.plus.provider.api.OrderService;
-import com.funtl.myshop.plus.provider.domain.CaseExecList;
-import com.funtl.myshop.plus.provider.domain.CaseProList;
-import com.funtl.myshop.plus.provider.domain.CompanyNameList;
-import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
+import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
@@ -104,7 +101,6 @@ public class TableTwoController {
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
     }
-
 
     @ApiOperation(value = "新增契约租金-客户来源")
     @ApiImplicitParams({
@@ -267,6 +263,64 @@ public class TableTwoController {
         list.add(thisMonthTar7);
         list.add(thisMonthTar8);
         list.add(thisMonthTar9);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
+
+    @ApiOperation(value = "新增契约租金-车辆来源")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryCarSourceRent")
+    public ResponseResult<List<CarSourceRent>> queryCarSourceRent(@RequestParam(name = "startDate",required = false) String startDate,
+                                                                 @RequestParam(name = "endDate",required = false) String endDate) throws ParseException {
+
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
+        }
+        List<CarSourceRent> list = Lists.newArrayList();
+
+        //当月实绩
+        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate);
+        CarSourceRent carSourceRent1 = orderService.selectCarSourceRent(monGoalQueryParam);
+        carSourceRent1.setTableTwoName("当月实绩");
+        carSourceRent1.setEastNewCarN(carSourceRent1.getEastNewCar().toString());
+        carSourceRent1.setEastOldCarN(carSourceRent1.getEastOldCar().toString());
+        carSourceRent1.setSouthNewCarN(carSourceRent1.getSouthNewCar().toString());
+        carSourceRent1.setSouthOldCarN(carSourceRent1.getSouthOldCar().toString());
+        carSourceRent1.setTotalNumAmtN(carSourceRent1.getTotalNumAmt().toString());
+        list.add(carSourceRent1);
+
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+
+        //结构比
+        CarSourceRent carSourceRent2 = new CarSourceRent();
+        carSourceRent2.setTableTwoName("结构比");
+        carSourceRent2.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setTotalNumAmtN(nt.format(carSourceRent2.getTotalNumAmt()));
+        carSourceRent2.setEastNewCar(carSourceRent1.getEastNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setEastNewCarN(nt.format(carSourceRent2.getEastNewCar()));
+        carSourceRent2.setEastOldCar(carSourceRent1.getEastOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setEastOldCarN(nt.format(carSourceRent2.getEastOldCar()));
+        carSourceRent2.setSouthNewCar(carSourceRent1.getSouthNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setSouthNewCarN(nt.format(carSourceRent2.getSouthNewCar()));
+        carSourceRent2.setSouthOldCar(carSourceRent1.getSouthOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setSouthOldCarN(nt.format(carSourceRent2.getSouthOldCar()));
+        list.add(carSourceRent2);
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }

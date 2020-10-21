@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@ApiModel(value = "营业报表查询参数")
+@ApiModel(value = "营业报表,客户来源当月目标查询参数")
 public class LineChartQueryParam implements Serializable {
     private Long userAuto;
     private String startDate;

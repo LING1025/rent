@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@ApiModel(value = "当月实绩查询参数")
+@ApiModel(value = "客户,车辆来源当月实绩查询参数")
 public class MonGoalQueryParam implements Serializable {
     private Integer inc;
     private Integer type;
