@@ -205,10 +205,20 @@ public class TableTwoController {
         thisMonthTar6.setTableName("环比");
         thisMonthTar6.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
         thisMonthTar6.setTotalNew(nt.format(thisMonthTar6.getTotalNumAmt()));
-        thisMonthTar6.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar5.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar6.setNewExsNew(nt.format(thisMonthTar6.getNewExs()));
-        thisMonthTar6.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar6.setRetainNew(nt.format(thisMonthTar6.getRetain()));
+        if (thisMonthTar5.getNewExs().equals("0.00")){
+            thisMonthTar6.setNewExsNew("-");
+        }else {
+            thisMonthTar6.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar5.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar6.setNewExsNew(nt.format(thisMonthTar6.getNewExs()));
+        }
+
+        if (thisMonthTar5.getRetain().equals("0.00")){
+            thisMonthTar6.setRetainNew("-");
+        }else {
+            thisMonthTar6.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar6.setRetainNew(nt.format(thisMonthTar6.getRetain()));
+        }
+
         if(thisMonthTar5.getIntroduceNew().equals("0.00")){
             thisMonthTar6.setIntroduceNew("-");
         }else {
@@ -246,12 +256,26 @@ public class TableTwoController {
         thisMonthTar9.setTableName("同期比较");
         thisMonthTar9.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
         thisMonthTar9.setTotalNew(nt.format(thisMonthTar9.getTotalNumAmt()));
-        thisMonthTar9.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar7.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar9.setNewExsNew(nt.format(thisMonthTar9.getNewExs()));
-        thisMonthTar9.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar7.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar9.setRetainNew(nt.format(thisMonthTar9.getRetain()));
-        thisMonthTar9.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar9.setIntroduceNew(nt.format(thisMonthTar9.getIntroduce()));
+        if (thisMonthTar7.getNewExs().equals("0.00")){
+            thisMonthTar9.setNewExsNew("-");
+        }else {
+            thisMonthTar9.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar7.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar9.setNewExsNew(nt.format(thisMonthTar9.getNewExs()));
+        }
+
+        if (thisMonthTar7.getRetain().equals("0.00")){
+            thisMonthTar9.setRetainNew("-");
+        }else {
+            thisMonthTar9.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar7.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar9.setRetainNew(nt.format(thisMonthTar9.getRetain()));
+        }
+
+        if(thisMonthTar7.getIntroduceNew().equals("0.00")){
+            thisMonthTar9.setIntroduceNew("-");
+        }else {
+            thisMonthTar9.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar9.setIntroduceNew(nt.format(thisMonthTar9.getIntroduce()));
+        }
 
         //将查到的数据插入列表中
         list.add(thisMonthTar1);
