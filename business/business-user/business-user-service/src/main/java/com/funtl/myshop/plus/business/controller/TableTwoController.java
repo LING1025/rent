@@ -321,6 +321,29 @@ public class TableTwoController {
         carSourceRent2.setSouthOldCarN(nt.format(carSourceRent2.getSouthOldCar()));
         list.add(carSourceRent2);
 
+        //上月实绩
+        Integer lastY = Integer.valueOf(startYear);
+        Integer lastM = Integer.valueOf(startMon) - 1;
+        if (lastM == 0){
+            lastM = 12;
+            lastY = Integer.valueOf(startYear) - 1;
+        }
+        String lastStartMon = lastM.toString();
+        String lastStartYear = lastY.toString();
+        String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
+        String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
+
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate);
+        CarSourceRent carSourceRent3 = orderService.selectCarSourceRent(monGoalQueryParam2);
+        carSourceRent3.setTableTwoName("上月实绩");
+        carSourceRent3.setEastNewCarN(carSourceRent3.getEastNewCar().toString());
+        carSourceRent3.setEastOldCarN(carSourceRent3.getEastOldCar().toString());
+        carSourceRent3.setSouthNewCarN(carSourceRent3.getSouthNewCar().toString());
+        carSourceRent3.setSouthOldCarN(carSourceRent3.getSouthOldCar().toString());
+        carSourceRent3.setTotalNumAmtN(carSourceRent3.getTotalNumAmt().toString());
+        list.add(carSourceRent3);
+
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
