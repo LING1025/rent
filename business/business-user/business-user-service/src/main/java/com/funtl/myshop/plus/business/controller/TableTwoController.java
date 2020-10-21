@@ -3,10 +3,7 @@ package com.funtl.myshop.plus.business.controller;
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.IncService;
 import com.funtl.myshop.plus.provider.api.OrderService;
-import com.funtl.myshop.plus.provider.domain.CaseExecList;
-import com.funtl.myshop.plus.provider.domain.CaseProList;
-import com.funtl.myshop.plus.provider.domain.CompanyNameList;
-import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
+import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
@@ -267,6 +264,19 @@ public class TableTwoController {
         list.add(thisMonthTar7);
         list.add(thisMonthTar8);
         list.add(thisMonthTar9);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
+
+    @ApiOperation(value = "新增契约租金-车辆来源")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryCarSourceRent")
+    public ResponseResult<List<CarSourceRent>> queryCarSourceRent(@RequestParam(name = "startDate",required = false) String startDate,
+                                                                 @RequestParam(name = "endDate",required = false) String endDate) throws ParseException {
+
+        List<CarSourceRent> list = Lists.newArrayList();
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }

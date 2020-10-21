@@ -568,10 +568,10 @@ end
   </select>
 
   <resultMap id="queryThisMonGoal" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ThisMonthTar">
-    <result column="newExs" jdbcType="INTEGER" property="newExs" />
-    <result column="retain" jdbcType="INTEGER" property="retain" />
-    <result column="introduce" jdbcType="INTEGER" property="introduce" />
-    <result column="totalNumAmt" jdbcType="INTEGER" property="totalNumAmt" />
+    <result column="newExs" jdbcType="DECIMAL" property="newExs" />
+    <result column="retain" jdbcType="DECIMAL" property="retain" />
+    <result column="introduce" jdbcType="DECIMAL" property="introduce" />
+    <result column="totalNumAmt" jdbcType="DECIMAL" property="totalNumAmt" />
   </resultMap>
   <select id="selectThisMonGoal" resultMap="queryThisMonGoal">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
@@ -894,4 +894,11 @@ BEGIN
 	drop table #D
     end
   </select>
+
+  <resultMap id="queryCarSourceRent" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.CarSourceRent">
+
+  </resultMap>
+    <select id="selectCarSourceRent" resultMap="queryCarSourceRent">
+
+    </select>
 </mapper>

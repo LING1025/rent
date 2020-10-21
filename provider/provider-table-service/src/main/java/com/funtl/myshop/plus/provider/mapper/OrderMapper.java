@@ -1,9 +1,6 @@
 package com.funtl.myshop.plus.provider.mapper;
 
-import com.funtl.myshop.plus.provider.domain.CaseExecList;
-import com.funtl.myshop.plus.provider.domain.CaseProList;
-import com.funtl.myshop.plus.provider.domain.Order;
-import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
+import com.funtl.myshop.plus.provider.domain.*;
 import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
 import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
 import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
@@ -20,6 +17,8 @@ public interface OrderMapper extends MyMapper<Order> {
     ThisMonthTar selectThisMonGoal(@Param("param") LineChartQueryParam lineChartQueryParam);
 
     ThisMonthTar selectThisMonReal(@Param("param") MonGoalQueryParam monGoalQueryParam);
+
+    CarSourceRent selectCarSourceRent(@Param("param") MonGoalQueryParam monGoalQueryParam);
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
 }

@@ -1,13 +1,11 @@
 package com.funtl.myshop.plus.provider.api;
 
 
+import com.funtl.myshop.plus.provider.domain.CarSourceRent;
 import com.funtl.myshop.plus.provider.domain.CaseExecList;
 import com.funtl.myshop.plus.provider.domain.CaseProList;
 import com.funtl.myshop.plus.provider.domain.ThisMonthTar;
-import com.funtl.myshop.plus.provider.dto.CaseExecListDto;
-import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
-import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
-import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
+import com.funtl.myshop.plus.provider.dto.*;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -31,16 +29,23 @@ public interface OrderService{
 //    PageInfo<CaseExecListDto> selectCaseExecListDto(CaseProQueryParam caseProQueryParam);
 
     /**
-     * 周报表当月目标数据
+     * 周报表新增契约租金-客户来源当月目标数据
      * @param lineChartQueryParam
      * @return
      */
     ThisMonthTar selectThisMonGoal(LineChartQueryParam lineChartQueryParam);
 
     /**
-     * 周报表当月实绩数据
+     * 周报表新增契约租金-客户来源当月实绩数据
      * @param monGoalQueryParam
      * @return
      */
     ThisMonthTar selectThisMonReal(MonGoalQueryParam monGoalQueryParam);
+
+    /**
+     * 周报表新增契约租金-车辆来源当月实绩数据
+     * @param monGoalQueryParam
+     * @return
+     */
+    CarSourceRent selectCarSourceRent(MonGoalQueryParam monGoalQueryParam);
 }
