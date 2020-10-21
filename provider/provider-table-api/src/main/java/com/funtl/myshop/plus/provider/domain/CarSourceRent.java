@@ -33,7 +33,7 @@ public class CarSourceRent implements Serializable {
     private String southOldCarN;
 
     @ApiModelProperty(value = "新增契约租金(①+②+③)")
-    private BigDecimal totalNumAmtN;
+    private String totalNumAmtN;
 
     @ApiModelProperty(value = "新增契约租金（交车）")
     private String tableTwoName;

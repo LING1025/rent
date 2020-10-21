@@ -999,7 +999,7 @@ BEGIN
     )
 
     select a.Order_Auto,sum(b.InCome + b.InComePre) InCome
-    into #C
+    into #G
     from @Order a
     left join OrderRent b on b.Order_Auto = a.Order_Auto
     group by a.Order_Auto
@@ -1067,7 +1067,7 @@ BEGIN
     left join orders k2 on k2.Orders_Auto = k1.Orders_Auto
     left join OrdersInsureList k3 on k3.Orders_Auto = k2.Orders_Auto and k3.InsureType = 2
     group by k1.Order_Auto,k2.MM,k2.IsCustomerCare)x on x.order_auto = a.Order_Auto
-    left join #C a1 on a1.Order_Auto = a.Order_Auto
+    left join #G a1 on a1.Order_Auto = a.Order_Auto
     left join #D a2 on a2.Order_Auto = a.Order_Auto
     Order by b1.DepName,b.FNAme
 
@@ -1091,7 +1091,7 @@ BEGIN
     where YJCDT between @StartDT and @EndDT
     drop table #F
     drop table #E
-    drop table #C
+    drop table #G
     drop table #D
     end
   </select>
