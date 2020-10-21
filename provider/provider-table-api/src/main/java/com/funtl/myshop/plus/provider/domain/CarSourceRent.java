@@ -29,10 +29,10 @@ public class CarSourceRent implements Serializable {
     @ApiModelProperty(value = "华南-车辆来源-新车③")
     private String southNewCarN;
 
-    @ApiModelProperty(value = "华南-车辆来源-旧车①")
+    @ApiModelProperty(value = "华南-车辆来源-旧车④")
     private String southOldCarN;
 
-    @ApiModelProperty(value = "新增契约租金(①+②+③)")
+    @ApiModelProperty(value = "新增契约租金(①+②+③+④)")
     private String totalNumAmtN;
 
     @ApiModelProperty(value = "新增契约租金（交车）")

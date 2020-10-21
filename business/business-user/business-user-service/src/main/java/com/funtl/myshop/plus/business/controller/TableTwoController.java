@@ -304,6 +304,23 @@ public class TableTwoController {
         carSourceRent1.setTotalNumAmtN(carSourceRent1.getTotalNumAmt().toString());
         list.add(carSourceRent1);
 
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+
+        //结构比
+        CarSourceRent carSourceRent2 = new CarSourceRent();
+        carSourceRent2.setTableTwoName("结构比");
+        carSourceRent2.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setTotalNumAmtN(nt.format(carSourceRent2.getTotalNumAmt()));
+        carSourceRent2.setEastNewCar(carSourceRent1.getEastNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setEastNewCarN(nt.format(carSourceRent2.getEastNewCar()));
+        carSourceRent2.setEastOldCar(carSourceRent1.getEastOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setEastOldCarN(nt.format(carSourceRent2.getEastOldCar()));
+        carSourceRent2.setSouthNewCar(carSourceRent1.getSouthNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setSouthNewCarN(nt.format(carSourceRent2.getSouthNewCar()));
+        carSourceRent2.setSouthOldCar(carSourceRent1.getSouthOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+        carSourceRent2.setSouthOldCarN(nt.format(carSourceRent2.getSouthOldCar()));
+        list.add(carSourceRent2);
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
