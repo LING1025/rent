@@ -42,11 +42,6 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectCarSourceRent(monGoalQueryParam);
     }
 
-    @Override
-    public CarSourceRent selectCarSourceNum(MonGoalQueryParam monGoalQueryParam) {
-        return orderMapper.selectCarSourceNum(monGoalQueryParam);
-    }
-
     /*@Override
     public PageInfo<CaseExecListDto> selectCaseExecListDto(CaseProQueryParam caseProQueryParam) {
         PageHelper.startPage(caseProQueryParam.getPageNum(),caseProQueryParam.getPageSize());

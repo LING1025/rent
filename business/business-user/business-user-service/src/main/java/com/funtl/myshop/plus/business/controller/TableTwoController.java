@@ -290,7 +290,7 @@ public class TableTwoController {
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 
-    @ApiOperation(value = "新增契约租金-车辆来源")
+    @ApiOperation(value = "新增契约租金,台数-车辆来源")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
@@ -334,9 +334,24 @@ public class TableTwoController {
             carSourceRent1.setEastOldCarN(carSourceRent1.getEastOldCar().toString());
         }
 
-        carSourceRent1.setSouthNewCarN(carSourceRent1.getSouthNewCar().toString());
-        carSourceRent1.setSouthOldCarN(carSourceRent1.getSouthOldCar().toString());
-        carSourceRent1.setTotalNumAmtN(carSourceRent1.getTotalNumAmt().toString());
+        if (carSourceRent1.getSouthNewCar() == null){
+            carSourceRent1.setSouthNewCarN(String.valueOf(0));
+        }else{
+            carSourceRent1.setSouthNewCarN(carSourceRent1.getSouthNewCar().toString());
+        }
+
+        if (carSourceRent1.getSouthOldCar() == null){
+            carSourceRent1.setSouthOldCarN(String.valueOf(0));
+        }else{
+            carSourceRent1.setSouthOldCarN(carSourceRent1.getSouthOldCar().toString());
+        }
+
+        if (carSourceRent1.getTotalNumAmt() == null){
+            carSourceRent1.setTotalNumAmtN(String.valueOf(0));
+        }else{
+            carSourceRent1.setTotalNumAmtN(carSourceRent1.getTotalNumAmt().toString());
+        }
+
         list.add(carSourceRent1);
 
         NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
@@ -344,8 +359,7 @@ public class TableTwoController {
         //结构比
         CarSourceRent carSourceRent2 = new CarSourceRent();
         carSourceRent2.setTableTwoName("结构比");
-        carSourceRent2.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent2.setTotalNumAmtN(nt.format(carSourceRent2.getTotalNumAmt()));
+        carSourceRent2.setTotalNumAmtN("100%");
         carSourceRent2.setEastNewCar(carSourceRent1.getEastNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
         carSourceRent2.setEastNewCarN(nt.format(carSourceRent2.getEastNewCar()));
         carSourceRent2.setEastOldCar(carSourceRent1.getEastOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
