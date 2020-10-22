@@ -653,11 +653,7 @@ end
 
     if @Mode > 0
     begin
-    select Mode,Org_Auto,orgName,isnull(targetPaperNum,0) targetPaperNum,isnull(proPaperNum,0) proPaperNum,isnull(targetNum,0) targetNum
-    ,isnull(realNum,0) realNum,isnull(targetVolume,0) targetVolume,isnull(realVolume,0) realVolume
-    ,case when isnull(targetPaperNum,0) > 0 then isnull(proPaperNum,0) *1.0 / targetPaperNum  else 0 end paperLv
-    ,case when isnull(targetNum,0) > 0 then isnull(realNum,0) *1.0 / targetNum  else 0 end countLv
-    ,case when isnull(targetVolume,0) > 0 then isnull(realVolume,0) *1.0 / targetVolume  else 0 end volumeLv
+    select Mode,Org_Auto,orgName,isnull(targetNum,0) targetNum
 	into #C
     from (
     select @Mode Mode,case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end Org_Auto
@@ -689,8 +685,6 @@ end
     left join AspNet.dbo.Org f on f.Org_Auto = g.UpUnit
     group by case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end,case when @Mode = 1 then a4.DepName else f.DepName end
     ) a5
-    order by replace (replace (replace (replace (replace (replace (replace (replace (replace (orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
-
     end
 
 --当月目标
