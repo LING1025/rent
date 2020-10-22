@@ -653,11 +653,7 @@ end
 
     if @Mode > 0
     begin
-    select Mode,Org_Auto,orgName,isnull(targetPaperNum,0) targetPaperNum,isnull(proPaperNum,0) proPaperNum,isnull(targetNum,0) targetNum
-    ,isnull(realNum,0) realNum,isnull(targetVolume,0) targetVolume,isnull(realVolume,0) realVolume
-    ,case when isnull(targetPaperNum,0) > 0 then isnull(proPaperNum,0) *1.0 / targetPaperNum  else 0 end paperLv
-    ,case when isnull(targetNum,0) > 0 then isnull(realNum,0) *1.0 / targetNum  else 0 end countLv
-    ,case when isnull(targetVolume,0) > 0 then isnull(realVolume,0) *1.0 / targetVolume  else 0 end volumeLv
+    select Mode,Org_Auto,orgName,isnull(targetNum,0) targetNum
 	into #C
     from (
     select @Mode Mode,case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end Org_Auto
@@ -689,8 +685,6 @@ end
     left join AspNet.dbo.Org f on f.Org_Auto = g.UpUnit
     group by case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end,case when @Mode = 1 then a4.DepName else f.DepName end
     ) a5
-    order by replace (replace (replace (replace (replace (replace (replace (replace (replace (orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
-
     end
 
 --当月目标
@@ -710,200 +704,6 @@ drop table #D
   </select>
   <select id="selectThisMonReal" resultMap="queryThisMonGoal">
     declare
-      @inc int,
-      @type int,
-      @year varchar(10),
-      @month varchar(10),
-      @flag int,
-      @customer varchar(100),
-      @StartDT varchar(50),
-      @EndDT varchar(50)
-    set @inc = #{param.inc}
-    set	@type = #{param.type}
-    set	@year = #{param.year}
-    set	@month = #{param.month}
-    set	@flag = #{param.flag}
-    set	@customer = #{param.customer}
-    set @StartDT = #{param.startDate}
-    set @EndDT = #{param.endDate}
-BEGIN
-	declare @order table(
-	order_auto bigint,
-	orders_auto bigint
-	)
-
-	insert into @order
-	select distinct a.Order_Auto,a.orders_auto
-	from [order] a  (nolock)
-	inner join tradeitem c  (nolock) on a.tradeitem_auto=c.tradeitem_auto
-	left join Credit_Order f (nolock)  on a.Orders_Auto=f.Orders_Auto
-	inner join CreditMainInfo g (nolock)  on f.CreditMain_Auto=g.CreditMain_Auto and g.CreditStatus>=10
-	left join BookCar i  (nolock) on g.CreditMain_Auto=i.CreditMain_Auto
-	left join BookCarNote k  (nolock) on k.CreditMain_Auto=g.CreditMain_Auto and k.Status=1
-	where  a.OrderType in(1,5,6) and (a.Inc_Auto=@inc or @inc=0) and
-		(
-			(@customer!='' and c.FName like '%'+@customer+'%' and (a.YJCDT is null or a.JCDT is null)) or
-			((@customer ='') and (
-			(
-				(@flag=0 and
-					((@type=1 and
-						(
-							(isnull(a.DptAmt,0)>0 and ( ((@month between 2 and 11) and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)))
-							or (@month=1 and DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)
-							or (@month=12 and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month))) ) and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year)
-							or
-							(isnull(a.DptAmt,0)=0 and ( ((@month between 2 and 11) and ((DATEPART(MM,i.EndDT)=@month-1 and DATEPART(DD,i.EndDT)>=21) or (DATEPART(MM,i.EndDT)=@month and DATEPART(DD,i.EndDT)&lt;=20)))
-							or (@month=1 and DATEPART(MM,i.EndDT)=@month and DATEPART(DD,i.EndDT)&lt;=20)
-							or (@month=12 and ((DATEPART(MM,i.EndDT)=@month-1 and DATEPART(DD,i.EndDT)>=21) or (DATEPART(MM,i.EndDT)=@month))) ) and DATEPART(YYYY,i.EndDT)=@year)
-						)
-					)
-					or (@type=2 and ( ((@month between 2 and 11) and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)) )
-					or (@month=1 and DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)
-					or (@month=12 and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month))) )  and DATEPART(YYYY,a.JCDT)=@year)
-					or (@type=3 and ( ((@month between 2 and 11) and ((DATEPART(MM,a.BoundDT)=@month-1 and DATEPART(DD,a.BoundDT)>=21) or (DATEPART(MM,a.BoundDT)=@month and DATEPART(DD,a.BoundDT)&lt;=20)) )
-					or (@month=1 and DATEPART(MM,a.BoundDT)=@month and DATEPART(DD,a.BoundDT)&lt;=20)
-					or (@month=12 and ((DATEPART(MM,a.BoundDT)=@month-1 and DATEPART(DD,a.BoundDT)>=21) or (DATEPART(MM,a.BoundDT)=@month))) )  and DATEPART(YYYY,a.BoundDT)=@year)
-					or (@type=4 and ( ((@month between 2 and 11) and ((DATEPART(MM,a.YJCDT)=@month-1 and DATEPART(DD,a.YJCDT)>=21) or (DATEPART(MM,a.YJCDT)=@month and DATEPART(DD,a.YJCDT)&lt;=20)) )
-					or (@month=1 and DATEPART(MM,a.YJCDT)=@month and DATEPART(DD,a.YJCDT)&lt;=20)
-					or (@month=12 and ((DATEPART(MM,a.YJCDT)=@month-1 and DATEPART(DD,a.YJCDT)>=21) or (DATEPART(MM,a.YJCDT)=@month))) )  and DATEPART(YYYY,a.YJCDT)=@year)
-					or (
-						@type=5 and isnull(case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end,'') &lt;>'' and (
-							(( ((@month between 2 and 11) and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)))
-							or (@month=1 and DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)
-							or (@month=12 and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month))) ) and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year
-							)
-							or
-							(( ((@month between 2 and 11) and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)) )
-							or (@month=1 and DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)
-							or (@month=12 and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month))) )  and DATEPART(YYYY,a.JCDT)=@year
-							)
-							or (a.JCDT is null )
-						)
-					)
-					)
-				)
-				or (@flag=1 and
-					(
-						(@type=1 and (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year))
-						or (@type=2 and (DATEPART(MM,a.JCDT)=@month and DATEPART(YYYY,a.JCDT)=@year))
-						or (@type=3 and (DATEPART(MM,a.BoundDT)=@month and DATEPART(YYYY,a.BoundDT)=@year))
-						or (@type=4 and (DATEPART(MM,a.YJCDT)=@month and DATEPART(YYYY,a.YJCDT)=@year))
-						or (
-							@type=5 and isnull(case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end,'') &lt;>'' and (
-								((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year))
-								or
-								((DATEPART(MM,a.JCDT)=@month and DATEPART(YYYY,a.JCDT)=@year))
-								or (a.JCDT is null)
-							)
-						)
-				))
-			)
-			or (case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end &lt;'2013/11/21' and a.Order_Auto in(6064,4325,4326,6067,6061,5963,6065,6017,6068,5984,5993,5962,6047,5981,6002,5870,6013,6014,6071,6042)
-			and (a.JCDT='' or a.JCDT is null) and @type&lt;>4
-			)
-			))
-		)
-
-	select a.Order_Auto,sum(b.InCome + b.InComePre) InCome
-	into #C
-	from @Order a
-	left join OrderRent b on b.Order_Auto = a.Order_Auto
-	group by a.Order_Auto
-
-	select a.Order_Auto
-	,sum(case b.CountMode when 0 then Amt when 12 then isnull(Amt*1.0/12 * c.MM,0) when 1 then isnull(case when b.type_auto = 3 then Amt*1.0/12 else Amt end,0) * c.MM end) BudgetAmt
-	into #D
-	from @Order a
-	left join OrderBudget b on b.Order_Auto = a.Order_Auto and b.type_auto &lt;> 0
-	left join [order] c on c.Order_Auto = a.Order_Auto
-	group by a.Order_Auto
-
-	select b1.DepName depName,b.FNAme fName,a.OrderNo, c.TradeItem_Auto,c.FName comFName,case when q.identype = 1 then '是' else '' end	idenType,h.SName sName
-	,case when a.status=30 then '正常' when a.status=40 then '解约' when a.status=10 then '送件' else '暂存' end statusName
-	,d.MakNo makNo,dbo.f_GetItemName(226,d.Category) category,dbo.f_GetItemName(313,a.CustSource) custSource,dbo.f_GetItemName(314,a.RentType) rentType,L.FactoryBrandName factoryBrandName,m.BrandName brandName,e.ClasenName clasenName
-	,d.CarColor carColor,n.FName sellerFName,a.MAmt ,a.MAmt*a.MM totalAmt,d.MakDT makDT
-	,a.ListPrice ,a.GetPrice ,a.DisPrice ,Convert(decimal(16,2), a.DisPrice /case when a.ListPrice > 0 then a.ListPrice else 1 end * 100) disPriceTax,a.Accessary ,j.PushMoney pushMoney,case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end salvage,a.DptAmt ,a.CarMtnAmt ,case when j.OrderType = 8 then a.CarCost-a.StampTax else a.ListPrice-a.DisPrice-case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end end loanAmount
-	,a.StartDT ,a.EndDT ,a.MM ,dbo.f_GetItemName(115,g.Creditlevle) creditLevel
-	,a.Order_Auto ,g.CreditMain_Auto,g.ContractNo contractNo
-	,ISNULL(a.JCDT,t.deliveryDT) forDT
-	,dbo.f_GetItemName(1001,g.PayType) payType
-	,case j.CarSource when 1 then '新车' when 2 then '调度中心' when 3  then '原车续租' when 4 then '外购二手车' end carSource,a.RentRate
-	, a.finalrate , a.rentamt ,a.BonusRate
-	,s.ItemName businessType
-	,s1.ItemName businessOrdersType
-	,isnull(o.RealAmt,0) realAmt,isnull(p.RealAmt,0) accRealAmt,a.YJCDT ,dbo.f_GetItemName(225,d.UseType)  useType,case when j.Onetime = 1 then '是' else '' end onetime
-	,isnull(r.Project_Name,'') projectName
-	,case when u.ItemName like '%货车%' then '货车' else case when j.Onetime = 1 then '一次性' else v.ItemName end end trucks
-	,w.ItemName comType
-	,x.InsureMM insureMM
-	,x.InsureAmt insureAmt
-	,a.CarTax carTax
-	,isnull(a1.InCome,0) inCome
-	,j.CarCost carCost
-	,isnull(a2.BudgetAmt,0)  budgetAmt
-	into #E
-		from @order aa
-		left join [order] a (nolock) on a.Order_Auto = aa.order_auto
-		inner join v_emp b  (nolock) on a.YJSales=b.User_Auto
-		inner join AspNet.dbo.Org b1  (nolock) on b1.Org_Auto = a.YJOrg
-		inner join tradeitem c  (nolock) on a.tradeitem_auto=c.tradeitem_auto
-		inner join Carbase d  (nolock) on a.Carbase_auto=d.Carbase_auto
-		inner join Clasen e  (nolock) on a.clasen_auto=e.clasen_auto
-		inner join Brand m  (nolock) on a.Brand_Auto=m.Brand_Auto
-		inner join Inc h  (nolock) on a.Inc_Auto=h.Inc_Auto
-		left join FactoryBrand l  (nolock) on l.FactoryBrand_Auto=d.FactoryBrand_Auto
-		left join Credit_Order f  (nolock) on a.Orders_Auto=f.Orders_Auto
-		inner join CreditMainInfo g  (nolock) on f.CreditMain_Auto=g.CreditMain_Auto and g.CreditStatus>=10
-		left join Orders j  (nolock) on a.Orders_Auto=j.Orders_Auto
-		left join TradeItem n  (nolock) on n.TradeItem_Auto = d.supplier
-		left join dpn o  (nolock) on o.Order_Auto = a.Order_Auto and o.DPN_Type = 2
-		left join dpn p  (nolock) on p.Order_Auto = a.Order_Auto and p.DPN_Type = 3
-		left join Customer q  (nolock) on q.TradeItem_Auto = c.TradeItem_Auto
-		left join Orders_Project r (nolock)  on r.Project_Auto = j.Project_Auto
-		left join ItemCode s (nolock)  on s.ItemType = 326 and s.Num = a.OrderType
-		left join ItemCode s1 (nolock) on s1.ItemType = 326 and s1.Num = j.OrderType
-		LEFT JOIN DEliverycar t  (nolock) on t.Order_auto=a.Order_Auto AND t.[Status]=1 AND t.ReturnVisit_Auto>0
-		left join ItemCode u  (nolock) on u.ItemType = 410 and u.Num = d.InsurePercnt
-		left join ItemCode v  (nolock) on v.ItemType = 503 and v.Num = j.CarSource
-		left join ItemCode w  (nolock) on w.ItemType = 111 and w.Num = q.IncType
-		left join (	select k1.Order_Auto,
-			sum(case when k3.InsureType = 2 then 1 else 0 end * 12  - case when k2.MM%12 > 0 and k3.InsureType = 2 and k3.InsureYear = k2.MM/12 then 12 - k2.MM%12 else 0 end) InsureMM  ,
-			sum(case when k3.InsureType = 2 and k3.InsureYear = 1 then k3.InsureRealAmt else 0 end) InsureAmt
-			from @Order k1
-			left join orders k2 on k2.Orders_Auto = k1.Orders_Auto
-			left join OrdersInsureList k3 on k3.Orders_Auto = k2.Orders_Auto and k3.InsureType = 2
-			group by k1.Order_Auto,k2.MM,k2.IsCustomerCare)x on x.order_auto = a.Order_Auto
-	left join #C a1 on a1.Order_Auto = a.Order_Auto
-	left join #D a2 on a2.Order_Auto = a.Order_Auto
-	Order by b1.DepName,b.FNAme
-
-	select
-	sum(case when custSource like '%新拓%' then totalAmt else 0 end) newExs,
-	sum(case when custSource like '%保有%' then totalAmt else 0 end) retain,
-	sum(case when custSource like '%介绍%' then totalAmt else 0 end) introduce,
-	YJCDT
-	into #F
-	from #E
-	group by YJCDT
-
-	select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #F where YJCDT between @StartDT and @EndDT
-
-	drop table #F
-	drop table #E
-	drop table #C
-	drop table #D
-    end
-  </select>
-
-  <resultMap id="queryCarSourceRent" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.CarSourceRent">
-    <result column="eastNewCar" jdbcType="DECIMAL" property="eastNewCar" />
-    <result column="eastOldCar" jdbcType="DECIMAL" property="eastOldCar" />
-    <result column="southNewCar" jdbcType="DECIMAL" property="southNewCar" />
-    <result column="southOldCar" jdbcType="DECIMAL" property="southOldCar" />
-    <result column="totalNumAmt" jdbcType="DECIMAL" property="totalNumAmt" />
-  </resultMap>
-  <select id="selectCarSourceRent" resultMap="queryCarSourceRent">
-    declare
     @inc int,
     @type int,
     @year varchar(10),
@@ -911,7 +711,8 @@ BEGIN
     @flag int,
     @customer varchar(100),
     @StartDT varchar(50),
-    @EndDT varchar(50)
+    @EndDT varchar(50),
+    @typeQuery int
     set @inc = #{param.inc}
     set	@type = #{param.type}
     set	@year = #{param.year}
@@ -920,6 +721,7 @@ BEGIN
     set	@customer = #{param.customer}
     set @StartDT = #{param.startDate}
     set @EndDT = #{param.endDate}
+    set @typeQuery = #{param.typeQuery}
     BEGIN
     declare @order table(
     order_auto bigint,
@@ -1071,6 +873,8 @@ BEGIN
     left join #D a2 on a2.Order_Auto = a.Order_Auto
     Order by b1.DepName,b.FNAme
 
+    if @typeQuery = 1
+    begin
     select
     sum(case when carSource = '新车'and depName like '%华东%' then totalAmt else 0 end) eastNewCar,
     sum(case when carSource != '新车'and depName like '%华东%' then totalAmt else 0 end) eastOldCar,
@@ -1090,6 +894,281 @@ BEGIN
     from #F
     where YJCDT between @StartDT and @EndDT
     drop table #F
+
+    end
+
+    else if @typeQuery = 2
+    begin
+    declare
+    @eastNewCar decimal(18,2),
+    @eastOldCar decimal(18,2),
+    @southNewCar decimal(18,2),
+    @southOldCar decimal(18,2),
+    @totalNumAmt decimal(18,2)
+
+    select @eastNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
+    select @eastOldCar=count(carSource)  from #E where carSource != '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
+    select @southNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT
+    select @southOldCar=count(carSource)  from #E where carSource != '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT
+    select @totalNumAmt=count(carSource)  from #E where YJCDT between @StartDT and @EndDT
+    select @eastNewCar eastNewCar,@eastOldCar eastOldCar,@southNewCar southNewCar,@southOldCar southOldCar,@totalNumAmt totalNumAmt
+    end
+
+    else if @typeQuery = 3
+    begin
+    select
+    sum(case when custSource like '%新拓%' then totalAmt else 0 end) newExs,
+    sum(case when custSource like '%保有%' then totalAmt else 0 end) retain,
+    sum(case when custSource like '%介绍%' then totalAmt else 0 end) introduce,
+    YJCDT
+    into #H
+    from #E
+    group by YJCDT
+
+    select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #H where YJCDT between @StartDT and @EndDT
+    drop table #H
+    end
+
+    drop table #E
+    drop table #G
+    drop table #D
+    end
+  </select>
+
+  <resultMap id="queryCarSourceRent" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.CarSourceRent">
+    <result column="eastNewCar" jdbcType="DECIMAL" property="eastNewCar" />
+    <result column="eastOldCar" jdbcType="DECIMAL" property="eastOldCar" />
+    <result column="southNewCar" jdbcType="DECIMAL" property="southNewCar" />
+    <result column="southOldCar" jdbcType="DECIMAL" property="southOldCar" />
+    <result column="totalNumAmt" jdbcType="DECIMAL" property="totalNumAmt" />
+  </resultMap>
+  <select id="selectCarSourceRent" resultMap="queryCarSourceRent">
+    declare
+    @inc int,
+    @type int,
+    @year varchar(10),
+    @month varchar(10),
+    @flag int,
+    @customer varchar(100),
+    @StartDT varchar(50),
+    @EndDT varchar(50),
+    @typeQuery int
+    set @inc = #{param.inc}
+    set	@type = #{param.type}
+    set	@year = #{param.year}
+    set	@month = #{param.month}
+    set	@flag = #{param.flag}
+    set	@customer = #{param.customer}
+    set @StartDT = #{param.startDate}
+    set @EndDT = #{param.endDate}
+    set @typeQuery = #{param.typeQuery}
+    BEGIN
+    declare @order table(
+    order_auto bigint,
+    orders_auto bigint
+    )
+
+    insert into @order
+    select distinct a.Order_Auto,a.orders_auto
+    from [order] a  (nolock)
+    inner join tradeitem c  (nolock) on a.tradeitem_auto=c.tradeitem_auto
+    left join Credit_Order f (nolock)  on a.Orders_Auto=f.Orders_Auto
+    inner join CreditMainInfo g (nolock)  on f.CreditMain_Auto=g.CreditMain_Auto and g.CreditStatus>=10
+    left join BookCar i  (nolock) on g.CreditMain_Auto=i.CreditMain_Auto
+    left join BookCarNote k  (nolock) on k.CreditMain_Auto=g.CreditMain_Auto and k.Status=1
+    where  a.OrderType in(1,5,6) and (a.Inc_Auto=@inc or @inc=0) and
+    (
+    (@customer!='' and c.FName like '%'+@customer+'%' and (a.YJCDT is null or a.JCDT is null)) or
+    ((@customer ='') and (
+    (
+    (@flag=0 and
+    ((@type=1 and
+    (
+    (isnull(a.DptAmt,0)>0 and ( ((@month between 2 and 11) and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)))
+    or (@month=1 and DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)
+    or (@month=12 and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month))) ) and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year)
+    or
+    (isnull(a.DptAmt,0)=0 and ( ((@month between 2 and 11) and ((DATEPART(MM,i.EndDT)=@month-1 and DATEPART(DD,i.EndDT)>=21) or (DATEPART(MM,i.EndDT)=@month and DATEPART(DD,i.EndDT)&lt;=20)))
+    or (@month=1 and DATEPART(MM,i.EndDT)=@month and DATEPART(DD,i.EndDT)&lt;=20)
+    or (@month=12 and ((DATEPART(MM,i.EndDT)=@month-1 and DATEPART(DD,i.EndDT)>=21) or (DATEPART(MM,i.EndDT)=@month))) ) and DATEPART(YYYY,i.EndDT)=@year)
+    )
+    )
+    or (@type=2 and ( ((@month between 2 and 11) and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)) )
+    or (@month=1 and DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)
+    or (@month=12 and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month))) )  and DATEPART(YYYY,a.JCDT)=@year)
+    or (@type=3 and ( ((@month between 2 and 11) and ((DATEPART(MM,a.BoundDT)=@month-1 and DATEPART(DD,a.BoundDT)>=21) or (DATEPART(MM,a.BoundDT)=@month and DATEPART(DD,a.BoundDT)&lt;=20)) )
+    or (@month=1 and DATEPART(MM,a.BoundDT)=@month and DATEPART(DD,a.BoundDT)&lt;=20)
+    or (@month=12 and ((DATEPART(MM,a.BoundDT)=@month-1 and DATEPART(DD,a.BoundDT)>=21) or (DATEPART(MM,a.BoundDT)=@month))) )  and DATEPART(YYYY,a.BoundDT)=@year)
+    or (@type=4 and ( ((@month between 2 and 11) and ((DATEPART(MM,a.YJCDT)=@month-1 and DATEPART(DD,a.YJCDT)>=21) or (DATEPART(MM,a.YJCDT)=@month and DATEPART(DD,a.YJCDT)&lt;=20)) )
+    or (@month=1 and DATEPART(MM,a.YJCDT)=@month and DATEPART(DD,a.YJCDT)&lt;=20)
+    or (@month=12 and ((DATEPART(MM,a.YJCDT)=@month-1 and DATEPART(DD,a.YJCDT)>=21) or (DATEPART(MM,a.YJCDT)=@month))) )  and DATEPART(YYYY,a.YJCDT)=@year)
+    or (
+    @type=5 and isnull(case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end,'') &lt;>'' and (
+    (( ((@month between 2 and 11) and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)))
+    or (@month=1 and DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )&lt;=20)
+    or (@month=12 and ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month-1 and DATEPART(DD,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )>=21) or (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month))) ) and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year
+    )
+    or
+    (( ((@month between 2 and 11) and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)) )
+    or (@month=1 and DATEPART(MM,a.JCDT)=@month and DATEPART(DD,a.JCDT)&lt;=20)
+    or (@month=12 and ((DATEPART(MM,a.JCDT)=@month-1 and DATEPART(DD,a.JCDT)>=21) or (DATEPART(MM,a.JCDT)=@month))) )  and DATEPART(YYYY,a.JCDT)=@year
+    )
+    or (a.JCDT is null )
+    )
+    )
+    )
+    )
+    or (@flag=1 and
+    (
+    (@type=1 and (DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year))
+    or (@type=2 and (DATEPART(MM,a.JCDT)=@month and DATEPART(YYYY,a.JCDT)=@year))
+    or (@type=3 and (DATEPART(MM,a.BoundDT)=@month and DATEPART(YYYY,a.BoundDT)=@year))
+    or (@type=4 and (DATEPART(MM,a.YJCDT)=@month and DATEPART(YYYY,a.YJCDT)=@year))
+    or (
+    @type=5 and isnull(case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end,'') &lt;>'' and (
+    ((DATEPART(MM,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@month and DATEPART(YYYY,case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end )=@year))
+    or
+    ((DATEPART(MM,a.JCDT)=@month and DATEPART(YYYY,a.JCDT)=@year))
+    or (a.JCDT is null)
+    )
+    )
+    ))
+    )
+    or (case when k.BookCarNote_Auto is not null then case when case when k.txtzongbaozhengjin = '' then 0.00 else convert(decimal(16,2), k.txtzongbaozhengjin) end > case when k.txtruzhang1 = '' then 0.00 else convert(decimal(16,2),k.txtruzhang1) end then null else k.txtsumbailgetdate end else null end &lt;'2013/11/21' and a.Order_Auto in(6064,4325,4326,6067,6061,5963,6065,6017,6068,5984,5993,5962,6047,5981,6002,5870,6013,6014,6071,6042)
+    and (a.JCDT='' or a.JCDT is null) and @type&lt;>4
+    )
+    ))
+    )
+
+    select a.Order_Auto,sum(b.InCome + b.InComePre) InCome
+    into #G
+    from @Order a
+    left join OrderRent b on b.Order_Auto = a.Order_Auto
+    group by a.Order_Auto
+
+    select a.Order_Auto
+    ,sum(case b.CountMode when 0 then Amt when 12 then isnull(Amt*1.0/12 * c.MM,0) when 1 then isnull(case when b.type_auto = 3 then Amt*1.0/12 else Amt end,0) * c.MM end) BudgetAmt
+    into #D
+    from @Order a
+    left join OrderBudget b on b.Order_Auto = a.Order_Auto and b.type_auto &lt;> 0
+    left join [order] c on c.Order_Auto = a.Order_Auto
+    group by a.Order_Auto
+
+    select b1.DepName depName,b.FNAme fName,a.OrderNo, c.TradeItem_Auto,c.FName comFName,case when q.identype = 1 then '是' else '' end	idenType,h.SName sName
+    ,case when a.status=30 then '正常' when a.status=40 then '解约' when a.status=10 then '送件' else '暂存' end statusName
+    ,d.MakNo makNo,dbo.f_GetItemName(226,d.Category) category,dbo.f_GetItemName(313,a.CustSource) custSource,dbo.f_GetItemName(314,a.RentType) rentType,L.FactoryBrandName factoryBrandName,m.BrandName brandName,e.ClasenName clasenName
+    ,d.CarColor carColor,n.FName sellerFName,a.MAmt ,a.MAmt*a.MM totalAmt,d.MakDT makDT
+    ,a.ListPrice ,a.GetPrice ,a.DisPrice ,Convert(decimal(16,2), a.DisPrice /case when a.ListPrice > 0 then a.ListPrice else 1 end * 100) disPriceTax,a.Accessary ,j.PushMoney pushMoney,case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end salvage,a.DptAmt ,a.CarMtnAmt ,case when j.OrderType = 8 then a.CarCost-a.StampTax else a.ListPrice-a.DisPrice-case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end end loanAmount
+    ,a.StartDT ,a.EndDT ,a.MM ,dbo.f_GetItemName(115,g.Creditlevle) creditLevel
+    ,a.Order_Auto ,g.CreditMain_Auto,g.ContractNo contractNo
+    ,ISNULL(a.JCDT,t.deliveryDT) forDT
+    ,dbo.f_GetItemName(1001,g.PayType) payType
+    ,case j.CarSource when 1 then '新车' when 2 then '调度中心' when 3  then '原车续租' when 4 then '外购二手车' end carSource,a.RentRate
+    , a.finalrate , a.rentamt ,a.BonusRate
+    ,s.ItemName businessType
+    ,s1.ItemName businessOrdersType
+    ,isnull(o.RealAmt,0) realAmt,isnull(p.RealAmt,0) accRealAmt,a.YJCDT ,dbo.f_GetItemName(225,d.UseType)  useType,case when j.Onetime = 1 then '是' else '' end onetime
+    ,isnull(r.Project_Name,'') projectName
+    ,case when u.ItemName like '%货车%' then '货车' else case when j.Onetime = 1 then '一次性' else v.ItemName end end trucks
+    ,w.ItemName comType
+    ,x.InsureMM insureMM
+    ,x.InsureAmt insureAmt
+    ,a.CarTax carTax
+    ,isnull(a1.InCome,0) inCome
+    ,j.CarCost carCost
+    ,isnull(a2.BudgetAmt,0)  budgetAmt
+    into #E
+    from @order aa
+    left join [order] a (nolock) on a.Order_Auto = aa.order_auto
+    inner join v_emp b  (nolock) on a.YJSales=b.User_Auto
+    inner join AspNet.dbo.Org b1  (nolock) on b1.Org_Auto = a.YJOrg
+    inner join tradeitem c  (nolock) on a.tradeitem_auto=c.tradeitem_auto
+    inner join Carbase d  (nolock) on a.Carbase_auto=d.Carbase_auto
+    inner join Clasen e  (nolock) on a.clasen_auto=e.clasen_auto
+    inner join Brand m  (nolock) on a.Brand_Auto=m.Brand_Auto
+    inner join Inc h  (nolock) on a.Inc_Auto=h.Inc_Auto
+    left join FactoryBrand l  (nolock) on l.FactoryBrand_Auto=d.FactoryBrand_Auto
+    left join Credit_Order f  (nolock) on a.Orders_Auto=f.Orders_Auto
+    inner join CreditMainInfo g  (nolock) on f.CreditMain_Auto=g.CreditMain_Auto and g.CreditStatus>=10
+    left join Orders j  (nolock) on a.Orders_Auto=j.Orders_Auto
+    left join TradeItem n  (nolock) on n.TradeItem_Auto = d.supplier
+    left join dpn o  (nolock) on o.Order_Auto = a.Order_Auto and o.DPN_Type = 2
+    left join dpn p  (nolock) on p.Order_Auto = a.Order_Auto and p.DPN_Type = 3
+    left join Customer q  (nolock) on q.TradeItem_Auto = c.TradeItem_Auto
+    left join Orders_Project r (nolock)  on r.Project_Auto = j.Project_Auto
+    left join ItemCode s (nolock)  on s.ItemType = 326 and s.Num = a.OrderType
+    left join ItemCode s1 (nolock) on s1.ItemType = 326 and s1.Num = j.OrderType
+    LEFT JOIN DEliverycar t  (nolock) on t.Order_auto=a.Order_Auto AND t.[Status]=1 AND t.ReturnVisit_Auto>0
+    left join ItemCode u  (nolock) on u.ItemType = 410 and u.Num = d.InsurePercnt
+    left join ItemCode v  (nolock) on v.ItemType = 503 and v.Num = j.CarSource
+    left join ItemCode w  (nolock) on w.ItemType = 111 and w.Num = q.IncType
+    left join (	select k1.Order_Auto,
+    sum(case when k3.InsureType = 2 then 1 else 0 end * 12  - case when k2.MM%12 > 0 and k3.InsureType = 2 and k3.InsureYear = k2.MM/12 then 12 - k2.MM%12 else 0 end) InsureMM  ,
+    sum(case when k3.InsureType = 2 and k3.InsureYear = 1 then k3.InsureRealAmt else 0 end) InsureAmt
+    from @Order k1
+    left join orders k2 on k2.Orders_Auto = k1.Orders_Auto
+    left join OrdersInsureList k3 on k3.Orders_Auto = k2.Orders_Auto and k3.InsureType = 2
+    group by k1.Order_Auto,k2.MM,k2.IsCustomerCare)x on x.order_auto = a.Order_Auto
+    left join #G a1 on a1.Order_Auto = a.Order_Auto
+    left join #D a2 on a2.Order_Auto = a.Order_Auto
+    Order by b1.DepName,b.FNAme
+
+    if @typeQuery = 1
+    begin
+    select
+    sum(case when carSource = '新车'and depName like '%华东%' then totalAmt else 0 end) eastNewCar,
+    sum(case when carSource != '新车'and depName like '%华东%' then totalAmt else 0 end) eastOldCar,
+    sum(case when carSource = '新车'and depName like '%华南%' then totalAmt else 0 end) southNewCar,
+    sum(case when carSource != '新车'and depName like '%华南%' then totalAmt else 0 end) southOldCar,
+    YJCDT
+    into #F
+    from #E
+    group by YJCDT
+
+    select
+    sum(eastNewCar) eastNewCar,
+    sum(eastOldCar) eastOldCar,
+    sum(southNewCar) southNewCar,
+    sum(southOldCar) southOldCar,
+    sum(eastNewCar+eastOldCar+southNewCar+southOldCar) totalNumAmt
+    from #F
+    where YJCDT between @StartDT and @EndDT
+    drop table #F
+
+    end
+
+    else if @typeQuery = 2
+    begin
+    declare
+    @eastNewCar decimal(18,2),
+    @eastOldCar decimal(18,2),
+    @southNewCar decimal(18,2),
+    @southOldCar decimal(18,2),
+    @totalNumAmt decimal(18,2)
+
+    select @eastNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
+    select @eastOldCar=count(carSource)  from #E where carSource != '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
+    select @southNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT
+    select @southOldCar=count(carSource)  from #E where carSource != '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT
+    select @totalNumAmt=count(carSource)  from #E where YJCDT between @StartDT and @EndDT
+    select @eastNewCar eastNewCar,@eastOldCar eastOldCar,@southNewCar southNewCar,@southOldCar southOldCar,@totalNumAmt totalNumAmt
+    end
+
+    else if @typeQuery = 3
+    begin
+    select
+    sum(case when custSource like '%新拓%' then totalAmt else 0 end) newExs,
+    sum(case when custSource like '%保有%' then totalAmt else 0 end) retain,
+    sum(case when custSource like '%介绍%' then totalAmt else 0 end) introduce,
+    YJCDT
+    into #H
+    from #E
+    group by YJCDT
+
+    select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #H where YJCDT between @StartDT and @EndDT
+    drop table #H
+    end
+
     drop table #E
     drop table #G
     drop table #D

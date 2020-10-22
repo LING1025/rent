@@ -16,8 +16,9 @@ public class MonGoalQueryParam implements Serializable {
     private String customer;
     private String startDate;
     private String endDate;
+    private Integer typeQuery;// 1 新增契约租金-车辆来源 2 新增契约台数-车辆来源
 
-    public MonGoalQueryParam(Integer inc, Integer type, String year, String month, Integer flag, String customer, String startDate, String endDate) {
+    public MonGoalQueryParam(Integer inc, Integer type, String year, String month, Integer flag, String customer, String startDate, String endDate, Integer typeQuery) {
         this.inc = inc;
         this.type = type;
         this.year = year;
@@ -26,5 +27,6 @@ public class MonGoalQueryParam implements Serializable {
         this.customer = customer;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.typeQuery = typeQuery;
     }
 }
