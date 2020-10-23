@@ -42,6 +42,16 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectCarSourceRent(monGoalQueryParam);
     }
 
+    @Override
+    public CustomerNum selectCustomerNum(CusQueryParam cusQueryParam) {
+        return orderMapper.selectCustomerNum(cusQueryParam);
+    }
+
+    @Override
+    public CustomerNum selectLm(LmCusQueryParam lmCusQueryParam) {
+        return orderMapper.selectLm(lmCusQueryParam);
+    }
+
     /*@Override
     public PageInfo<CaseExecListDto> selectCaseExecListDto(CaseProQueryParam caseProQueryParam) {
         PageHelper.startPage(caseProQueryParam.getPageNum(),caseProQueryParam.getPageSize());

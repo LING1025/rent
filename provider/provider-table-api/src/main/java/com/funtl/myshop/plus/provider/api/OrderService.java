@@ -45,4 +45,18 @@ public interface OrderService{
      * @return
      */
     CarSourceRent selectCarSourceRent(MonGoalQueryParam monGoalQueryParam);
+
+    /**
+     * 保有客户台数
+     * @param cusQueryParam
+     * @return
+     */
+    CustomerNum selectCustomerNum(CusQueryParam cusQueryParam);
+
+    /**
+     * 上个月保有客户台数
+     * @param lmCusQueryParam
+     * @return
+     */
+    CustomerNum selectLm(LmCusQueryParam lmCusQueryParam);
 }

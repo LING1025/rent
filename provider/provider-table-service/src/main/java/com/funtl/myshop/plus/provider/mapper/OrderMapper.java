@@ -1,9 +1,7 @@
 package com.funtl.myshop.plus.provider.mapper;
 
 import com.funtl.myshop.plus.provider.domain.*;
-import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
-import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
-import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
+import com.funtl.myshop.plus.provider.dto.*;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.MyMapper;
 
@@ -19,6 +17,10 @@ public interface OrderMapper extends MyMapper<Order> {
     ThisMonthTar selectThisMonReal(@Param("param") MonGoalQueryParam monGoalQueryParam);
 
     CarSourceRent selectCarSourceRent(@Param("param") MonGoalQueryParam monGoalQueryParam);
+
+    CustomerNum selectCustomerNum(@Param("param") CusQueryParam cusQueryParam);
+
+    CustomerNum selectLm(@Param("param") LmCusQueryParam lmCusQueryParam);
 
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);

@@ -4,9 +4,7 @@ import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.IncService;
 import com.funtl.myshop.plus.provider.api.OrderService;
 import com.funtl.myshop.plus.provider.domain.*;
-import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
-import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
-import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
+import com.funtl.myshop.plus.provider.dto.*;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -142,6 +140,7 @@ public class TableTwoController {
         thisMonthTar1.setIntroduceNew(thisMonthTar1.getIntroduce().toString());
         thisMonthTar1.setTotalNew(thisMonthTar1.getTotalNumAmt().toString());
         thisMonthTar1.setTableName("当月目标");
+        list.add(thisMonthTar1);
 
 
         //当月实绩
@@ -152,7 +151,7 @@ public class TableTwoController {
         thisMonthTar2.setIntroduceNew(thisMonthTar2.getIntroduce().toString());
         thisMonthTar2.setTotalNew(thisMonthTar2.getTotalNumAmt().toString());
         thisMonthTar2.setTableName("当月实绩");
-
+        list.add(thisMonthTar2);
 
         NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
 
@@ -167,6 +166,7 @@ public class TableTwoController {
         thisMonthTar3.setRetainNew(nt.format(thisMonthTar3.getRetain()));
         thisMonthTar3.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
         thisMonthTar3.setIntroduceNew(nt.format(thisMonthTar3.getIntroduce()));
+        list.add(thisMonthTar3);
 
         //达成率
         ThisMonthTar thisMonthTar4 = new ThisMonthTar();
@@ -179,6 +179,7 @@ public class TableTwoController {
         thisMonthTar4.setRetainNew(nt.format(thisMonthTar4.getRetain()));
         thisMonthTar4.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP));
         thisMonthTar4.setIntroduceNew(nt.format(thisMonthTar4.getIntroduce()));
+        list.add(thisMonthTar4);
 
         //上月实绩
         Integer lastY = Integer.valueOf(startYear);
@@ -199,6 +200,7 @@ public class TableTwoController {
         thisMonthTar5.setNewExsNew(thisMonthTar5.getNewExs().toString());
         thisMonthTar5.setRetainNew(thisMonthTar5.getRetain().toString());
         thisMonthTar5.setIntroduceNew(thisMonthTar5.getIntroduce().toString());
+        list.add(thisMonthTar5);
 
         //环比
         ThisMonthTar thisMonthTar6 = new ThisMonthTar();
@@ -225,6 +227,7 @@ public class TableTwoController {
             thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
             thisMonthTar6.setIntroduceNew(nt.format(thisMonthTar6.getIntroduce()));
         }
+        list.add(thisMonthTar6);
 
         //去年实绩
         Integer lYear = Integer.valueOf(startYear) - 1;
@@ -238,6 +241,7 @@ public class TableTwoController {
         thisMonthTar7.setNewExsNew(thisMonthTar7.getNewExs().toString());
         thisMonthTar7.setRetainNew(thisMonthTar7.getRetain().toString());
         thisMonthTar7.setIntroduceNew(thisMonthTar7.getIntroduce().toString());
+        list.add(thisMonthTar7);
 
         //结构比
         ThisMonthTar thisMonthTar8 = new ThisMonthTar();
@@ -250,6 +254,7 @@ public class TableTwoController {
         thisMonthTar8.setRetainNew(nt.format(thisMonthTar8.getRetain()));
         thisMonthTar8.setIntroduce(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
         thisMonthTar8.setIntroduceNew(nt.format(thisMonthTar8.getIntroduce()));
+        list.add(thisMonthTar8);
 
         //同期对比
         ThisMonthTar thisMonthTar9 = new ThisMonthTar();
@@ -276,17 +281,8 @@ public class TableTwoController {
             thisMonthTar9.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
             thisMonthTar9.setIntroduceNew(nt.format(thisMonthTar9.getIntroduce()));
         }
-
-        //将查到的数据插入列表中
-        list.add(thisMonthTar1);
-        list.add(thisMonthTar2);
-        list.add(thisMonthTar3);
-        list.add(thisMonthTar4);
-        list.add(thisMonthTar5);
-        list.add(thisMonthTar6);
-        list.add(thisMonthTar7);
-        list.add(thisMonthTar8);
         list.add(thisMonthTar9);
+
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 
@@ -493,6 +489,51 @@ public class TableTwoController {
         carSourceRent7.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
         carSourceRent7.setTotalNumAmtN(nt.format(carSourceRent7.getTotalNumAmt()));
         list.add(carSourceRent7);
+
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
+
+    @ApiOperation(value = "保有客户台数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryCustomerNum")
+    public ResponseResult<List<CustomerNum>> queryCustomerNum(@RequestParam(name = "startDate",required = false) String startDate,
+                                                                  @RequestParam(name = "endDate",required = false) String endDate) throws ParseException {
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
+        }
+        List<CustomerNum> list = Lists.newArrayList();
+        CusQueryParam cusQueryParam = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon),0,0,0,0,startDate,endDate);
+        CustomerNum customerNum1 = orderService.selectCustomerNum(cusQueryParam);
+        /*if (customerNum1.getCreateNum() == null){
+            customerNum1.setCreateNumN(String.valueOf(0));
+        }*/
+        customerNum1.setCreateNumN(customerNum1.getCreateNum().toString());
+        customerNum1.setEndNumN(customerNum1.getEndNum().toString());
+        customerNum1.setBeforeEndNumN(customerNum1.getBeforeEndNum().toString());
+        customerNum1.setTableName("当月实绩");
+
+        LmCusQueryParam lmCusQueryParam = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0);
+        CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam);
+        customerNum1.setLmCusNumN(customerNum2.getLmCusNum().toString());
+        customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum1.getEndNum() - customerNum1.getBeforeEndNum());
+        customerNum1.setTmCusNumN(customerNum1.getTmCusNum().toString());
+        list.add(customerNum1);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
