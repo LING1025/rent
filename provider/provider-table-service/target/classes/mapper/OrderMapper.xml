@@ -1174,4 +1174,330 @@ drop table #D
     drop table #D
     end
   </select>
+  <resultMap id="queryCustomerNum" type="com.funtl.myshop.plus.provider.domain.CustomerNum">
+    <result column="createNum" jdbcType="INTEGER" property="createNum" />
+    <result column="endNum" jdbcType="INTEGER" property="endNum" />
+    <result column="beforeEndNum" jdbcType="INTEGER" property="beforeEndNum" />
+  </resultMap>
+    <select id="selectCustomerNum" resultMap="queryCustomerNum">
+        ----S_Credit_ORder
+declare
+@Type int =7,
+@YY int=2020,
+@MM int=10,
+@Order_Type int=0,
+@Inc_Auto bigint=0,
+@pageSize    int=0,
+@page        int=0,
+@StartDT datetime = '2020-10-01',
+@EndDT datetime = '2020-10-31'
+
+	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
+	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
+	,Status int,Inc_Auto bigint,Carbase_Auto bigint,TradeItem_Auto bigint,Sales_Auto bigint,MAmt int,CarSource int,CarDT nvarchar(10),MakDT nvarchar(10))
+	select @YY_T=DATEPART(YYYY,getdate())
+	select @MM_T=DATEPART(MM,getdate())
+   declare @D_Q nvarchar(40),@D_T nvarchar(40),@Day_F nvarchar(40)
+   select @D_Q=convert(nvarchar(40),convert(datetime,convert(char(4),@YY)+'/'+convert(char(2),@MM)+'/01'),111)
+   select @D_T=convert(nvarchar(40),convert(datetime,convert(char(4),@YY_T)+'/'+convert(char(2),@MM_T)+'/01'),111)
+   if(@D_Q>=@D_T)
+   begin
+      select @Day_T=convert(nvarchar(20),DATEADD(dd,-1,DATEADD(MM,1,@D_T)),111)
+	  select @Day_F=convert(nvarchar(20),@D_T,111)
+	  select @YY=DATEPART(YY,@Day_T)
+	  select @MM=DATEPART(MM,@Day_T)
+   end
+   if(@D_Q&lt;@D_T)
+   begin
+      select @Day_T=convert(nvarchar(20),DATEADD(dd,-1,DATEADD(MM,1,@D_Q)),111)
+	  select @Day_F=convert(nvarchar(20),@D_Q,111)
+   end
+   --select Day_T=@Day_T
+    insert into @Order_Q(Order_Auto,RentType,OrderType,StartDT,EndDT,ResDT,Status,Inc_Auto,Carbase_Auto,TradeItem_Auto,Sales_Auto,MAmt ,CarSource ,CarDT ,MakDT)
+	select a.Order_Auto,a.RentType,isnull(b.OrderType,a.OrderType) OrderType,StartDT=convert(nvarchar(20),a.StartDT,111),EndDT=convert(nvarchar(20),a.EndDT,111)
+	,ResDT=convert(nvarchar(20),a.ResDT,111),a.Status,a.Inc_Auto,a.CarBase_Auto,a.TradeItem_Auto,a.Sales_Auto,a.MAmt,b.CarSource,convert(nvarchar(10),c.CarDT,111),convert(nvarchar(10),c.MakDT,111)
+	from [order] a
+	left join orders b on isnull(a.orders_auto,0) > 0 and b.orders_auto = a.orders_auto
+	left join CarBase c on c.CarBase_Auto = a.CarBase_Auto
+	where a.OrderType!=3---不含月租
+	and
+    (
+      (a.[Status]=30  and ((a.EndDT&lt;=@Day_T) or (a.EndDT>@Day_T and a.StartDT&lt;=@Day_T))) or
+	  (a.[Status]=40 and a.ResDT>@Day_T and (
+	   (convert(nvarchar(20),a.StartDT,111)&lt;@Day_F and convert(nvarchar(20),a.EndDT,111)>@Day_T)
+	   or (convert(nvarchar(20),a.StartDT,111)&lt;@Day_F and convert(nvarchar(20),a.EndDT,111) between @Day_F and @Day_T) or
+	   (convert(nvarchar(20),a.EndDT,111)>@Day_T and convert(nvarchar(20),a.StartDT,111) between @Day_F and @Day_T)
+	   ))
+    )
+    and (isnull(b.OrderType,a.OrderType)=@Order_Type or @Order_Type=0)
+
+	if(@Type=5 or @Type=7)
+    begin
+       select t1.*, Is_carfix=case isnull(t5.RealAmt,0) when 0 then 'N' else 'Y' end,OrderType_D=isnull(t3.ItemName,'')
+	   into #Order_F
+	   from @Order_Q t1
+	   left outer join ItemCode t3 on t1.OrderType=t3.num and t3.ItemType=326
+	   left outer join OrderBudget t5 on t1.Order_Auto=t5.Order_Auto and t5.Type_Auto=1
+	   where (OrderType=@Order_Type or @Order_Type=0)
+	   and (Inc_Auto=@Inc_Auto or @Inc_Auto=0)  --车种 Category  226
+
+
+	   ---交强险公司---
+	   select t1.EndDT,t2.Order_Auto,t2.Carbase_Auto,t1.Supplier,Ins_EndDT=convert(nvarchar(20),t1.EndDT,111)
+	   into #Ins_NN
+	   from insure2 t1,#Order_F t2
+	   where t1.InsureType=0
+	   and t1.Status!=-10
+	   and t1.CarBase_Auto=t2.Carbase_Auto
+	   and
+	   (
+	   (convert(nvarchar(20),t1.StartDT,111)&lt;@Day_F and convert(nvarchar(20),t1.EndDT,111)>@Day_T) or
+	   (convert(nvarchar(20),t1.StartDT,111)&lt;@Day_F and convert(nvarchar(20),t1.EndDT,111) between @Day_F and @Day_T) or
+	   (convert(nvarchar(20),t1.EndDT,111)>@Day_T and convert(nvarchar(20),t1.StartDT,111) between @Day_F and @Day_T)
+	   )
+
+
+	   select  Order_Auto, Carbase_Auto,Ins_EndDT=MAX(Ins_EndDT)
+	   into #Ins_NN_
+	   from #Ins_NN
+	   group by Order_Auto,Carbase_Auto
+
+	   select distinct t1.*,t2.Supplier
+	   into #Ins_N
+	   from #Ins_NN_ t1,#Ins_NN t2
+	   where t1.Carbase_Auto=t2.CarBase_Auto
+	   and t1.Ins_EndDT=t2.Ins_EndDT
+	   and t1.Order_Auto=t2.Order_Auto
+
+	select d.Order_Auto,case when g.Num = 11 then g.ItemName+ '-'+j.ItemName else g.ItemName end  orderLaw
+	into #order_Law
+	from (
+	select a.Order_Auto, max(c.Registerdt) Registerdt
+	from #Order_F a
+	LEFT JOIN LawCaseInfo  b ON b.Order_Auto = a.Order_Auto
+	left join Law_Register c on c.LawCase_Auto = b.LawCase_Auto
+	group by a.Order_Auto
+	) d
+	left join LawCaseInfo e on e.Order_Auto = d.Order_Auto
+	inner join Law_Register f on f.LawCase_Auto = e.LawCase_Auto and f.Registerdt = d.Registerdt
+	left join ItemCode g on g.ItemType = 2027 and g.Num = e.[Status]
+	left join Law_Closecase h on h.LawCase_Auto = e.LawCase_Auto
+	left join ItemCode j on j.ItemType = 2021 and j.Num = h.Closecasetype
+
+	   select t1.*--, Is_carfix=case isnull(t5.RealAmt,0) when 0 then 'N' else 'Y' end,OrderType_D=isnull(t3.ItemName,'')
+	   ,Category_D=isnull(t4.ItemName,'') ,Status_D=isnull(t6.ItemName,''),Sales_N=isnull(t7.FName,''),Ins_EndDT=isnull(t8.Ins_EndDT,'')
+	   ,Ins_name=isnull(t10.SName,'') ,Inc_Name=isnull(t14.SName,''),t2.MakNo,ClasenName=isnull(t15.ClasenName ,'')
+	   ,CusName=isnull(t16.SName,''),OrderStatus_D=case t1.status when 30 then '正常' when 40 then '解约' end
+	   ,t17.ItemName CarSourceName,t18.orderLaw
+	   into #ttt
+	   from #Order_F t1
+	   inner join CarBase t2 on t1.Carbase_Auto=t2.CarBase_Auto
+	   left outer join ItemCode t3 on t1.OrderType=t3.num and t3.ItemType=326
+	   left outer join ItemCode t4 on t2.Category=t4.num and t4.ItemType=226--车种
+	   left outer join ItemCode t6 on t2.Status=t6.num and t6.ItemType=233--牌照状态
+	   left outer join OrderBudget t5 on t1.Order_Auto=t5.Order_Auto and t5.Type_Auto=1
+	   left outer join v_Emp  t7 on t7.User_Auto=t1.Sales_Auto
+	   left outer join #Ins_N t8 on t8.Order_Auto=t1.Order_Auto and t2.CarBase_Auto=t8.Carbase_Auto
+	   left outer join  supplier t9 on t9.Supplier_Auto=t8.Supplier and t9.SupplierType=1
+	   left outer join  TradeItem t10 on t10.TradeItem_Auto=t9.TradeItem_Auto
+	   left outer join Inc t14 on t14.Inc_Auto=t1.Inc_Auto
+	   left outer join Clasen t15 on t15.Clasen_Auto=t2.Clasen_Auto
+	   left outer join  TradeItem t16 on t16.TradeItem_Auto=t1.TradeItem_Auto
+	   left outer join  ItemCode t17 on t1.CarSource=t17.num and t17.ItemType=503 --车辆来源
+	   left join #order_Law t18 on t18.Order_Auto = t1.Order_Auto
+	   order by t1.Inc_Auto,t1.OrderType
+
+	   if(@Type=7 )
+	   begin
+	   declare
+    @createNum int,
+    @endNum int,
+    @beforeEndNum int
+
+	   --保有台数计算--公务车9 短租2 不计算在内
+	   --1.新增保有台数
+	      select @createNum=count(*) from #ttt where StartDT between @StartDT and @EndDT and OrderType not in (2,9)
+	   --2.期满解约
+	      select @endNum=count(*) from #ttt where EndDT between @StartDT and @EndDT and OrderType not in (2,9)
+	   --3.提前解约
+	      select
+		  @beforeEndNum=count(*)
+		  from #ttt
+		  where
+		  EndDT between @StartDT and @EndDT
+		  and
+		  ResDT between @StartDT and @EndDT
+		  and
+		  OrderType not in (2,9)
+
+		  select @createNum createNum,@endNum endNum,@beforeEndNum beforeEndNum
+	   --4.上个月保有 between DATEADD(m,-1,@StartDT) and DATEADD(m,-1,@EndDT)
+	   --本月
+	   --select count(*) from #ttt where OrderType not in (2,9)
+	   end
+	   --exec dbo.xp_GetPage  'select * from #ttt',2,20,1
+	   if(@Type=5 )
+	   begin
+	      exec proc_paged_2part_selectMax '#ttt','*',@pageSize,@page,'Order_Auto',0,null,'Order_Auto',0
+	   end
+	end
+
+	drop table #Order_F
+	drop table #Ins_NN_
+	drop table #Ins_NN
+	drop table #Ins_N
+	drop table #order_Law
+	drop table #ttt
+    </select>
+
+  <resultMap id="queryLm" type="com.funtl.myshop.plus.provider.domain.CustomerNum">
+        <result column="lmCusNum" jdbcType="INTEGER" property="lmCusNum" />
+  </resultMap>
+  <select id="selectLm" resultMap="queryLm">
+    ----S_Credit_ORder
+declare
+@Type int =7,
+@YY int=2020,
+@MM int=10,
+@Order_Type int=0,
+@Inc_Auto bigint=0,
+@pageSize    int=0,
+@page        int=0,
+@StartDT datetime = '2020-10-01',
+@EndDT datetime = '2020-10-31'
+
+	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
+	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
+	,Status int,Inc_Auto bigint,Carbase_Auto bigint,TradeItem_Auto bigint,Sales_Auto bigint,MAmt int,CarSource int,CarDT nvarchar(10),MakDT nvarchar(10))
+	select @YY_T=DATEPART(YYYY,getdate())
+	select @MM_T=DATEPART(MM,getdate())
+   declare @D_Q nvarchar(40),@D_T nvarchar(40),@Day_F nvarchar(40)
+   select @D_Q=convert(nvarchar(40),convert(datetime,convert(char(4),@YY)+'/'+convert(char(2),@MM)+'/01'),111)
+   select @D_T=convert(nvarchar(40),convert(datetime,convert(char(4),@YY_T)+'/'+convert(char(2),@MM_T)+'/01'),111)
+   if(@D_Q>=@D_T)
+   begin
+      select @Day_T=convert(nvarchar(20),DATEADD(dd,-1,DATEADD(MM,1,@D_T)),111)
+	  select @Day_F=convert(nvarchar(20),@D_T,111)
+	  select @YY=DATEPART(YY,@Day_T)
+	  select @MM=DATEPART(MM,@Day_T)
+   end
+   if(@D_Q&lt;@D_T)
+   begin
+      select @Day_T=convert(nvarchar(20),DATEADD(dd,-1,DATEADD(MM,1,@D_Q)),111)
+	  select @Day_F=convert(nvarchar(20),@D_Q,111)
+   end
+   --select Day_T=@Day_T
+    insert into @Order_Q(Order_Auto,RentType,OrderType,StartDT,EndDT,ResDT,Status,Inc_Auto,Carbase_Auto,TradeItem_Auto,Sales_Auto,MAmt ,CarSource ,CarDT ,MakDT)
+	select a.Order_Auto,a.RentType,isnull(b.OrderType,a.OrderType) OrderType,StartDT=convert(nvarchar(20),a.StartDT,111),EndDT=convert(nvarchar(20),a.EndDT,111)
+	,ResDT=convert(nvarchar(20),a.ResDT,111),a.Status,a.Inc_Auto,a.CarBase_Auto,a.TradeItem_Auto,a.Sales_Auto,a.MAmt,b.CarSource,convert(nvarchar(10),c.CarDT,111),convert(nvarchar(10),c.MakDT,111)
+	from [order] a
+	left join orders b on isnull(a.orders_auto,0) > 0 and b.orders_auto = a.orders_auto
+	left join CarBase c on c.CarBase_Auto = a.CarBase_Auto
+	where a.OrderType!=3---不含月租
+	and
+    (
+      (a.[Status]=30  and ((a.EndDT&lt;=@Day_T) or (a.EndDT>@Day_T and a.StartDT&lt;=@Day_T))) or
+	  (a.[Status]=40 and a.ResDT>@Day_T and (
+	   (convert(nvarchar(20),a.StartDT,111)&lt;@Day_F and convert(nvarchar(20),a.EndDT,111)>@Day_T)
+	   or (convert(nvarchar(20),a.StartDT,111)&lt;@Day_F and convert(nvarchar(20),a.EndDT,111) between @Day_F and @Day_T) or
+	   (convert(nvarchar(20),a.EndDT,111)>@Day_T and convert(nvarchar(20),a.StartDT,111) between @Day_F and @Day_T)
+	   ))
+    )
+    and (isnull(b.OrderType,a.OrderType)=@Order_Type or @Order_Type=0)
+
+	if(@Type=5 or @Type=7)
+    begin
+       select t1.*, Is_carfix=case isnull(t5.RealAmt,0) when 0 then 'N' else 'Y' end,OrderType_D=isnull(t3.ItemName,'')
+	   into #Order_F
+	   from @Order_Q t1
+	   left outer join ItemCode t3 on t1.OrderType=t3.num and t3.ItemType=326
+	   left outer join OrderBudget t5 on t1.Order_Auto=t5.Order_Auto and t5.Type_Auto=1
+	   where (OrderType=@Order_Type or @Order_Type=0)
+	   and (Inc_Auto=@Inc_Auto or @Inc_Auto=0)  --车种 Category  226
+
+
+	   ---交强险公司---
+	   select t1.EndDT,t2.Order_Auto,t2.Carbase_Auto,t1.Supplier,Ins_EndDT=convert(nvarchar(20),t1.EndDT,111)
+	   into #Ins_NN
+	   from insure2 t1,#Order_F t2
+	   where t1.InsureType=0
+	   and t1.Status!=-10
+	   and t1.CarBase_Auto=t2.Carbase_Auto
+	   and
+	   (
+	   (convert(nvarchar(20),t1.StartDT,111)&lt;@Day_F and convert(nvarchar(20),t1.EndDT,111)>@Day_T) or
+	   (convert(nvarchar(20),t1.StartDT,111)&lt;@Day_F and convert(nvarchar(20),t1.EndDT,111) between @Day_F and @Day_T) or
+	   (convert(nvarchar(20),t1.EndDT,111)>@Day_T and convert(nvarchar(20),t1.StartDT,111) between @Day_F and @Day_T)
+	   )
+
+
+	   select  Order_Auto, Carbase_Auto,Ins_EndDT=MAX(Ins_EndDT)
+	   into #Ins_NN_
+	   from #Ins_NN
+	   group by Order_Auto,Carbase_Auto
+
+	   select distinct t1.*,t2.Supplier
+	   into #Ins_N
+	   from #Ins_NN_ t1,#Ins_NN t2
+	   where t1.Carbase_Auto=t2.CarBase_Auto
+	   and t1.Ins_EndDT=t2.Ins_EndDT
+	   and t1.Order_Auto=t2.Order_Auto
+
+	select d.Order_Auto,case when g.Num = 11 then g.ItemName+ '-'+j.ItemName else g.ItemName end  orderLaw
+	into #order_Law
+	from (
+	select a.Order_Auto, max(c.Registerdt) Registerdt
+	from #Order_F a
+	LEFT JOIN LawCaseInfo  b ON b.Order_Auto = a.Order_Auto
+	left join Law_Register c on c.LawCase_Auto = b.LawCase_Auto
+	group by a.Order_Auto
+	) d
+	left join LawCaseInfo e on e.Order_Auto = d.Order_Auto
+	inner join Law_Register f on f.LawCase_Auto = e.LawCase_Auto and f.Registerdt = d.Registerdt
+	left join ItemCode g on g.ItemType = 2027 and g.Num = e.[Status]
+	left join Law_Closecase h on h.LawCase_Auto = e.LawCase_Auto
+	left join ItemCode j on j.ItemType = 2021 and j.Num = h.Closecasetype
+
+	   select t1.*--, Is_carfix=case isnull(t5.RealAmt,0) when 0 then 'N' else 'Y' end,OrderType_D=isnull(t3.ItemName,'')
+	   ,Category_D=isnull(t4.ItemName,'') ,Status_D=isnull(t6.ItemName,''),Sales_N=isnull(t7.FName,''),Ins_EndDT=isnull(t8.Ins_EndDT,'')
+	   ,Ins_name=isnull(t10.SName,'') ,Inc_Name=isnull(t14.SName,''),t2.MakNo,ClasenName=isnull(t15.ClasenName ,'')
+	   ,CusName=isnull(t16.SName,''),OrderStatus_D=case t1.status when 30 then '正常' when 40 then '解约' end
+	   ,t17.ItemName CarSourceName,t18.orderLaw
+	   into #ttt
+	   from #Order_F t1
+	   inner join CarBase t2 on t1.Carbase_Auto=t2.CarBase_Auto
+	   left outer join ItemCode t3 on t1.OrderType=t3.num and t3.ItemType=326
+	   left outer join ItemCode t4 on t2.Category=t4.num and t4.ItemType=226--车种
+	   left outer join ItemCode t6 on t2.Status=t6.num and t6.ItemType=233--牌照状态
+	   left outer join OrderBudget t5 on t1.Order_Auto=t5.Order_Auto and t5.Type_Auto=1
+	   left outer join v_Emp  t7 on t7.User_Auto=t1.Sales_Auto
+	   left outer join #Ins_N t8 on t8.Order_Auto=t1.Order_Auto and t2.CarBase_Auto=t8.Carbase_Auto
+	   left outer join  supplier t9 on t9.Supplier_Auto=t8.Supplier and t9.SupplierType=1
+	   left outer join  TradeItem t10 on t10.TradeItem_Auto=t9.TradeItem_Auto
+	   left outer join Inc t14 on t14.Inc_Auto=t1.Inc_Auto
+	   left outer join Clasen t15 on t15.Clasen_Auto=t2.Clasen_Auto
+	   left outer join  TradeItem t16 on t16.TradeItem_Auto=t1.TradeItem_Auto
+	   left outer join  ItemCode t17 on t1.CarSource=t17.num and t17.ItemType=503 --车辆来源
+	   left join #order_Law t18 on t18.Order_Auto = t1.Order_Auto
+	   order by t1.Inc_Auto,t1.OrderType
+
+	   if(@Type=7 )
+	   begin
+       --保有台数计算
+	   --4.上个月保有
+	   select count(*) lmCusNum from #ttt where OrderType not in (2,9)
+	   end
+	   if(@Type=5 )
+	   begin
+	      exec proc_paged_2part_selectMax '#ttt','*',@pageSize,@page,'Order_Auto',0,null,'Order_Auto',0
+	   end
+	end
+
+	drop table #Order_F
+	drop table #Ins_NN_
+	drop table #Ins_NN
+	drop table #Ins_N
+	drop table #order_Law
+	drop table #ttt
+  </select>
 </mapper>
