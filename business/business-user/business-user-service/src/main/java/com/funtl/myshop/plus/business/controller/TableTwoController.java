@@ -4,9 +4,7 @@ import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.IncService;
 import com.funtl.myshop.plus.provider.api.OrderService;
 import com.funtl.myshop.plus.provider.domain.*;
-import com.funtl.myshop.plus.provider.dto.CaseProQueryParam;
-import com.funtl.myshop.plus.provider.dto.LineChartQueryParam;
-import com.funtl.myshop.plus.provider.dto.MonGoalQueryParam;
+import com.funtl.myshop.plus.provider.dto.*;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -491,6 +489,51 @@ public class TableTwoController {
         carSourceRent7.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
         carSourceRent7.setTotalNumAmtN(nt.format(carSourceRent7.getTotalNumAmt()));
         list.add(carSourceRent7);
+
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
+
+    @ApiOperation(value = "保有客户台数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryCustomerNum")
+    public ResponseResult<List<CustomerNum>> queryCustomerNum(@RequestParam(name = "startDate",required = false) String startDate,
+                                                                  @RequestParam(name = "endDate",required = false) String endDate) throws ParseException {
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("-")[0];
+        String endYear = endDate.split("-")[0];
+        String startMon = startDate.split("-")[1];
+        String endMon = endDate.split("-")[1];
+        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
+        }
+        List<CustomerNum> list = Lists.newArrayList();
+        CusQueryParam cusQueryParam = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon),0,0,0,0,startDate,endDate);
+        CustomerNum customerNum1 = orderService.selectCustomerNum(cusQueryParam);
+        /*if (customerNum1.getCreateNum() == null){
+            customerNum1.setCreateNumN(String.valueOf(0));
+        }*/
+        customerNum1.setCreateNumN(customerNum1.getCreateNum().toString());
+        customerNum1.setEndNumN(customerNum1.getEndNum().toString());
+        customerNum1.setBeforeEndNumN(customerNum1.getBeforeEndNum().toString());
+        customerNum1.setTableName("当月实绩");
+
+        LmCusQueryParam lmCusQueryParam = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon),0,0,0,0);
+        CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam);
+        customerNum1.setLmCusNumN(customerNum2.getLmCusNum().toString());
+        customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum1.getEndNum() - customerNum1.getBeforeEndNum());
+        customerNum1.setTmCusNumN(customerNum1.getTmCusNum().toString());
+        list.add(customerNum1);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
