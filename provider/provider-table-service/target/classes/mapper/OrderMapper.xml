@@ -1182,15 +1182,15 @@ drop table #D
     <select id="selectCustomerNum" resultMap="queryCustomerNum">
         ----S_Credit_ORder
 declare
-@Type int =7,
-@YY int=2020,
-@MM int=10,
-@Order_Type int=0,
-@Inc_Auto bigint=0,
-@pageSize    int=0,
-@page        int=0,
-@StartDT datetime = '2020-10-01',
-@EndDT datetime = '2020-10-31'
+@Type int = #{param.type},
+@YY int=#{param.yy},
+@MM int=#{param.mm},
+@Order_Type int=#{param.orderType},
+@Inc_Auto bigint=#{param.incAuto},
+@pageSize    int=#{param.pageSize},
+@page        int=#{param.page},
+@StartDT datetime = #{param.startDate},
+@EndDT datetime = #{param.endDate}
 
 	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
 	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
@@ -1356,15 +1356,13 @@ declare
   <select id="selectLm" resultMap="queryLm">
     ----S_Credit_ORder
 declare
-@Type int =7,
-@YY int=2020,
-@MM int=10,
-@Order_Type int=0,
-@Inc_Auto bigint=0,
-@pageSize    int=0,
-@page        int=0,
-@StartDT datetime = '2020-10-01',
-@EndDT datetime = '2020-10-31'
+    @Type int = #{param.type},
+    @YY int=#{param.yy},
+    @MM int=#{param.mm},
+    @Order_Type int=#{param.orderType},
+    @Inc_Auto bigint=#{param.incAuto},
+    @pageSize    int=#{param.pageSize},
+    @page        int=#{param.page}
 
 	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
 	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)

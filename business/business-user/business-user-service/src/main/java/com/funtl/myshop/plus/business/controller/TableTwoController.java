@@ -528,7 +528,7 @@ public class TableTwoController {
         customerNum1.setBeforeEndNumN(customerNum1.getBeforeEndNum().toString());
         customerNum1.setTableName("当月实绩");
 
-        LmCusQueryParam lmCusQueryParam = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon),0,0,0,0);
+        LmCusQueryParam lmCusQueryParam = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0);
         CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam);
         customerNum1.setLmCusNumN(customerNum2.getLmCusNum().toString());
         customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum1.getEndNum() - customerNum1.getBeforeEndNum());
