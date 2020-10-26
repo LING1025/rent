@@ -593,6 +593,25 @@ public class TableTwoController {
         customerNum5.setTableName("环比");
         list.add(customerNum5);
 
+        //去年实绩
+        Integer lYear = Integer.valueOf(startYear) - 1;
+        String lastYear = lYear.toString();
+        String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
+        String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
+        CusQueryParam cusQueryParam3 = new CusQueryParam(7,Integer.valueOf(lastYear),Integer.valueOf(startMon),0,0,0,0,lastSD,lastED);
+        CustomerNum customerNum6 = orderService.selectCustomerNum(cusQueryParam3);
+        customerNum6.setCreateNumN(customerNum6.getCreateNum().toString());
+        customerNum6.setEndNumN(customerNum6.getEndNum().toString());
+        customerNum6.setBeforeEndNumN(customerNum6.getBeforeEndNum().toString());
+        customerNum6.setTableName("去年实绩");
+        //前月保有客户台数
+        LmCusQueryParam lmCusQueryParam3 = new LmCusQueryParam(7,Integer.valueOf(lastYear),Integer.valueOf(startMon) - 1,0,0,0,0);
+        CustomerNum customerNum7 = orderService.selectLm(lmCusQueryParam3);
+        customerNum6.setLmCusNumN(customerNum7.getLmCusNum().toString());
+        customerNum6.setLmCusNum(customerNum7.getLmCusNum());
+        customerNum6.setTmCusNum(customerNum7.getLmCusNum() + customerNum6.getCreateNum() - customerNum6.getEndNum() - customerNum6.getBeforeEndNum());
+        customerNum6.setTmCusNumN(customerNum6.getTmCusNum().toString());
+        list.add(customerNum6);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
