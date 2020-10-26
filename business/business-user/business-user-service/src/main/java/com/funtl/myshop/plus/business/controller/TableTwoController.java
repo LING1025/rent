@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -533,6 +534,7 @@ public class TableTwoController {
         LmCusQueryParam lmCusQueryParam1 = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0);
         CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam1);
         customerNum1.setLmCusNumN(customerNum2.getLmCusNum().toString());
+        customerNum1.setLmCusNum(customerNum2.getLmCusNum());
         customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum1.getEndNum() - customerNum1.getBeforeEndNum());
         customerNum1.setTmCusNumN(customerNum1.getTmCusNum().toString());
         list.add(customerNum1);
@@ -559,10 +561,37 @@ public class TableTwoController {
         LmCusQueryParam lmCusQueryParam2 = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 2,0,0,0,0);
         CustomerNum customerNum4 = orderService.selectLm(lmCusQueryParam2);
         customerNum3.setLmCusNumN(customerNum4.getLmCusNum().toString());
+        customerNum3.setLmCusNum(customerNum4.getLmCusNum());
         customerNum3.setTmCusNum(customerNum4.getLmCusNum() + customerNum3.getCreateNum() - customerNum3.getEndNum() - customerNum3.getBeforeEndNum());
         customerNum3.setTmCusNumN(customerNum3.getTmCusNum().toString());
         list.add(customerNum3);
 
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+        //设置百分数精确度2即保留两位小数
+//        nt.setMinimumFractionDigits(2);
+        //环比
+        CustomerNum customerNum5 = new CustomerNum();
+        customerNum5.setLmCusNumN(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum3.getLmCusNum().doubleValue() - 1));
+        if (customerNum3.getCreateNum() == 0){
+            customerNum5.setCreateNumN("-");
+        }else {
+            customerNum5.setCreateNumN(nt.format(customerNum1.getCreateNum().doubleValue()/customerNum3.getCreateNum().doubleValue() - 1));
+        }
+
+        if (customerNum3.getEndNum() == 0){
+            customerNum5.setEndNumN("-");
+        }else{
+            customerNum5.setEndNumN(nt.format(customerNum1.getEndNum().doubleValue()/customerNum3.getEndNum().doubleValue() - 1));
+        }
+
+        if (customerNum3.getBeforeEndNum() == 0){
+            customerNum5.setBeforeEndNumN("-");
+        }else{
+            customerNum5.setBeforeEndNumN(nt.format(customerNum1.getBeforeEndNum().doubleValue()/customerNum3.getBeforeEndNum().doubleValue() - 1));
+        }
+        customerNum5.setTmCusNumN(nt.format(customerNum1.getTmCusNum().doubleValue()/customerNum3.getTmCusNum().doubleValue() - 1));
+        customerNum5.setTableName("环比");
+        list.add(customerNum5);
 
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
