@@ -613,6 +613,29 @@ public class TableTwoController {
         customerNum6.setTmCusNumN(customerNum6.getTmCusNum().toString());
         list.add(customerNum6);
 
+        //同期对比
+        CustomerNum customerNum8 = new CustomerNum();
+        customerNum8.setLmCusNumN(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum6.getLmCusNum().doubleValue() - 1));
+        if (customerNum6.getCreateNum() == 0){
+            customerNum8.setCreateNumN("-");
+        }else {
+            customerNum8.setCreateNumN(nt.format(customerNum1.getCreateNum().doubleValue()/customerNum6.getCreateNum().doubleValue() - 1));
+        }
+
+        if (customerNum6.getEndNum() == 0){
+            customerNum8.setEndNumN("-");
+        }else{
+            customerNum8.setEndNumN(nt.format(customerNum1.getEndNum().doubleValue()/customerNum6.getEndNum().doubleValue() - 1));
+        }
+
+        if (customerNum6.getBeforeEndNum() == 0){
+            customerNum8.setBeforeEndNumN("-");
+        }else{
+            customerNum8.setBeforeEndNumN(nt.format(customerNum1.getBeforeEndNum().doubleValue()/customerNum6.getBeforeEndNum().doubleValue() - 1));
+        }
+        customerNum8.setTmCusNumN(nt.format(customerNum1.getTmCusNum().doubleValue()/customerNum6.getTmCusNum().doubleValue() - 1));
+        customerNum8.setTableName("同期对比");
+        list.add(customerNum8);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
 }
