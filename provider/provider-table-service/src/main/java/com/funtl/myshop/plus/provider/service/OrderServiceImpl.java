@@ -48,8 +48,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CustomerNum selectLm(LmCusQueryParam lmCusQueryParam) {
-        return orderMapper.selectLm(lmCusQueryParam);
+    public CustomerNum selectLm(CusQueryParam cusQueryParam) {
+        return orderMapper.selectLm(cusQueryParam);
     }
 
     /*@Override

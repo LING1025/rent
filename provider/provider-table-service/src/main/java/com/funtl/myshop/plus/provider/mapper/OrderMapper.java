@@ -20,7 +20,7 @@ public interface OrderMapper extends MyMapper<Order> {
 
     CustomerNum selectCustomerNum(@Param("param") CusQueryParam cusQueryParam);
 
-    CustomerNum selectLm(@Param("param") LmCusQueryParam lmCusQueryParam);
+    CustomerNum selectLm(@Param("param") CusQueryParam cusQueryParam);
 
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);

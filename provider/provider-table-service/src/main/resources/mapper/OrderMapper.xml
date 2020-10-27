@@ -1176,8 +1176,6 @@ drop table #D
   </select>
   <resultMap id="queryCustomerNum" type="com.funtl.myshop.plus.provider.domain.CustomerNum">
     <result column="createNum" jdbcType="INTEGER" property="createNum" />
-    <result column="endNum" jdbcType="INTEGER" property="endNum" />
-    <result column="beforeEndNum" jdbcType="INTEGER" property="beforeEndNum" />
   </resultMap>
     <select id="selectCustomerNum" resultMap="queryCustomerNum">
         ----S_Credit_ORder
@@ -1310,31 +1308,10 @@ declare
 	   if(@Type=7 )
 	   begin
 	   declare
-    @createNum int,
-    @endNum int,
-    @beforeEndNum int
-
 	   --保有台数计算--公务车9 短租2 不计算在内
 	   --1.新增保有台数
-	      select @createNum=count(*) from #ttt where StartDT between @StartDT and @EndDT and OrderType not in (2,9)
-	   --2.期满解约
-	      select @endNum=count(*) from #ttt where EndDT between @StartDT and @EndDT and OrderType not in (2,9)
-	   --3.提前解约
-	      select
-		  @beforeEndNum=count(*)
-		  from #ttt
-		  where
-		  EndDT between @StartDT and @EndDT
-		  and
-		  ResDT between @StartDT and @EndDT
-		  and
-		  OrderType not in (2,9)
-
-		  select @createNum createNum,@endNum endNum,@beforeEndNum beforeEndNum
-	   --4.上个月保有 between DATEADD(m,-1,@StartDT) and DATEADD(m,-1,@EndDT)
-	   --本月
-	   --select count(*) from #ttt where OrderType not in (2,9)
-	   end
+      select createNum=count(*) from #ttt where StartDT between @StartDT and @EndDT and OrderType not in (2,9)
+      end
 	   --exec dbo.xp_GetPage  'select * from #ttt',2,20,1
 	   if(@Type=5 )
 	   begin
@@ -1351,7 +1328,9 @@ declare
     </select>
 
   <resultMap id="queryLm" type="com.funtl.myshop.plus.provider.domain.CustomerNum">
-        <result column="lmCusNum" jdbcType="INTEGER" property="lmCusNum" />
+    <result column="lmCusNum" jdbcType="INTEGER" property="lmCusNum" />
+    <result column="endNum" jdbcType="INTEGER" property="endNum" />
+    <result column="beforeEndNum" jdbcType="INTEGER" property="beforeEndNum" />
   </resultMap>
   <select id="selectLm" resultMap="queryLm">
     ----S_Credit_ORder
@@ -1362,7 +1341,9 @@ declare
     @Order_Type int=#{param.orderType},
     @Inc_Auto bigint=#{param.incAuto},
     @pageSize    int=#{param.pageSize},
-    @page        int=#{param.page}
+    @page        int=#{param.page},
+    @StartDT datetime = #{param.startDate},
+    @EndDT datetime = #{param.endDate}
 
 	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
 	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
@@ -1481,9 +1462,27 @@ declare
 
 	   if(@Type=7 )
 	   begin
-       --保有台数计算
-	   --4.上个月保有
-	   select count(*) lmCusNum from #ttt where OrderType not in (2,9)
+    declare
+    @endNum int,
+    @beforeEndNum int,
+    @lmCusNum int
+    --保有台数计算
+    --2.期满解约
+    select @endNum=count(*) from #ttt where EndDT between DATEADD(m,1,@StartDT) and DATEADD(m,1,@EndDT) and OrderType not in (2,9)
+    --3.提前解约
+    select
+    @beforeEndNum=count(*)
+    from #ttt
+    where
+    EndDT not between DATEADD(m,1,@StartDT) and DATEADD(m,1,@EndDT)
+    and
+    ResDT between DATEADD(m,1,@StartDT) and DATEADD(m,1,@EndDT)
+    and
+    OrderType not in (2,9)
+    --4.上个月保有
+    select @lmCusNum=count(*) from #ttt where StartDT &lt;= @EndDT and OrderType not in (2,9)
+
+    select @endNum endNum,@beforeEndNum beforeEndNum,@lmCusNum lmCusNum
 	   end
 	   if(@Type=5 )
 	   begin
