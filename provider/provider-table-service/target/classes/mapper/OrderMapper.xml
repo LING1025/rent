@@ -1178,17 +1178,17 @@ drop table #D
     <result column="createNum" jdbcType="INTEGER" property="createNum" />
   </resultMap>
     <select id="selectCustomerNum" resultMap="queryCustomerNum">
-        ----S_Credit_ORder
-declare
-@Type int = #{param.type},
-@YY int=#{param.yy},
-@MM int=#{param.mm},
-@Order_Type int=#{param.orderType},
-@Inc_Auto bigint=#{param.incAuto},
-@pageSize    int=#{param.pageSize},
-@page        int=#{param.page},
-@StartDT datetime = #{param.startDate},
-@EndDT datetime = #{param.endDate}
+
+    declare
+    @Type int = #{param.type},
+    @YY int=#{param.yy},
+    @MM int=#{param.mm},
+    @Order_Type int=#{param.orderType},
+    @Inc_Auto bigint=#{param.incAuto},
+    @pageSize    int=#{param.pageSize},
+    @page        int=#{param.page},
+    @StartDT datetime = #{param.startDate},
+    @EndDT datetime = #{param.endDate}
 
 	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
 	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
@@ -1307,7 +1307,6 @@ declare
 
 	   if(@Type=7 )
 	   begin
-	   declare
 	   --保有台数计算--公务车9 短租2 不计算在内
 	   --1.新增保有台数
       select createNum=count(*) from #ttt where StartDT between @StartDT and @EndDT and OrderType not in (2,9)
@@ -1333,8 +1332,8 @@ declare
     <result column="beforeEndNum" jdbcType="INTEGER" property="beforeEndNum" />
   </resultMap>
   <select id="selectLm" resultMap="queryLm">
-    ----S_Credit_ORder
-declare
+
+    declare
     @Type int = #{param.type},
     @YY int=#{param.yy},
     @MM int=#{param.mm},

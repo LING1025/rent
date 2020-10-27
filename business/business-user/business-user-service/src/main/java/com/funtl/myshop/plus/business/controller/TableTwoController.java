@@ -505,16 +505,16 @@ public class TableTwoController {
         if(startDate == null || endDate == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         Date date1 = format.parse(startDate);
         Date date2 = format.parse(endDate);
         if(date1.after(date2)){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
         }
-        String startYear = startDate.split("-")[0];
-        String endYear = endDate.split("-")[0];
-        String startMon = startDate.split("-")[1];
-        String endMon = endDate.split("-")[1];
+        String startYear = startDate.split("/")[0];
+        String endYear = endDate.split("/")[0];
+        String startMon = startDate.split("/")[1];
+        String endMon = endDate.split("/")[1];
         if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
         }
@@ -523,19 +523,16 @@ public class TableTwoController {
         //当月实绩
         CusQueryParam cusQueryParam1 = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon),0,0,0,0,startDate,endDate);
         CustomerNum customerNum1 = orderService.selectCustomerNum(cusQueryParam1);
-        /*if (customerNum1.getCreateNum() == null){
-            customerNum1.setCreateNumN(String.valueOf(0));
-        }*/
         customerNum1.setCreateNumN(customerNum1.getCreateNum().toString());
-        customerNum1.setEndNumN(customerNum1.getEndNum().toString());
-        customerNum1.setBeforeEndNumN(customerNum1.getBeforeEndNum().toString());
-        customerNum1.setTableName("当月实绩");
 
-        LmCusQueryParam lmCusQueryParam1 = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0);
+        CusQueryParam lmCusQueryParam1 = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0,startDate,endDate);
         CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam1);
+        customerNum1.setEndNumN(customerNum2.getEndNum().toString());
+        customerNum1.setBeforeEndNumN(customerNum2.getBeforeEndNum().toString());
+        customerNum1.setTableName("当月实绩");
         customerNum1.setLmCusNumN(customerNum2.getLmCusNum().toString());
         customerNum1.setLmCusNum(customerNum2.getLmCusNum());
-        customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum1.getEndNum() - customerNum1.getBeforeEndNum());
+        customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum2.getEndNum() - customerNum2.getBeforeEndNum());
         customerNum1.setTmCusNumN(customerNum1.getTmCusNum().toString());
         list.add(customerNum1);
 
@@ -546,23 +543,30 @@ public class TableTwoController {
             lastM = 12;
             lastY = Integer.valueOf(startYear) - 1;
         }
-        String lastStartMon = lastM.toString();
-        String lastStartYear = lastY.toString();
-        String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
-        String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
+        String lastStartDate = lastY.toString() + "/" + lastM.toString() + "/" + startDate.split("/")[2];
+        String lastEndDate = lastY.toString() + "/" + lastM.toString() + "/" + endDate.split("/")[2];
 
-        CusQueryParam cusQueryParam2 = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0,lastStartDate,lastEndDate);
+        CusQueryParam cusQueryParam2 = new CusQueryParam(7,lastY,lastM,0,0,0,0,lastStartDate,lastEndDate);
         CustomerNum customerNum3 = orderService.selectCustomerNum(cusQueryParam2);
         customerNum3.setCreateNumN(customerNum3.getCreateNum().toString());
-        customerNum3.setEndNumN(customerNum3.getEndNum().toString());
-        customerNum3.setBeforeEndNumN(customerNum3.getBeforeEndNum().toString());
-        customerNum3.setTableName("上月实绩");
         //前月保有客户台数
-        LmCusQueryParam lmCusQueryParam2 = new LmCusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 2,0,0,0,0);
+        Integer qYe = Integer.valueOf(startYear);
+        Integer qMon = Integer.valueOf(startMon) - 2;
+        if (qMon == 0){
+            qMon = 12;
+            qYe = Integer.valueOf(startYear) - 1;
+        }
+        String qStartDate = qYe.toString() + "/" + qMon.toString() + "/" + startDate.split("/")[2];
+        String qEndDate = qYe.toString() + "/" + qMon.toString() + "/" + endDate.split("/")[2];
+
+        CusQueryParam lmCusQueryParam2 = new CusQueryParam(7,qYe,qMon,0,0,0,0,qStartDate,qEndDate);
         CustomerNum customerNum4 = orderService.selectLm(lmCusQueryParam2);
+        customerNum3.setEndNumN(customerNum4.getEndNum().toString());
+        customerNum3.setBeforeEndNumN(customerNum4.getBeforeEndNum().toString());
+        customerNum3.setTableName("上月实绩");
         customerNum3.setLmCusNumN(customerNum4.getLmCusNum().toString());
         customerNum3.setLmCusNum(customerNum4.getLmCusNum());
-        customerNum3.setTmCusNum(customerNum4.getLmCusNum() + customerNum3.getCreateNum() - customerNum3.getEndNum() - customerNum3.getBeforeEndNum());
+        customerNum3.setTmCusNum(customerNum4.getLmCusNum() + customerNum3.getCreateNum() - customerNum4.getEndNum() - customerNum4.getBeforeEndNum());
         customerNum3.setTmCusNumN(customerNum3.getTmCusNum().toString());
         list.add(customerNum3);
 
@@ -571,23 +575,23 @@ public class TableTwoController {
 //        nt.setMinimumFractionDigits(2);
         //环比
         CustomerNum customerNum5 = new CustomerNum();
-        customerNum5.setLmCusNumN(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum3.getLmCusNum().doubleValue() - 1));
+        customerNum5.setLmCusNumN(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum4.getLmCusNum().doubleValue() - 1));
         if (customerNum3.getCreateNum() == 0){
             customerNum5.setCreateNumN("-");
         }else {
             customerNum5.setCreateNumN(nt.format(customerNum1.getCreateNum().doubleValue()/customerNum3.getCreateNum().doubleValue() - 1));
         }
 
-        if (customerNum3.getEndNum() == 0){
+        if (customerNum4.getEndNum() == 0){
             customerNum5.setEndNumN("-");
         }else{
-            customerNum5.setEndNumN(nt.format(customerNum1.getEndNum().doubleValue()/customerNum3.getEndNum().doubleValue() - 1));
+            customerNum5.setEndNumN(nt.format(customerNum2.getEndNum().doubleValue()/customerNum4.getEndNum().doubleValue() - 1));
         }
 
-        if (customerNum3.getBeforeEndNum() == 0){
+        if (customerNum4.getBeforeEndNum() == 0){
             customerNum5.setBeforeEndNumN("-");
         }else{
-            customerNum5.setBeforeEndNumN(nt.format(customerNum1.getBeforeEndNum().doubleValue()/customerNum3.getBeforeEndNum().doubleValue() - 1));
+            customerNum5.setBeforeEndNumN(nt.format(customerNum2.getBeforeEndNum().doubleValue()/customerNum4.getBeforeEndNum().doubleValue() - 1));
         }
         customerNum5.setTmCusNumN(nt.format(customerNum1.getTmCusNum().doubleValue()/customerNum3.getTmCusNum().doubleValue() - 1));
         customerNum5.setTableName("环比");
@@ -595,43 +599,51 @@ public class TableTwoController {
 
         //去年实绩
         Integer lYear = Integer.valueOf(startYear) - 1;
-        String lastYear = lYear.toString();
-        String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
-        String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
-        CusQueryParam cusQueryParam3 = new CusQueryParam(7,Integer.valueOf(lastYear),Integer.valueOf(startMon),0,0,0,0,lastSD,lastED);
+        String lastSD = lYear.toString() + "/" + startMon + "/" + startDate.split("/")[2];
+        String lastED = lYear.toString() + "/" + endMon + "/" + endDate.split("/")[2];
+        CusQueryParam cusQueryParam3 = new CusQueryParam(7,lYear,Integer.valueOf(startMon),0,0,0,0,lastSD,lastED);
         CustomerNum customerNum6 = orderService.selectCustomerNum(cusQueryParam3);
         customerNum6.setCreateNumN(customerNum6.getCreateNum().toString());
-        customerNum6.setEndNumN(customerNum6.getEndNum().toString());
-        customerNum6.setBeforeEndNumN(customerNum6.getBeforeEndNum().toString());
-        customerNum6.setTableName("去年实绩");
+
         //前月保有客户台数
-        LmCusQueryParam lmCusQueryParam3 = new LmCusQueryParam(7,Integer.valueOf(lastYear),Integer.valueOf(startMon) - 1,0,0,0,0);
+        Integer qY = lYear;
+        Integer qM = lastM;
+        if (qM == 0){
+            qM = 12;
+            qY = Integer.valueOf(startYear) - 1;
+        }
+        String qSD = qY.toString() + "/" + qM + "/" + startDate.split("/")[2];
+        String qED = qY.toString() + "/" + qM + "/" + endDate.split("/")[2];
+        CusQueryParam lmCusQueryParam3 = new CusQueryParam(7,qY,qM,0,0,0,0,qSD,qED);
         CustomerNum customerNum7 = orderService.selectLm(lmCusQueryParam3);
+        customerNum6.setEndNumN(customerNum7.getEndNum().toString());
+        customerNum6.setBeforeEndNumN(customerNum7.getBeforeEndNum().toString());
+        customerNum6.setTableName("去年实绩");
         customerNum6.setLmCusNumN(customerNum7.getLmCusNum().toString());
         customerNum6.setLmCusNum(customerNum7.getLmCusNum());
-        customerNum6.setTmCusNum(customerNum7.getLmCusNum() + customerNum6.getCreateNum() - customerNum6.getEndNum() - customerNum6.getBeforeEndNum());
+        customerNum6.setTmCusNum(customerNum7.getLmCusNum() + customerNum6.getCreateNum() - customerNum7.getEndNum() - customerNum7.getBeforeEndNum());
         customerNum6.setTmCusNumN(customerNum6.getTmCusNum().toString());
         list.add(customerNum6);
 
         //同期对比
         CustomerNum customerNum8 = new CustomerNum();
-        customerNum8.setLmCusNumN(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum6.getLmCusNum().doubleValue() - 1));
+        customerNum8.setLmCusNumN(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum7.getLmCusNum().doubleValue() - 1));
         if (customerNum6.getCreateNum() == 0){
             customerNum8.setCreateNumN("-");
         }else {
             customerNum8.setCreateNumN(nt.format(customerNum1.getCreateNum().doubleValue()/customerNum6.getCreateNum().doubleValue() - 1));
         }
 
-        if (customerNum6.getEndNum() == 0){
+        if (customerNum7.getEndNum() == 0){
             customerNum8.setEndNumN("-");
         }else{
-            customerNum8.setEndNumN(nt.format(customerNum1.getEndNum().doubleValue()/customerNum6.getEndNum().doubleValue() - 1));
+            customerNum8.setEndNumN(nt.format(customerNum2.getEndNum().doubleValue()/customerNum7.getEndNum().doubleValue() - 1));
         }
 
-        if (customerNum6.getBeforeEndNum() == 0){
+        if (customerNum7.getBeforeEndNum() == 0){
             customerNum8.setBeforeEndNumN("-");
         }else{
-            customerNum8.setBeforeEndNumN(nt.format(customerNum1.getBeforeEndNum().doubleValue()/customerNum6.getBeforeEndNum().doubleValue() - 1));
+            customerNum8.setBeforeEndNumN(nt.format(customerNum2.getBeforeEndNum().doubleValue()/customerNum7.getBeforeEndNum().doubleValue() - 1));
         }
         customerNum8.setTmCusNumN(nt.format(customerNum1.getTmCusNum().doubleValue()/customerNum6.getTmCusNum().doubleValue() - 1));
         customerNum8.setTableName("同期对比");
