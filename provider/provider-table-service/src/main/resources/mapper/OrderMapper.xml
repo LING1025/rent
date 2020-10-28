@@ -1036,7 +1036,7 @@ drop table #D
     ,a.CarTax carTax
     ,isnull(a1.InCome,0) inCome
     ,j.CarCost carCost
-    ,isnull(a2.BudgetAmt,0)  budgetAmt
+    ,isnull(a2.BudgetAmt,0)  budgetAmt,a.YJOrg depAuto
     into #E
     from @order aa
     left join [order] a (nolock) on a.Order_Auto = aa.order_auto
@@ -1076,10 +1076,10 @@ drop table #D
     if @typeQuery = 1
     begin
     select
-    sum(case when carSource = '新车'and depName like '%华东%' then totalAmt else 0 end) eastNewCar,
-    sum(case when carSource != '新车'and depName like '%华东%' then totalAmt else 0 end) eastOldCar,
-    sum(case when carSource = '新车'and depName like '%华南%' then totalAmt else 0 end) southNewCar,
-    sum(case when carSource != '新车'and depName like '%华南%' then totalAmt else 0 end) southOldCar,
+    sum(case when carSource = '新车'and depName like '%华东%' or depAuto in (45,139,170,134,156,168,169,206) then totalAmt else 0 end) eastNewCar,
+    sum(case when carSource != '新车'and depName like '%华东%' or depAuto  in (45,139,170,134,156,168,169,206) then totalAmt else 0 end) eastOldCar,
+    sum(case when carSource = '新车'and depName like '%华南%' or depAuto in (69,146,147,171,172,20,151) then totalAmt else 0 end) southNewCar,
+    sum(case when carSource != '新车'and depName like '%华南%' or depAuto in (69,146,147,171,172,20,151) then totalAmt else 0 end) southOldCar,
     YJCDT
     into #F
     from #E
