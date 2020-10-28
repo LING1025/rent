@@ -884,9 +884,8 @@ drop table #D
     from #E
     group by YJCDT
     select isnull(sum(newExs),0)newExs,isnull(sum(retain),0)retain,isnull(sum(introduce),0)introduce,
-    (isnull(sum(newExs),0)+isnull(sum(retain),0)+isnull(sum(introduce),0)) totalNumAmt
-    from #H
-    where YJCDT between @StartDT and @EndDT
+    isnull(sum(newExs+retain+introduce),0) totalNumAmt
+    from #H where YJCDT between @StartDT and @EndDT
     drop table #H
     end
 
@@ -1087,11 +1086,11 @@ drop table #D
     group by YJCDT
 
     select
-    sum(eastNewCar) eastNewCar,
-    sum(eastOldCar) eastOldCar,
-    sum(southNewCar) southNewCar,
-    sum(southOldCar) southOldCar,
-    sum(eastNewCar+eastOldCar+southNewCar+southOldCar) totalNumAmt
+    isnull(sum(eastNewCar),0) eastNewCar,
+    isnull(sum(eastOldCar),0) eastOldCar,
+    isnull(sum(southNewCar),0) southNewCar,
+    isnull(sum(southOldCar),0) southOldCar,
+    isnull(sum(eastNewCar+eastOldCar+southNewCar+southOldCar),0) totalNumAmt
     from #F
     where YJCDT between @StartDT and @EndDT
     drop table #F
@@ -1126,7 +1125,7 @@ drop table #D
     from #E
     group by YJCDT
     select isnull(sum(newExs),0)newExs,isnull(sum(retain),0)retain,isnull(sum(introduce),0)introduce,
-    (isnull(sum(newExs),0)+isnull(sum(retain),0)+isnull(sum(introduce),0)) totalNumAmt
+    isnull(sum(newExs+retain+introduce),0) totalNumAmt
     from #H where YJCDT between @StartDT and @EndDT
     drop table #H
     end

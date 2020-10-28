@@ -159,13 +159,12 @@ public class TableTwoController {
         //结构比
         ThisMonthTar thisMonthTar3 = new ThisMonthTar();
         thisMonthTar3.setTableName("结构比");
+        thisMonthTar3.setTotalNew("100%");
         if(thisMonthTar2.getTotalNumAmt().toString().equals("0.00")){
-            thisMonthTar3.setTotalNew("100%");
             thisMonthTar3.setNewExsNew("-");
             thisMonthTar3.setRetainNew("-");
             thisMonthTar3.setIntroduceNew("-");
         }else{
-            thisMonthTar3.setTotalNew("100%");
             thisMonthTar3.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
             thisMonthTar3.setNewExsNew(nt.format(thisMonthTar3.getNewExs()));
             thisMonthTar3.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
@@ -258,13 +257,12 @@ public class TableTwoController {
         //结构比
         ThisMonthTar thisMonthTar8 = new ThisMonthTar();
         thisMonthTar8.setTableName("结构比");
+        thisMonthTar8.setTotalNew("100%");
         if(thisMonthTar7.getTotalNumAmt().toString().equals("0.00")){
-            thisMonthTar8.setTotalNew("100%");
             thisMonthTar8.setNewExsNew("-");
             thisMonthTar8.setRetainNew("-");
             thisMonthTar8.setIntroduceNew("-");
         }else{
-            thisMonthTar8.setTotalNew("100%");
             thisMonthTar8.setNewExs(thisMonthTar7.getNewExs().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
             thisMonthTar8.setNewExsNew(nt.format(thisMonthTar8.getNewExs()));
             thisMonthTar8.setRetain(thisMonthTar7.getRetain().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
@@ -379,14 +377,21 @@ public class TableTwoController {
         CarSourceRent carSourceRent2 = new CarSourceRent();
         carSourceRent2.setTableTwoName("结构比");
         carSourceRent2.setTotalNumAmtN("100%");
-        carSourceRent2.setEastNewCar(carSourceRent1.getEastNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent2.setEastNewCarN(nt.format(carSourceRent2.getEastNewCar()));
-        carSourceRent2.setEastOldCar(carSourceRent1.getEastOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent2.setEastOldCarN(nt.format(carSourceRent2.getEastOldCar()));
-        carSourceRent2.setSouthNewCar(carSourceRent1.getSouthNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent2.setSouthNewCarN(nt.format(carSourceRent2.getSouthNewCar()));
-        carSourceRent2.setSouthOldCar(carSourceRent1.getSouthOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent2.setSouthOldCarN(nt.format(carSourceRent2.getSouthOldCar()));
+        if (carSourceRent1.getTotalNumAmt().toString().equals("0.00")){
+            carSourceRent2.setEastNewCarN("-");
+            carSourceRent2.setEastOldCarN("-");
+            carSourceRent2.setSouthNewCarN("-");
+            carSourceRent2.setSouthOldCarN("-");
+        }else {
+            carSourceRent2.setEastNewCar(carSourceRent1.getEastNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent2.setEastNewCarN(nt.format(carSourceRent2.getEastNewCar()));
+            carSourceRent2.setEastOldCar(carSourceRent1.getEastOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent2.setEastOldCarN(nt.format(carSourceRent2.getEastOldCar()));
+            carSourceRent2.setSouthNewCar(carSourceRent1.getSouthNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent2.setSouthNewCarN(nt.format(carSourceRent2.getSouthNewCar()));
+            carSourceRent2.setSouthOldCar(carSourceRent1.getSouthOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent2.setSouthOldCarN(nt.format(carSourceRent2.getSouthOldCar()));
+        }
         list.add(carSourceRent2);
 
         //上月实绩
@@ -443,8 +448,12 @@ public class TableTwoController {
             carSourceRent4.setSouthOldCarN(nt.format(carSourceRent4.getSouthOldCar()));
         }
 
-        carSourceRent4.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent3.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        carSourceRent4.setTotalNumAmtN(nt.format(carSourceRent4.getTotalNumAmt()));
+        if (carSourceRent3.getTotalNumAmtN().equals("0.00")){
+            carSourceRent4.setTotalNumAmtN("-");
+        }else {
+            carSourceRent4.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent3.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            carSourceRent4.setTotalNumAmtN(nt.format(carSourceRent4.getTotalNumAmt()));
+        }
         list.add(carSourceRent4);
 
         //去年实绩
@@ -465,16 +474,22 @@ public class TableTwoController {
         //结构比
         CarSourceRent carSourceRent6 = new CarSourceRent();
         carSourceRent6.setTableTwoName("结构比");
-        carSourceRent6.setTotalNumAmt(carSourceRent5.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent6.setTotalNumAmtN(nt.format(carSourceRent6.getTotalNumAmt()));
-        carSourceRent6.setEastNewCar(carSourceRent5.getEastNewCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent6.setEastNewCarN(nt.format(carSourceRent6.getEastNewCar()));
-        carSourceRent6.setEastOldCar(carSourceRent5.getEastOldCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent6.setEastOldCarN(nt.format(carSourceRent6.getEastOldCar()));
-        carSourceRent6.setSouthNewCar(carSourceRent5.getSouthNewCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent6.setSouthNewCarN(nt.format(carSourceRent6.getSouthNewCar()));
-        carSourceRent6.setSouthOldCar(carSourceRent5.getSouthOldCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        carSourceRent6.setSouthOldCarN(nt.format(carSourceRent6.getSouthOldCar()));
+        carSourceRent6.setTotalNumAmtN("100%");
+        if (carSourceRent5.getTotalNumAmt().toString().equals("0.00")){
+            carSourceRent6.setEastNewCarN("-");
+            carSourceRent6.setEastOldCarN("-");
+            carSourceRent6.setSouthNewCarN("-");
+            carSourceRent6.setSouthOldCarN("-");
+        }else {
+            carSourceRent6.setEastNewCar(carSourceRent5.getEastNewCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent6.setEastNewCarN(nt.format(carSourceRent6.getEastNewCar()));
+            carSourceRent6.setEastOldCar(carSourceRent5.getEastOldCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent6.setEastOldCarN(nt.format(carSourceRent6.getEastOldCar()));
+            carSourceRent6.setSouthNewCar(carSourceRent5.getSouthNewCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent6.setSouthNewCarN(nt.format(carSourceRent6.getSouthNewCar()));
+            carSourceRent6.setSouthOldCar(carSourceRent5.getSouthOldCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            carSourceRent6.setSouthOldCarN(nt.format(carSourceRent6.getSouthOldCar()));
+        }
         list.add(carSourceRent6);
 
         //同期比较
@@ -509,8 +524,12 @@ public class TableTwoController {
             carSourceRent7.setSouthOldCarN(nt.format(carSourceRent7.getSouthOldCar()));
         }
 
-        carSourceRent7.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        carSourceRent7.setTotalNumAmtN(nt.format(carSourceRent7.getTotalNumAmt()));
+        if (carSourceRent5.getTotalNumAmtN().equals("0.00")){
+            carSourceRent7.setTotalNumAmtN("-");
+        }else {
+            carSourceRent7.setTotalNumAmt(carSourceRent1.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            carSourceRent7.setTotalNumAmtN(nt.format(carSourceRent7.getTotalNumAmt()));
+        }
         list.add(carSourceRent7);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
