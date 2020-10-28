@@ -159,14 +159,20 @@ public class TableTwoController {
         //结构比
         ThisMonthTar thisMonthTar3 = new ThisMonthTar();
         thisMonthTar3.setTableName("结构比");
-        thisMonthTar3.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar2.getTotalNumAmt()));
-        thisMonthTar3.setTotalNew(nt.format(thisMonthTar3.getTotalNumAmt()));
-        thisMonthTar3.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
-        thisMonthTar3.setNewExsNew(nt.format(thisMonthTar3.getNewExs()));
-        thisMonthTar3.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar3.setRetainNew(nt.format(thisMonthTar3.getRetain()));
-        thisMonthTar3.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar3.setIntroduceNew(nt.format(thisMonthTar3.getIntroduce()));
+        if(thisMonthTar2.getTotalNumAmt().toString().equals("0.00")){
+            thisMonthTar3.setTotalNew("100%");
+            thisMonthTar3.setNewExsNew("-");
+            thisMonthTar3.setRetainNew("-");
+            thisMonthTar3.setIntroduceNew("-");
+        }else{
+            thisMonthTar3.setTotalNew("100%");
+            thisMonthTar3.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
+            thisMonthTar3.setNewExsNew(nt.format(thisMonthTar3.getNewExs()));
+            thisMonthTar3.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar3.setRetainNew(nt.format(thisMonthTar3.getRetain()));
+            thisMonthTar3.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar3.setIntroduceNew(nt.format(thisMonthTar3.getIntroduce()));
+        }
         list.add(thisMonthTar3);
 
         //达成率
@@ -206,23 +212,28 @@ public class TableTwoController {
         //环比
         ThisMonthTar thisMonthTar6 = new ThisMonthTar();
         thisMonthTar6.setTableName("环比");
-        thisMonthTar6.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar6.setTotalNew(nt.format(thisMonthTar6.getTotalNumAmt()));
-        if (thisMonthTar5.getNewExs().equals("0.00")){
+        if(thisMonthTar5.getTotalNumAmt().toString().equals("0.00")){
+            thisMonthTar6.setTotalNew("-");
+        }else {
+            thisMonthTar6.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar6.setTotalNew(nt.format(thisMonthTar6.getTotalNumAmt()));
+        }
+
+        if (thisMonthTar5.getNewExs().toString().equals("0.00")){
             thisMonthTar6.setNewExsNew("-");
         }else {
             thisMonthTar6.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar5.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
             thisMonthTar6.setNewExsNew(nt.format(thisMonthTar6.getNewExs()));
         }
 
-        if (thisMonthTar5.getRetain().equals("0.00")){
+        if (thisMonthTar5.getRetain().toString().equals("0.00")){
             thisMonthTar6.setRetainNew("-");
         }else {
             thisMonthTar6.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
             thisMonthTar6.setRetainNew(nt.format(thisMonthTar6.getRetain()));
         }
 
-        if(thisMonthTar5.getIntroduceNew().equals("0.00")){
+        if(thisMonthTar5.getIntroduce().toString().equals("0.00")){
             thisMonthTar6.setIntroduceNew("-");
         }else {
             thisMonthTar6.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
@@ -247,36 +258,47 @@ public class TableTwoController {
         //结构比
         ThisMonthTar thisMonthTar8 = new ThisMonthTar();
         thisMonthTar8.setTableName("结构比");
-        thisMonthTar8.setTotalNumAmt(thisMonthTar7.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt()));
-        thisMonthTar8.setTotalNew(nt.format(thisMonthTar8.getTotalNumAmt()));
-        thisMonthTar8.setNewExs(thisMonthTar7.getNewExs().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
-        thisMonthTar8.setNewExsNew(nt.format(thisMonthTar8.getNewExs()));
-        thisMonthTar8.setRetain(thisMonthTar7.getRetain().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar8.setRetainNew(nt.format(thisMonthTar8.getRetain()));
-        thisMonthTar8.setIntroduce(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar8.setIntroduceNew(nt.format(thisMonthTar8.getIntroduce()));
+        if(thisMonthTar7.getTotalNumAmt().toString().equals("0.00")){
+            thisMonthTar8.setTotalNew("100%");
+            thisMonthTar8.setNewExsNew("-");
+            thisMonthTar8.setRetainNew("-");
+            thisMonthTar8.setIntroduceNew("-");
+        }else{
+            thisMonthTar8.setTotalNew("100%");
+            thisMonthTar8.setNewExs(thisMonthTar7.getNewExs().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));//四舍五入保留两位小数
+            thisMonthTar8.setNewExsNew(nt.format(thisMonthTar8.getNewExs()));
+            thisMonthTar8.setRetain(thisMonthTar7.getRetain().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar8.setRetainNew(nt.format(thisMonthTar8.getRetain()));
+            thisMonthTar8.setIntroduce(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar8.setIntroduceNew(nt.format(thisMonthTar8.getIntroduce()));
+        }
         list.add(thisMonthTar8);
 
         //同期对比
         ThisMonthTar thisMonthTar9 = new ThisMonthTar();
         thisMonthTar9.setTableName("同期比较");
-        thisMonthTar9.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
-        thisMonthTar9.setTotalNew(nt.format(thisMonthTar9.getTotalNumAmt()));
-        if (thisMonthTar7.getNewExs().equals("0.00")){
+        if(thisMonthTar7.getTotalNumAmt().toString().equals("0.00")){
+            thisMonthTar9.setTotalNew("-");
+        }else {
+            thisMonthTar9.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
+            thisMonthTar9.setTotalNew(nt.format(thisMonthTar9.getTotalNumAmt()));
+        }
+
+        if (thisMonthTar7.getNewExs().toString().equals("0.00")){
             thisMonthTar9.setNewExsNew("-");
         }else {
             thisMonthTar9.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar7.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
             thisMonthTar9.setNewExsNew(nt.format(thisMonthTar9.getNewExs()));
         }
 
-        if (thisMonthTar7.getRetain().equals("0.00")){
+        if (thisMonthTar7.getRetain().toString().equals("0.00")){
             thisMonthTar9.setRetainNew("-");
         }else {
             thisMonthTar9.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar7.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));
             thisMonthTar9.setRetainNew(nt.format(thisMonthTar9.getRetain()));
         }
 
-        if(thisMonthTar7.getIntroduceNew().equals("0.00")){
+        if(thisMonthTar7.getIntroduce().toString().equals("0.00")){
             thisMonthTar9.setIntroduceNew("-");
         }else {
             thisMonthTar9.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1)));

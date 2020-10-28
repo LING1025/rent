@@ -883,8 +883,10 @@ drop table #D
     into #H
     from #E
     group by YJCDT
-
-    select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #H where YJCDT between @StartDT and @EndDT
+    select isnull(sum(newExs),0)newExs,isnull(sum(retain),0)retain,isnull(sum(introduce),0)introduce,
+    (isnull(sum(newExs),0)+isnull(sum(retain),0)+isnull(sum(introduce),0)) totalNumAmt
+    from #H
+    where YJCDT between @StartDT and @EndDT
     drop table #H
     end
 
@@ -1123,8 +1125,9 @@ drop table #D
     into #H
     from #E
     group by YJCDT
-
-    select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #H where YJCDT between @StartDT and @EndDT
+    select isnull(sum(newExs),0)newExs,isnull(sum(retain),0)retain,isnull(sum(introduce),0)introduce,
+    (isnull(sum(newExs),0)+isnull(sum(retain),0)+isnull(sum(introduce),0)) totalNumAmt
+    from #H where YJCDT between @StartDT and @EndDT
     drop table #H
     end
 

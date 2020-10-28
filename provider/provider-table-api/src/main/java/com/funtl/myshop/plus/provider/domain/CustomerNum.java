@@ -11,19 +11,19 @@ import java.io.Serializable;
 @ApiModel(value = "保有客户台数")
 public class CustomerNum implements Serializable {
     @JsonIgnore
-    private Integer lmCusNum;
+    private Integer lmCusNum=0;
 
     @JsonIgnore
-    private Integer createNum;
+    private Integer createNum=0;
 
     @JsonIgnore
-    private Integer endNum;
+    private Integer endNum=0;
 
     @JsonIgnore
-    private Integer beforeEndNum;
+    private Integer beforeEndNum=0;
 
     @JsonIgnore
-    private Integer tmCusNum;
+    private Integer tmCusNum=0;
 
     @ApiModelProperty(value = "前月保有客户台数")
     private String lmCusNumN;
