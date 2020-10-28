@@ -10,15 +10,15 @@ import java.math.BigDecimal;
 @Data
 @ApiModel(value = "新增契约租金-车辆来源")
 public class CarSourceRent implements Serializable {
-    private BigDecimal eastNewCar;
+    private BigDecimal eastNewCar=BigDecimal.valueOf(0);
 
-    private BigDecimal eastOldCar;
+    private BigDecimal eastOldCar=BigDecimal.valueOf(0);
 
-    private BigDecimal southNewCar;
+    private BigDecimal southNewCar=BigDecimal.valueOf(0);
 
-    private BigDecimal southOldCar;
+    private BigDecimal southOldCar=BigDecimal.valueOf(0);
 
-    private BigDecimal totalNumAmt;
+    private BigDecimal totalNumAmt=BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "华东-车辆来源-新车①")
     private String eastNewCarN;

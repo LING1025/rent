@@ -816,7 +816,7 @@ drop table #D
 
     select b1.DepName depName,b.FNAme fName,a.OrderNo, c.TradeItem_Auto,c.FName comFName,case when q.identype = 1 then '是' else '' end	idenType,h.SName sName
     ,case when a.status=30 then '正常' when a.status=40 then '解约' when a.status=10 then '送件' else '暂存' end statusName
-    ,d.MakNo makNo,dbo.f_GetItemName(226,d.Category) category,dbo.f_GetItemName(313,a.CustSource) custSource,dbo.f_GetItemName(314,a.RentType) rentType,L.FactoryBrandName factoryBrandName,m.BrandName brandName,e.ClasenName clasenName
+    ,d.MakNo makNo,dbo.f_GetItemName(226,d.Category) category,dbo.f_GetItemName(313,a.CustSource) custSource,a.CustSource num,dbo.f_GetItemName(314,a.RentType) rentType,L.FactoryBrandName factoryBrandName,m.BrandName brandName,e.ClasenName clasenName
     ,d.CarColor carColor,n.FName sellerFName,a.MAmt ,a.MAmt*a.MM totalAmt,d.MakDT makDT
     ,a.ListPrice ,a.GetPrice ,a.DisPrice ,Convert(decimal(16,2), a.DisPrice /case when a.ListPrice > 0 then a.ListPrice else 1 end * 100) disPriceTax,a.Accessary ,j.PushMoney pushMoney,case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end salvage,a.DptAmt ,a.CarMtnAmt ,case when j.OrderType = 8 then a.CarCost-a.StampTax else a.ListPrice-a.DisPrice-case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end end loanAmount
     ,a.StartDT ,a.EndDT ,a.MM ,dbo.f_GetItemName(115,g.Creditlevle) creditLevel
@@ -873,59 +873,19 @@ drop table #D
     left join #D a2 on a2.Order_Auto = a.Order_Auto
     Order by b1.DepName,b.FNAme
 
-    if @typeQuery = 1
+    if @typeQuery = 3
     begin
     select
-    sum(case when carSource = '新车'and depName like '%华东%' then totalAmt else 0 end) eastNewCar,
-    sum(case when carSource != '新车'and depName like '%华东%' then totalAmt else 0 end) eastOldCar,
-    sum(case when carSource = '新车'and depName like '%华南%' then totalAmt else 0 end) southNewCar,
-    sum(case when carSource != '新车'and depName like '%华南%' then totalAmt else 0 end) southOldCar,
-    YJCDT
-    into #F
-    from #E
-    group by YJCDT
-
-    select
-    sum(eastNewCar) eastNewCar,
-    sum(eastOldCar) eastOldCar,
-    sum(southNewCar) southNewCar,
-    sum(southOldCar) southOldCar,
-    sum(eastNewCar+eastOldCar+southNewCar+southOldCar) totalNumAmt
-    from #F
-    where YJCDT between @StartDT and @EndDT
-    drop table #F
-
-    end
-
-    else if @typeQuery = 2
-    begin
-    declare
-    @eastNewCar decimal(18,2),
-    @eastOldCar decimal(18,2),
-    @southNewCar decimal(18,2),
-    @southOldCar decimal(18,2),
-    @totalNumAmt decimal(18,2)
-
-    select @eastNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
-    select @eastOldCar=count(carSource)  from #E where carSource != '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
-    select @southNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT
-    select @southOldCar=count(carSource)  from #E where carSource != '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT
-    select @totalNumAmt=count(carSource)  from #E where YJCDT between @StartDT and @EndDT
-    select @eastNewCar eastNewCar,@eastOldCar eastOldCar,@southNewCar southNewCar,@southOldCar southOldCar,@totalNumAmt totalNumAmt
-    end
-
-    else if @typeQuery = 3
-    begin
-    select
-    sum(case when custSource like '%新拓%' then totalAmt else 0 end) newExs,
-    sum(case when custSource like '%保有%' then totalAmt else 0 end) retain,
-    sum(case when custSource like '%介绍%' then totalAmt else 0 end) introduce,
+    sum(case when num in (10,11,20,80,40,100,130,140,150,170,180,30,210,220,160) then totalAmt else 0 end) newExs,
+    sum(case when num in (110,120,90,70,200) then totalAmt else 0 end) retain,
+    sum(case when num in (230,50,240) then totalAmt else 0 end) introduce,
     YJCDT
     into #H
     from #E
     group by YJCDT
-
-    select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #H where YJCDT between @StartDT and @EndDT
+    select isnull(sum(newExs),0)newExs,isnull(sum(retain),0)retain,isnull(sum(introduce),0)introduce,
+    isnull(sum(newExs+retain+introduce),0) totalNumAmt
+    from #H where YJCDT between @StartDT and @EndDT
     drop table #H
     end
 
@@ -1056,7 +1016,7 @@ drop table #D
 
     select b1.DepName depName,b.FNAme fName,a.OrderNo, c.TradeItem_Auto,c.FName comFName,case when q.identype = 1 then '是' else '' end	idenType,h.SName sName
     ,case when a.status=30 then '正常' when a.status=40 then '解约' when a.status=10 then '送件' else '暂存' end statusName
-    ,d.MakNo makNo,dbo.f_GetItemName(226,d.Category) category,dbo.f_GetItemName(313,a.CustSource) custSource,dbo.f_GetItemName(314,a.RentType) rentType,L.FactoryBrandName factoryBrandName,m.BrandName brandName,e.ClasenName clasenName
+    ,d.MakNo makNo,dbo.f_GetItemName(226,d.Category) category,dbo.f_GetItemName(313,a.CustSource) custSource,a.CustSource num,dbo.f_GetItemName(314,a.RentType) rentType,L.FactoryBrandName factoryBrandName,m.BrandName brandName,e.ClasenName clasenName
     ,d.CarColor carColor,n.FName sellerFName,a.MAmt ,a.MAmt*a.MM totalAmt,d.MakDT makDT
     ,a.ListPrice ,a.GetPrice ,a.DisPrice ,Convert(decimal(16,2), a.DisPrice /case when a.ListPrice > 0 then a.ListPrice else 1 end * 100) disPriceTax,a.Accessary ,j.PushMoney pushMoney,case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end salvage,a.DptAmt ,a.CarMtnAmt ,case when j.OrderType = 8 then a.CarCost-a.StampTax else a.ListPrice-a.DisPrice-case when a.RentType = 2 and isnull(j.OverAmt_Y,0) > 0 then j.OverAmt else a.OverAmt end end loanAmount
     ,a.StartDT ,a.EndDT ,a.MM ,dbo.f_GetItemName(115,g.Creditlevle) creditLevel
@@ -1126,11 +1086,11 @@ drop table #D
     group by YJCDT
 
     select
-    sum(eastNewCar) eastNewCar,
-    sum(eastOldCar) eastOldCar,
-    sum(southNewCar) southNewCar,
-    sum(southOldCar) southOldCar,
-    sum(eastNewCar+eastOldCar+southNewCar+southOldCar) totalNumAmt
+    isnull(sum(eastNewCar),0) eastNewCar,
+    isnull(sum(eastOldCar),0) eastOldCar,
+    isnull(sum(southNewCar),0) southNewCar,
+    isnull(sum(southOldCar),0) southOldCar,
+    isnull(sum(eastNewCar+eastOldCar+southNewCar+southOldCar),0) totalNumAmt
     from #F
     where YJCDT between @StartDT and @EndDT
     drop table #F
@@ -1157,15 +1117,16 @@ drop table #D
     else if @typeQuery = 3
     begin
     select
-    sum(case when custSource like '%新拓%' then totalAmt else 0 end) newExs,
-    sum(case when custSource like '%保有%' then totalAmt else 0 end) retain,
-    sum(case when custSource like '%介绍%' then totalAmt else 0 end) introduce,
+    sum(case when num in (10,11,20,80,40,100,130,140,150,170,180,30,210,220,160) then totalAmt else 0 end) newExs,
+    sum(case when num in (110,120,90,70,200) then totalAmt else 0 end) retain,
+    sum(case when num in (230,50,240) then totalAmt else 0 end) introduce,
     YJCDT
     into #H
     from #E
     group by YJCDT
-
-    select sum(newExs) newExs,sum(retain) retain,sum(introduce) introduce,sum(newExs+retain+introduce) totalNumAmt from #H where YJCDT between @StartDT and @EndDT
+    select isnull(sum(newExs),0)newExs,isnull(sum(retain),0)retain,isnull(sum(introduce),0)introduce,
+    isnull(sum(newExs+retain+introduce),0) totalNumAmt
+    from #H where YJCDT between @StartDT and @EndDT
     drop table #H
     end
 
@@ -1176,21 +1137,19 @@ drop table #D
   </select>
   <resultMap id="queryCustomerNum" type="com.funtl.myshop.plus.provider.domain.CustomerNum">
     <result column="createNum" jdbcType="INTEGER" property="createNum" />
-    <result column="endNum" jdbcType="INTEGER" property="endNum" />
-    <result column="beforeEndNum" jdbcType="INTEGER" property="beforeEndNum" />
   </resultMap>
     <select id="selectCustomerNum" resultMap="queryCustomerNum">
-        ----S_Credit_ORder
-declare
-@Type int = #{param.type},
-@YY int=#{param.yy},
-@MM int=#{param.mm},
-@Order_Type int=#{param.orderType},
-@Inc_Auto bigint=#{param.incAuto},
-@pageSize    int=#{param.pageSize},
-@page        int=#{param.page},
-@StartDT datetime = #{param.startDate},
-@EndDT datetime = #{param.endDate}
+
+    declare
+    @Type int = #{param.type},
+    @YY int=#{param.yy},
+    @MM int=#{param.mm},
+    @Order_Type int=#{param.orderType},
+    @Inc_Auto bigint=#{param.incAuto},
+    @pageSize    int=#{param.pageSize},
+    @page        int=#{param.page},
+    @StartDT datetime = #{param.startDate},
+    @EndDT datetime = #{param.endDate}
 
 	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
 	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
@@ -1309,32 +1268,10 @@ declare
 
 	   if(@Type=7 )
 	   begin
-	   declare
-    @createNum int,
-    @endNum int,
-    @beforeEndNum int
-
 	   --保有台数计算--公务车9 短租2 不计算在内
 	   --1.新增保有台数
-	      select @createNum=count(*) from #ttt where StartDT between @StartDT and @EndDT and OrderType not in (2,9)
-	   --2.期满解约
-	      select @endNum=count(*) from #ttt where EndDT between @StartDT and @EndDT and OrderType not in (2,9)
-	   --3.提前解约
-	      select
-		  @beforeEndNum=count(*)
-		  from #ttt
-		  where
-		  EndDT between @StartDT and @EndDT
-		  and
-		  ResDT between @StartDT and @EndDT
-		  and
-		  OrderType not in (2,9)
-
-		  select @createNum createNum,@endNum endNum,@beforeEndNum beforeEndNum
-	   --4.上个月保有 between DATEADD(m,-1,@StartDT) and DATEADD(m,-1,@EndDT)
-	   --本月
-	   --select count(*) from #ttt where OrderType not in (2,9)
-	   end
+      select createNum=count(*) from #ttt where StartDT between @StartDT and @EndDT and OrderType not in (2,9)
+      end
 	   --exec dbo.xp_GetPage  'select * from #ttt',2,20,1
 	   if(@Type=5 )
 	   begin
@@ -1351,18 +1288,22 @@ declare
     </select>
 
   <resultMap id="queryLm" type="com.funtl.myshop.plus.provider.domain.CustomerNum">
-        <result column="lmCusNum" jdbcType="INTEGER" property="lmCusNum" />
+    <result column="lmCusNum" jdbcType="INTEGER" property="lmCusNum" />
+    <result column="endNum" jdbcType="INTEGER" property="endNum" />
+    <result column="beforeEndNum" jdbcType="INTEGER" property="beforeEndNum" />
   </resultMap>
   <select id="selectLm" resultMap="queryLm">
-    ----S_Credit_ORder
-declare
+
+    declare
     @Type int = #{param.type},
     @YY int=#{param.yy},
     @MM int=#{param.mm},
     @Order_Type int=#{param.orderType},
     @Inc_Auto bigint=#{param.incAuto},
     @pageSize    int=#{param.pageSize},
-    @page        int=#{param.page}
+    @page        int=#{param.page},
+    @StartDT datetime = #{param.startDate},
+    @EndDT datetime = #{param.endDate}
 
 	declare @Day_T nvarchar(40),@YY_T int,@MM_T int
 	declare @Order_Q table(Order_Auto nvarchar(10),RentType int,OrderType int,StartDT nvarchar(20),EndDT nvarchar(20),ResDT nvarchar(20)
@@ -1481,9 +1422,27 @@ declare
 
 	   if(@Type=7 )
 	   begin
-       --保有台数计算
-	   --4.上个月保有
-	   select count(*) lmCusNum from #ttt where OrderType not in (2,9)
+    declare
+    @endNum int,
+    @beforeEndNum int,
+    @lmCusNum int
+    --保有台数计算
+    --2.期满解约
+    select @endNum=count(*) from #ttt where EndDT between DATEADD(m,1,@StartDT) and DATEADD(m,1,@EndDT) and OrderType not in (2,9)
+    --3.提前解约
+    select
+    @beforeEndNum=count(*)
+    from #ttt
+    where
+    EndDT not between DATEADD(m,1,@StartDT) and DATEADD(m,1,@EndDT)
+    and
+    ResDT between DATEADD(m,1,@StartDT) and DATEADD(m,1,@EndDT)
+    and
+    OrderType not in (2,9)
+    --4.上个月保有
+    select @lmCusNum=count(*) from #ttt where StartDT &lt;= @EndDT and OrderType not in (2,9)
+
+    select @endNum endNum,@beforeEndNum beforeEndNum,@lmCusNum lmCusNum
 	   end
 	   if(@Type=5 )
 	   begin

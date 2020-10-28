@@ -11,16 +11,16 @@ import java.math.BigDecimal;
 @ApiModel(value = "新增契约租金-客户来源")
 public class ThisMonthTar implements Serializable {
     @ApiModelProperty(value = "客户来源-新拓①")
-    private BigDecimal newExs;
+    private BigDecimal newExs=BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "客户来源-保有②")
-    private BigDecimal retain;
+    private BigDecimal retain=BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "客户来源-介绍③")
-    private BigDecimal introduce;
+    private BigDecimal introduce=BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "新增契约租金(①+②+③)")
-    private BigDecimal totalNumAmt;
+    private BigDecimal totalNumAmt=BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "最终%计算客户来源-新拓①")
     private String newExsNew;
