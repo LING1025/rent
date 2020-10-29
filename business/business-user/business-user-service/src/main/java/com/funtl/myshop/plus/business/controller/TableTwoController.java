@@ -118,16 +118,16 @@ public class TableTwoController {
         if(startDate == null || endDate == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         Date date1 = format.parse(startDate);
         Date date2 = format.parse(endDate);
         if(date1.after(date2)){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
         }
-        String startYear = startDate.split("-")[0];
-        String endYear = endDate.split("-")[0];
-        String startMon = startDate.split("-")[1];
-        String endMon = endDate.split("-")[1];
+        String startYear = startDate.split("/")[0];
+        String endYear = endDate.split("/")[0];
+        String startMon = startDate.split("/")[1];
+        String endMon = endDate.split("/")[1];
         if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
         }
@@ -196,8 +196,8 @@ public class TableTwoController {
         }
         String lastStartMon = lastM.toString();
         String lastStartYear = lastY.toString();
-        String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
-        String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
+        String lastStartDate = lastStartYear + "/" +lastStartMon + "/" + startDate.split("/")[2];
+        String lastEndDate = lastStartYear + "/" + lastStartMon + "/" + endDate.split("/")[2];
 
         MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate,3);
         ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
@@ -243,8 +243,8 @@ public class TableTwoController {
         //去年实绩
         Integer lYear = Integer.valueOf(startYear) - 1;
         String lastYear = lYear.toString();
-        String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
-        String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
+        String lastSD = lastYear + "/" + startMon + "/" + startDate.split("/")[2];
+        String lastED = lastYear + "/" + endMon + "/" + endDate.split("/")[2];
         MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED,3);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
         thisMonthTar7.setTableName("去年实绩");
@@ -320,16 +320,16 @@ public class TableTwoController {
         if(startDate == null || endDate == null){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         Date date1 = format.parse(startDate);
         Date date2 = format.parse(endDate);
         if(date1.after(date2)){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
         }
-        String startYear = startDate.split("-")[0];
-        String endYear = endDate.split("-")[0];
-        String startMon = startDate.split("-")[1];
-        String endMon = endDate.split("-")[1];
+        String startYear = startDate.split("/")[0];
+        String endYear = endDate.split("/")[0];
+        String startMon = startDate.split("/")[1];
+        String endMon = endDate.split("/")[1];
         if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
         }
@@ -403,8 +403,8 @@ public class TableTwoController {
         }
         String lastStartMon = lastM.toString();
         String lastStartYear = lastY.toString();
-        String lastStartDate = lastStartYear + "-" +lastStartMon + "-" + startDate.split("-")[2];
-        String lastEndDate = lastStartYear + "-" + lastStartMon + "-" + endDate.split("-")[2];
+        String lastStartDate = lastStartYear + "/" +lastStartMon + "/" + startDate.split("/")[2];
+        String lastEndDate = lastStartYear + "/" + lastStartMon + "/" + endDate.split("/")[2];
 
         MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate,typeQuery);
         CarSourceRent carSourceRent3 = orderService.selectCarSourceRent(monGoalQueryParam2);
@@ -459,8 +459,8 @@ public class TableTwoController {
         //去年实绩
         Integer lYear = Integer.valueOf(startYear) - 1;
         String lastYear = lYear.toString();
-        String lastSD = lastYear + "-" + startMon + "-" + startDate.split("-")[2];
-        String lastED = lastYear + "-" + endMon + "-" + endDate.split("-")[2];
+        String lastSD = lastYear + "/" + startMon + "/" + startDate.split("/")[2];
+        String lastED = lastYear + "/" + endMon + "/" + endDate.split("/")[2];
         MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED,typeQuery);
         CarSourceRent carSourceRent5 = orderService.selectCarSourceRent(monGoalQueryParam3);
         carSourceRent5.setTableTwoName("去年实绩");
