@@ -1,5 +1,6 @@
 package com.funtl.myshop.plus.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,14 +11,19 @@ import java.math.BigDecimal;
 @Data
 @ApiModel(value = "新增契约租金-车辆来源")
 public class CarSourceRent implements Serializable {
+    @JsonIgnore
     private BigDecimal eastNewCar=BigDecimal.valueOf(0);
 
+    @JsonIgnore
     private BigDecimal eastOldCar=BigDecimal.valueOf(0);
 
+    @JsonIgnore
     private BigDecimal southNewCar=BigDecimal.valueOf(0);
 
+    @JsonIgnore
     private BigDecimal southOldCar=BigDecimal.valueOf(0);
 
+    @JsonIgnore
     private BigDecimal totalNumAmt=BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "华东-车辆来源-新车①")
