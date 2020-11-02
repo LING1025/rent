@@ -128,9 +128,6 @@ public class TableTwoController {
         String endYear = endDate.split("/")[0];
         String startMon = startDate.split("/")[1];
         String endMon = endDate.split("/")[1];
-        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
-        }
         List<ThisMonthTar> list = Lists.newArrayList();
 
         //当月目标
@@ -177,14 +174,33 @@ public class TableTwoController {
         //达成率
         ThisMonthTar thisMonthTar4 = new ThisMonthTar();
         thisMonthTar4.setTableName("达成率");
-        thisMonthTar4.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar4.setTotalNew(nt.format(thisMonthTar4.getTotalNumAmt()));
-        thisMonthTar4.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar1.getNewExs(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar4.setNewExsNew(nt.format(thisMonthTar4.getNewExs()));
-        thisMonthTar4.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar1.getRetain(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar4.setRetainNew(nt.format(thisMonthTar4.getRetain()));
-        thisMonthTar4.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP));
-        thisMonthTar4.setIntroduceNew(nt.format(thisMonthTar4.getIntroduce()));
+        if(thisMonthTar1.getTotalNumAmt().toString().equals("0.00")){
+            thisMonthTar4.setTotalNew("-");
+        }else {
+            thisMonthTar4.setTotalNumAmt(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar4.setTotalNew(nt.format(thisMonthTar4.getTotalNumAmt()));
+        }
+
+        if (thisMonthTar1.getNewExs().toString().equals("0.00")){
+            thisMonthTar4.setNewExsNew("-");
+        }else {
+            thisMonthTar4.setNewExs(thisMonthTar2.getNewExs().divide(thisMonthTar1.getNewExs(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar4.setNewExsNew(nt.format(thisMonthTar4.getNewExs()));
+        }
+
+        if (thisMonthTar1.getRetain().toString().equals("0.00")){
+            thisMonthTar4.setRetainNew("-");
+        }else {
+            thisMonthTar4.setRetain(thisMonthTar2.getRetain().divide(thisMonthTar1.getRetain(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar4.setRetainNew(nt.format(thisMonthTar4.getRetain()));
+        }
+
+        if (thisMonthTar1.getIntroduce().toString().equals("0.00")){
+            thisMonthTar4.setIntroduceNew("-");
+        }else {
+            thisMonthTar4.setIntroduce(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP));
+            thisMonthTar4.setIntroduceNew(nt.format(thisMonthTar4.getIntroduce()));
+        }
         list.add(thisMonthTar4);
 
         //上月实绩
@@ -330,9 +346,6 @@ public class TableTwoController {
         String endYear = endDate.split("/")[0];
         String startMon = startDate.split("/")[1];
         String endMon = endDate.split("/")[1];
-        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
-        }
         List<CarSourceRent> list = Lists.newArrayList();
 
         //当月实绩
@@ -556,9 +569,6 @@ public class TableTwoController {
         String endYear = endDate.split("/")[0];
         String startMon = startDate.split("/")[1];
         String endMon = endDate.split("/")[1];
-        if (!startYear.equals(endYear) || !startMon.equals(endMon)) {
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：不允许跨年份或月份查询",null);
-        }
         List<CustomerNum> list = Lists.newArrayList();
 
         //当月实绩
