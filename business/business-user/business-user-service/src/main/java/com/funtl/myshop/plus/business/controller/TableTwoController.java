@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -125,9 +126,8 @@ public class TableTwoController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
         }
         String startYear = startDate.split("/")[0];
-        String endYear = endDate.split("/")[0];
         String startMon = startDate.split("/")[1];
-        String endMon = endDate.split("/")[1];
+
         List<ThisMonthTar> list = Lists.newArrayList();
 
         //当月目标
@@ -204,18 +204,17 @@ public class TableTwoController {
         list.add(thisMonthTar4);
 
         //上月实绩
-        Integer lastY = Integer.valueOf(startYear);
-        Integer lastM = Integer.valueOf(startMon) - 1;
-        if (lastM == 0){
-            lastM = 12;
-            lastY = Integer.valueOf(startYear) - 1;
-        }
-        String lastStartMon = lastM.toString();
-        String lastStartYear = lastY.toString();
+        //过去一月
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parse(endDate));
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        String lastStartMon = mon.split("/")[1];
+        String lastStartYear = mon.split("/")[0];
         String lastStartDate = lastStartYear + "/" +lastStartMon + "/" + startDate.split("/")[2];
-        String lastEndDate = lastStartYear + "/" + lastStartMon + "/" + endDate.split("/")[2];
 
-        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate,3);
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,mon,3);
         ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
         thisMonthTar5.setTableName("上月实绩");
         thisMonthTar5.setTotalNew(thisMonthTar5.getTotalNumAmt().toString());
@@ -257,11 +256,15 @@ public class TableTwoController {
         list.add(thisMonthTar6);
 
         //去年实绩
-        Integer lYear = Integer.valueOf(startYear) - 1;
-        String lastYear = lYear.toString();
+        //过去一年
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(format.parse(endDate));
+        c2.add(Calendar.YEAR, -1);
+        Date y = c2.getTime();
+        String year = format.format(y);
+        String lastYear = year.split("/")[0];
         String lastSD = lastYear + "/" + startMon + "/" + startDate.split("/")[2];
-        String lastED = lastYear + "/" + endMon + "/" + endDate.split("/")[2];
-        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED,3);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,year,3);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
         thisMonthTar7.setTableName("去年实绩");
         thisMonthTar7.setTotalNew(thisMonthTar7.getTotalNumAmt().toString());
@@ -337,15 +340,14 @@ public class TableTwoController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
         Date date1 = format.parse(startDate);
         Date date2 = format.parse(endDate);
         if(date1.after(date2)){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
         }
         String startYear = startDate.split("/")[0];
-        String endYear = endDate.split("/")[0];
         String startMon = startDate.split("/")[1];
-        String endMon = endDate.split("/")[1];
         List<CarSourceRent> list = Lists.newArrayList();
 
         //当月实绩
@@ -408,18 +410,17 @@ public class TableTwoController {
         list.add(carSourceRent2);
 
         //上月实绩
-        Integer lastY = Integer.valueOf(startYear);
-        Integer lastM = Integer.valueOf(startMon) - 1;
-        if (lastM == 0){
-            lastM = 12;
-            lastY = Integer.valueOf(startYear) - 1;
-        }
-        String lastStartMon = lastM.toString();
-        String lastStartYear = lastY.toString();
+        //过去一月
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parse(endDate));
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        String lastStartMon = mon.split("/")[1];
+        String lastStartYear = mon.split("/")[0];
         String lastStartDate = lastStartYear + "/" +lastStartMon + "/" + startDate.split("/")[2];
-        String lastEndDate = lastStartYear + "/" + lastStartMon + "/" + endDate.split("/")[2];
 
-        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,lastEndDate,typeQuery);
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,mon,typeQuery);
         CarSourceRent carSourceRent3 = orderService.selectCarSourceRent(monGoalQueryParam2);
         carSourceRent3.setTableTwoName("上月实绩");
         carSourceRent3.setEastNewCarN(carSourceRent3.getEastNewCar().toString());
@@ -470,11 +471,15 @@ public class TableTwoController {
         list.add(carSourceRent4);
 
         //去年实绩
-        Integer lYear = Integer.valueOf(startYear) - 1;
-        String lastYear = lYear.toString();
+        //过去一年
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(format.parse(endDate));
+        c2.add(Calendar.YEAR, -1);
+        Date y = c2.getTime();
+        String year = format.format(y);
+        String lastYear = year.split("/")[0];
         String lastSD = lastYear + "/" + startMon + "/" + startDate.split("/")[2];
-        String lastED = lastYear + "/" + endMon + "/" + endDate.split("/")[2];
-        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,lastED,typeQuery);
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,year,typeQuery);
         CarSourceRent carSourceRent5 = orderService.selectCarSourceRent(monGoalQueryParam3);
         carSourceRent5.setTableTwoName("去年实绩");
         carSourceRent5.setEastNewCarN(carSourceRent5.getEastNewCar().toString());
@@ -566,7 +571,6 @@ public class TableTwoController {
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
         }
         String startYear = startDate.split("/")[0];
-        String endYear = endDate.split("/")[0];
         String startMon = startDate.split("/")[1];
         String endMon = endDate.split("/")[1];
         List<CustomerNum> list = Lists.newArrayList();
@@ -576,7 +580,21 @@ public class TableTwoController {
         CustomerNum customerNum1 = orderService.selectCustomerNum(cusQueryParam1);
         customerNum1.setCreateNumN(customerNum1.getCreateNum().toString());
 
-        CusQueryParam lmCusQueryParam1 = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon) - 1,0,0,0,0,startDate,endDate);
+        //前月保有
+        //过去一月
+        Integer lastY = Integer.valueOf(startYear);
+        Integer lastM = Integer.valueOf(startMon) - 1;
+        if (lastM == 0){
+            lastM = 12;
+            lastY = Integer.valueOf(startYear) - 1;
+        }
+        String lastStartDate = lastY.toString() + "/" + lastM.toString() + "/" + startDate.split("/")[2];
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parse(endDate));
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        CusQueryParam lmCusQueryParam1 = new CusQueryParam(7,lastY,lastM,0,0,0,0,lastStartDate,mon);
         CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam1);
         customerNum1.setEndNumN(customerNum2.getEndNum().toString());
         customerNum1.setBeforeEndNumN(customerNum2.getBeforeEndNum().toString());
@@ -588,29 +606,21 @@ public class TableTwoController {
         list.add(customerNum1);
 
         //上月实绩
-        Integer lastY = Integer.valueOf(startYear);
-        Integer lastM = Integer.valueOf(startMon) - 1;
-        if (lastM == 0){
-            lastM = 12;
-            lastY = Integer.valueOf(startYear) - 1;
-        }
-        String lastStartDate = lastY.toString() + "/" + lastM.toString() + "/" + startDate.split("/")[2];
-        String lastEndDate = lastY.toString() + "/" + lastM.toString() + "/" + endDate.split("/")[2];
-
-        CusQueryParam cusQueryParam2 = new CusQueryParam(7,lastY,lastM,0,0,0,0,lastStartDate,lastEndDate);
+        CusQueryParam cusQueryParam2 = new CusQueryParam(7,lastY,lastM,0,0,0,0,lastStartDate,mon);
         CustomerNum customerNum3 = orderService.selectCustomerNum(cusQueryParam2);
         customerNum3.setCreateNumN(customerNum3.getCreateNum().toString());
         //前月保有客户台数
-        Integer qYe = Integer.valueOf(startYear);
-        Integer qMon = Integer.valueOf(startMon) - 2;
-        if (qMon == 0){
-            qMon = 12;
-            qYe = Integer.valueOf(startYear) - 1;
-        }
+        //过去两月
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(format.parse(endDate));
+        c2.add(Calendar.MONTH, -2);
+        Date m2 = c2.getTime();
+        String mon2 = format.format(m2);
+        Integer qYe = Integer.valueOf(mon2.split("/")[0]);
+        Integer qMon = Integer.valueOf(mon2.split("/")[1]);
         String qStartDate = qYe.toString() + "/" + qMon.toString() + "/" + startDate.split("/")[2];
-        String qEndDate = qYe.toString() + "/" + qMon.toString() + "/" + endDate.split("/")[2];
 
-        CusQueryParam lmCusQueryParam2 = new CusQueryParam(7,qYe,qMon,0,0,0,0,qStartDate,qEndDate);
+        CusQueryParam lmCusQueryParam2 = new CusQueryParam(7,qYe,qMon,0,0,0,0,qStartDate,mon2);
         CustomerNum customerNum4 = orderService.selectLm(lmCusQueryParam2);
         customerNum3.setEndNumN(customerNum4.getEndNum().toString());
         customerNum3.setBeforeEndNumN(customerNum4.getBeforeEndNum().toString());
@@ -649,23 +659,28 @@ public class TableTwoController {
         list.add(customerNum5);
 
         //去年实绩
-        Integer lYear = Integer.valueOf(startYear) - 1;
+        //过去一年
+        Calendar c3 = Calendar.getInstance();
+        c3.setTime(format.parse(endDate));
+        c3.add(Calendar.YEAR, -1);
+        Date y = c3.getTime();
+        String year = format.format(y);
+        Integer lYear = Integer.valueOf(year.split("/")[0]);
         String lastSD = lYear.toString() + "/" + startMon + "/" + startDate.split("/")[2];
-        String lastED = lYear.toString() + "/" + endMon + "/" + endDate.split("/")[2];
-        CusQueryParam cusQueryParam3 = new CusQueryParam(7,lYear,Integer.valueOf(startMon),0,0,0,0,lastSD,lastED);
+        CusQueryParam cusQueryParam3 = new CusQueryParam(7,lYear,Integer.valueOf(startMon),0,0,0,0,lastSD,year);
         CustomerNum customerNum6 = orderService.selectCustomerNum(cusQueryParam3);
         customerNum6.setCreateNumN(customerNum6.getCreateNum().toString());
 
         //前月保有客户台数
-        Integer qY = lYear;
-        Integer qM = lastM;
-        if (qM == 0){
-            qM = 12;
-            qY = Integer.valueOf(startYear) - 1;
-        }
-        String qSD = qY.toString() + "/" + qM + "/" + startDate.split("/")[2];
-        String qED = qY.toString() + "/" + qM + "/" + endDate.split("/")[2];
-        CusQueryParam lmCusQueryParam3 = new CusQueryParam(7,qY,qM,0,0,0,0,qSD,qED);
+        //过去两年
+        Calendar c4 = Calendar.getInstance();
+        c4.setTime(format.parse(endDate));
+        c4.add(Calendar.YEAR, -2);
+        Date y2 = c4.getTime();
+        String year2 = format.format(y2);
+        Integer qY = Integer.valueOf(year2.split("/")[0]);
+        String qSD = qY.toString() + "/" + startMon + "/" + startDate.split("/")[2];
+        CusQueryParam lmCusQueryParam3 = new CusQueryParam(7,qY,Integer.valueOf(startMon),0,0,0,0,qSD,year2);
         CustomerNum customerNum7 = orderService.selectLm(lmCusQueryParam3);
         customerNum6.setEndNumN(customerNum7.getEndNum().toString());
         customerNum6.setBeforeEndNumN(customerNum7.getBeforeEndNum().toString());
