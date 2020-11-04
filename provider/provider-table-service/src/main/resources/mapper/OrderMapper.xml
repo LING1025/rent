@@ -1023,7 +1023,7 @@ drop table #D
     ,a.Order_Auto ,g.CreditMain_Auto,g.ContractNo contractNo
     ,ISNULL(a.JCDT,t.deliveryDT) forDT
     ,dbo.f_GetItemName(1001,g.PayType) payType
-    ,case j.CarSource when 1 then '新车' when 2 then '调度中心' when 3  then '原车续租' when 4 then '外购二手车' end carSource,a.RentRate
+    ,case j.CarSource when 1 then '新车' when 2 then '调度中心' when 3  then '原车续租' when 4 then '外购二手车' else '' end carSource,a.RentRate
     , a.finalrate , a.rentamt ,a.BonusRate
     ,s.ItemName businessType
     ,s1.ItemName businessOrdersType
@@ -1077,9 +1077,9 @@ drop table #D
     begin
     select
     sum(case when carSource = '新车'and depName like '%华东%' or depAuto in (45,139,170,134,156,168,169,206) then totalAmt else 0 end) eastNewCar,
-    sum(case when carSource != '新车'and depName like '%华东%' or depAuto  in (45,139,170,134,156,168,169,206) then totalAmt else 0 end) eastOldCar,
+    sum(case when carSource in ('','调度中心','原车续租','外购二手车') and depName like '%华东%' or depAuto  in (45,139,170,134,156,168,169,206) then totalAmt else 0 end) eastOldCar,
     sum(case when carSource = '新车'and depName like '%华南%' or depAuto in (69,146,147,171,172,20,151) then totalAmt else 0 end) southNewCar,
-    sum(case when carSource != '新车'and depName like '%华南%' or depAuto in (69,146,147,171,172,20,151) then totalAmt else 0 end) southOldCar,
+    sum(case when carSource in ('','调度中心','原车续租','外购二手车') and depName like '%华南%' or depAuto in (69,146,147,171,172,20,151) then totalAmt else 0 end) southOldCar,
     YJCDT
     into #F
     from #E
@@ -1094,7 +1094,6 @@ drop table #D
     from #F
     where YJCDT between @StartDT and @EndDT
     drop table #F
-
     end
 
     else if @typeQuery = 2
