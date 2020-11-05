@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @ApiModel(value = "新增契约租金-客户来源")
 public class RentAmtList implements Serializable {
-    @ApiModelProperty(value = "标题名")
+    @ApiModelProperty(value = "新增契约租金（交车）")
     private String titleName;
 
     @ApiModelProperty(value = "当月目标")

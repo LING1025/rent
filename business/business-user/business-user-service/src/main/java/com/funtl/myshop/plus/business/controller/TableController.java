@@ -182,38 +182,52 @@ public class TableController {
         MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate,3);
         ThisMonthTar thisMonthTar2 = orderService.selectThisMonReal(monGoalQueryParam);
 
+        RentAmtList rentAmtList = new RentAmtList();
         RentAmtList rentAmtList1 = new RentAmtList();
         RentAmtList rentAmtList2 = new RentAmtList();
+        RentAmtList rentAmtList3 = new RentAmtList();
+
         //标题
+        rentAmtList.setTitleName("新增契约租金(①+②+③)");
         rentAmtList1.setTitleName("客户来源-新拓①");
         rentAmtList2.setTitleName("客户来源-保有②");
+        rentAmtList3.setTitleName("客户来源-介绍③");
 
         //当月目标
+        rentAmtList.setThisMonTar(thisMonthTar1.getTotalNumAmt());
         rentAmtList1.setThisMonTar(thisMonthTar1.getNewExs());
         rentAmtList2.setThisMonTar(thisMonthTar1.getRetain());
+        rentAmtList3.setThisMonTar(thisMonthTar1.getIntroduce());
 
         //当月实绩
+        rentAmtList.setThisMonAct(thisMonthTar2.getTotalNumAmt());
         rentAmtList1.setThisMonAct(thisMonthTar2.getNewExs());
         rentAmtList2.setThisMonAct(thisMonthTar2.getRetain());
+        rentAmtList3.setThisMonAct(thisMonthTar2.getIntroduce());
+
 
         //结构比
+        rentAmtList.setStructure("100%");
         if(thisMonthTar2.getTotalNumAmt().toString().equals("0.00")){
             rentAmtList1.setStructure("-");
             rentAmtList2.setStructure("-");
-
+            rentAmtList3.setStructure("-");
         }else {
             rentAmtList1.setStructure(nt.format(thisMonthTar2.getNewExs().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
             rentAmtList2.setStructure(nt.format(thisMonthTar2.getRetain().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
-
+            rentAmtList3.setStructure(nt.format(thisMonthTar2.getIntroduce().divide(thisMonthTar2.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
         }
         //达成率
         if(thisMonthTar1.getTotalNumAmt().toString().equals("0.00")){
+            rentAmtList.setReach("-");
             rentAmtList1.setReach("-");
             rentAmtList2.setReach("-");
-
+            rentAmtList3.setReach("-");
         }else {
+            rentAmtList.setReach(nt.format(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
             rentAmtList1.setReach(nt.format(thisMonthTar2.getNewExs().divide(thisMonthTar1.getNewExs(), 2, BigDecimal.ROUND_HALF_UP)));
             rentAmtList2.setReach(nt.format(thisMonthTar2.getRetain().divide(thisMonthTar1.getRetain(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList3.setReach(nt.format(thisMonthTar2.getIntroduce().divide(thisMonthTar1.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP)));
         }
         //上月实绩
         //过去一月
@@ -228,18 +242,23 @@ public class TableController {
 
         MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,mon,3);
         ThisMonthTar thisMonthTar5 = orderService.selectThisMonReal(monGoalQueryParam2);
+        rentAmtList.setLastMonAct(thisMonthTar5.getTotalNumAmt());
         rentAmtList1.setLastMonAct(thisMonthTar5.getNewExs());
         rentAmtList2.setLastMonAct(thisMonthTar5.getRetain());
+        rentAmtList3.setLastMonAct(thisMonthTar5.getIntroduce());
 
         //环比
         if (thisMonthTar5.getNewExs().toString().equals("0.00")){
+            rentAmtList.setLink("-");
             rentAmtList1.setLink("-");
             rentAmtList2.setLink("-");
+            rentAmtList3.setLink("-");
 
         }else {
+            rentAmtList.setLink(nt.format(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
             rentAmtList1.setLink(nt.format(thisMonthTar2.getNewExs().divide(thisMonthTar5.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
             rentAmtList2.setLink(nt.format(thisMonthTar2.getRetain().divide(thisMonthTar5.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
-
+            rentAmtList3.setLink(nt.format(thisMonthTar2.getIntroduce().divide(thisMonthTar5.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
         }
         //去年实绩
         //过去一年
@@ -252,31 +271,40 @@ public class TableController {
         String lastSD = lastYear + "/" + startMon + "/" + startDate.split("/")[2];
         MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,year,3);
         ThisMonthTar thisMonthTar7 = orderService.selectThisMonReal(monGoalQueryParam3);
+        rentAmtList.setLastYearAct(thisMonthTar7.getTotalNumAmt());
         rentAmtList1.setLastYearAct(thisMonthTar7.getNewExs());
         rentAmtList2.setLastYearAct(thisMonthTar7.getRetain());
+        rentAmtList3.setLastYearAct(thisMonthTar7.getIntroduce());
 
         //结构比
+        rentAmtList.setConstruction("100%");
         if(thisMonthTar7.getTotalNumAmt().toString().equals("0.00")){
             rentAmtList1.setConstruction("-");
             rentAmtList2.setConstruction("-");
+            rentAmtList3.setConstruction("-");
 
         }else {
             rentAmtList1.setConstruction(nt.format(thisMonthTar7.getNewExs().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));//四舍五入保留两位小数
             rentAmtList2.setConstruction(nt.format(thisMonthTar7.getRetain().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));//四舍五入保留两位小数
-
+            rentAmtList3.setConstruction(nt.format(thisMonthTar7.getIntroduce().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));//四舍五入保留两位小数
         }
         //同期对比
         if (thisMonthTar7.getNewExs().toString().equals("0.00")){
+            rentAmtList.setComparison("-");
             rentAmtList1.setComparison("-");
             rentAmtList2.setComparison("-");
-
+            rentAmtList3.setComparison("-");
         }else {
+            rentAmtList.setComparison(nt.format(thisMonthTar2.getTotalNumAmt().divide(thisMonthTar7.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
             rentAmtList1.setComparison(nt.format(thisMonthTar2.getNewExs().divide(thisMonthTar7.getNewExs(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
             rentAmtList2.setComparison(nt.format(thisMonthTar2.getRetain().divide(thisMonthTar7.getRetain(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
-
+            rentAmtList3.setComparison(nt.format(thisMonthTar2.getIntroduce().divide(thisMonthTar7.getIntroduce(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
         }
+        //将数据插入到集合中
+        list.add(rentAmtList);
         list.add(rentAmtList1);
         list.add(rentAmtList2);
+        list.add(rentAmtList3);
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
