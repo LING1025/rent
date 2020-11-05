@@ -308,4 +308,188 @@ public class TableController {
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
+
+    @ApiOperation(value = "新增契约租金,台数-车辆来源")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryCarRent")
+    public ResponseResult<List<RentAmtList>> queryCarRent(@RequestParam(name = "startDate",required = false) String startDate,
+                                                                  @RequestParam(name = "endDate",required = false) String endDate,
+                                                                  @RequestParam(name = "typeQuery",required = false) Integer typeQuery) throws ParseException {
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("/")[0];
+        String startMon = startDate.split("/")[1];
+        List<RentAmtList> list = Lists.newArrayList();
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+
+        //当月实绩
+        MonGoalQueryParam monGoalQueryParam = new MonGoalQueryParam(0,4,startYear,startMon,1,"",startDate,endDate,typeQuery);
+        CarSourceRent carSourceRent1 = orderService.selectCarSourceRent(monGoalQueryParam);
+
+        RentAmtList rentAmtList = new RentAmtList();
+        RentAmtList rentAmtList1 = new RentAmtList();
+        RentAmtList rentAmtList2 = new RentAmtList();
+        RentAmtList rentAmtList3 = new RentAmtList();
+        RentAmtList rentAmtList4 = new RentAmtList();
+
+        //标题
+        rentAmtList.setTitleName("新增契约租金(①+②+③+④)");
+        rentAmtList1.setTitleName("华东-车辆来源-新车①");
+        rentAmtList2.setTitleName("华东-车辆来源-旧车②");
+        rentAmtList3.setTitleName("华南-车辆来源-新车③");
+        rentAmtList4.setTitleName("华南-车辆来源-旧车④");
+
+        //当月实绩
+        rentAmtList.setThisMonAct(carSourceRent1.getTotalNumAmt());
+        rentAmtList1.setThisMonAct(carSourceRent1.getEastNewCar());
+        rentAmtList2.setThisMonAct(carSourceRent1.getEastOldCar());
+        rentAmtList3.setThisMonAct(carSourceRent1.getSouthNewCar());
+        rentAmtList4.setThisMonAct(carSourceRent1.getSouthOldCar());
+
+        //结构比
+        rentAmtList.setStructure("100%");
+        if (carSourceRent1.getTotalNumAmt().toString().equals("0.00")){
+            rentAmtList1.setStructure("-");
+            rentAmtList2.setStructure("-");
+            rentAmtList3.setStructure("-");
+            rentAmtList4.setStructure("-");
+        }else {
+            rentAmtList1.setStructure(nt.format(carSourceRent1.getEastNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList2.setStructure(nt.format(carSourceRent1.getEastOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList3.setStructure(nt.format(carSourceRent1.getSouthNewCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList4.setStructure(nt.format(carSourceRent1.getSouthOldCar().divide(carSourceRent1.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+        }
+
+        //上月实绩
+        //过去一月
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parse(endDate));
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        String lastStartMon = mon.split("/")[1];
+        String lastStartYear = mon.split("/")[0];
+        String lastStartDate = lastStartYear + "/" +lastStartMon + "/" + startDate.split("/")[2];
+        MonGoalQueryParam monGoalQueryParam2 = new MonGoalQueryParam(0,4,lastStartYear,lastStartMon,1,"",lastStartDate,mon,typeQuery);
+        CarSourceRent carSourceRent3 = orderService.selectCarSourceRent(monGoalQueryParam2);
+        rentAmtList.setLastMonAct(carSourceRent3.getTotalNumAmt());
+        rentAmtList1.setLastMonAct(carSourceRent3.getEastNewCar());
+        rentAmtList2.setLastMonAct(carSourceRent3.getEastOldCar());
+        rentAmtList3.setLastMonAct(carSourceRent3.getSouthNewCar());
+        rentAmtList4.setLastMonAct(carSourceRent3.getSouthOldCar());
+
+        //环比
+        if (carSourceRent3.getTotalNumAmt().toString().equals("0.00")){
+            rentAmtList.setLink("-");
+        }else {
+            rentAmtList.setLink(nt.format(carSourceRent1.getTotalNumAmt().divide(carSourceRent3.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent3.getEastNewCar().toString().equals("0.00")){
+            rentAmtList1.setLink("-");
+        }else {
+            rentAmtList1.setLink(nt.format(carSourceRent1.getEastNewCar().divide(carSourceRent3.getEastNewCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent3.getEastOldCar().toString().equals("0.00")){
+            rentAmtList2.setLink("-");
+        }else {
+            rentAmtList2.setLink(nt.format(carSourceRent1.getEastOldCar().divide(carSourceRent3.getEastOldCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent3.getSouthNewCar().toString().equals("0.00")){
+            rentAmtList3.setLink("-");
+        }else {
+            rentAmtList3.setLink(nt.format(carSourceRent1.getSouthNewCar().divide(carSourceRent3.getSouthNewCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent3.getSouthOldCar().toString().equals("0.00")){
+            rentAmtList4.setLink("-");
+        }else {
+            rentAmtList4.setLink(nt.format(carSourceRent1.getSouthOldCar().divide(carSourceRent3.getSouthOldCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        //去年实绩
+        //过去一年
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(format.parse(endDate));
+        c2.add(Calendar.YEAR, -1);
+        Date y = c2.getTime();
+        String year = format.format(y);
+        String lastYear = year.split("/")[0];
+        String lastSD = lastYear + "/" + startMon + "/" + startDate.split("/")[2];
+        MonGoalQueryParam monGoalQueryParam3 = new MonGoalQueryParam(0,4,lastYear,startMon,1,"",lastSD,year,typeQuery);
+        CarSourceRent carSourceRent5 = orderService.selectCarSourceRent(monGoalQueryParam3);
+        rentAmtList.setLastYearAct(carSourceRent5.getTotalNumAmt());
+        rentAmtList1.setLastYearAct(carSourceRent5.getEastNewCar());
+        rentAmtList2.setLastYearAct(carSourceRent5.getEastOldCar());
+        rentAmtList3.setLastYearAct(carSourceRent5.getSouthNewCar());
+        rentAmtList4.setLastYearAct(carSourceRent5.getSouthOldCar());
+
+        //结构比
+        rentAmtList.setConstruction("100%");
+        if (carSourceRent1.getTotalNumAmt().toString().equals("0.00")){
+            rentAmtList1.setConstruction("-");
+            rentAmtList2.setConstruction("-");
+            rentAmtList3.setConstruction("-");
+            rentAmtList4.setConstruction("-");
+        }else {
+            rentAmtList1.setConstruction(nt.format(carSourceRent5.getEastNewCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList2.setConstruction(nt.format(carSourceRent5.getEastOldCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList3.setConstruction(nt.format(carSourceRent5.getSouthNewCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+            rentAmtList4.setConstruction(nt.format(carSourceRent5.getSouthOldCar().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP)));
+        }
+
+        //同期比较
+        if (carSourceRent5.getTotalNumAmt().equals("0.00")){
+            rentAmtList.setComparison("-");
+        }else {
+            rentAmtList.setComparison(nt.format(carSourceRent1.getTotalNumAmt().divide(carSourceRent5.getTotalNumAmt(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent5.getEastNewCar().toString().equals("0.00")){
+            rentAmtList1.setComparison("-");
+        }else {
+            rentAmtList1.setComparison(nt.format(carSourceRent1.getEastNewCar().divide(carSourceRent5.getEastNewCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent5.getEastOldCar().toString().equals("0.00")){
+            rentAmtList2.setComparison("-");
+        }else {
+            rentAmtList2.setComparison(nt.format(carSourceRent1.getEastOldCar().divide(carSourceRent5.getEastOldCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent5.getSouthNewCar().toString().equals("0.00")){
+            rentAmtList3.setComparison("-");
+        }else {
+            rentAmtList3.setComparison(nt.format(carSourceRent1.getSouthNewCar().divide(carSourceRent5.getSouthNewCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+        if (carSourceRent5.getSouthOldCar().toString().equals("0.00")){
+            rentAmtList4.setComparison("-");
+        }else {
+            rentAmtList4.setComparison(nt.format(carSourceRent1.getSouthOldCar().divide(carSourceRent5.getSouthOldCar(), 2, BigDecimal.ROUND_HALF_UP).subtract(BigDecimal.valueOf(1))));
+        }
+
+
+        //将数据插入到集合中
+        list.add(rentAmtList);
+        list.add(rentAmtList1);
+        list.add(rentAmtList2);
+        list.add(rentAmtList3);
+        list.add(rentAmtList4);
+
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
 }
