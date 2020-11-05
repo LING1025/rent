@@ -492,4 +492,177 @@ public class TableController {
 
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
     }
+
+    @ApiOperation(value = "保有客户台数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "endDate", value = "结束日期", required = false, dataType = "string", paramType = "path")
+    })
+    @GetMapping(value = "queryNum")
+    public ResponseResult<List<RentAmtList>> queryNum(@RequestParam(name = "startDate",required = false) String startDate,
+                                                              @RequestParam(name = "endDate",required = false) String endDate) throws ParseException {
+        if(startDate == null || endDate == null){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：查询日期不能为空",null);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        Date date1 = format.parse(startDate);
+        Date date2 = format.parse(endDate);
+        if(date1.after(date2)){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：开始日期必须小于结束日期",null);
+        }
+        String startYear = startDate.split("/")[0];
+        String startMon = startDate.split("/")[1];
+        List<RentAmtList> list = Lists.newArrayList();
+
+
+        RentAmtList rentAmtList1 = new RentAmtList();
+        RentAmtList rentAmtList2 = new RentAmtList();
+        RentAmtList rentAmtList3 = new RentAmtList();
+        RentAmtList rentAmtList4 = new RentAmtList();
+        RentAmtList rentAmtList5 = new RentAmtList();
+
+        //标题
+        rentAmtList1.setTitleName("新增业绩台数");
+        rentAmtList2.setTitleName("前月保有客户台数");
+        rentAmtList3.setTitleName("结清-期满解约");
+        rentAmtList4.setTitleName("结清-提前解约");
+        rentAmtList5.setTitleName("本月保有客户台数");
+
+        //当月实绩
+        CusQueryParam cusQueryParam1 = new CusQueryParam(7,Integer.valueOf(startYear),Integer.valueOf(startMon),0,0,0,0,startDate,endDate);
+        CustomerNum customerNum1 = orderService.selectCustomerNum(cusQueryParam1);
+
+        //前月保有
+        //过去一月
+        Integer lastY = Integer.valueOf(startYear);
+        Integer lastM = Integer.valueOf(startMon) - 1;
+        if (lastM == 0){
+            lastM = 12;
+            lastY = Integer.valueOf(startYear) - 1;
+        }
+        String lastStartDate = lastY.toString() + "/" + lastM.toString() + "/" + startDate.split("/")[2];
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parse(endDate));
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        CusQueryParam lmCusQueryParam1 = new CusQueryParam(7,lastY,lastM,0,0,0,0,lastStartDate,mon);
+        CustomerNum customerNum2 = orderService.selectLm(lmCusQueryParam1);
+        //当月实绩
+        rentAmtList1.setThisMonAct(BigDecimal.valueOf(customerNum1.getCreateNum()));
+        rentAmtList2.setThisMonAct(BigDecimal.valueOf(customerNum2.getLmCusNum()));
+        rentAmtList3.setThisMonAct(BigDecimal.valueOf(customerNum2.getEndNum()));
+        rentAmtList4.setThisMonAct(BigDecimal.valueOf(customerNum2.getBeforeEndNum()));
+        customerNum1.setTmCusNum(customerNum2.getLmCusNum() + customerNum1.getCreateNum() - customerNum2.getEndNum() - customerNum2.getBeforeEndNum());
+        rentAmtList5.setThisMonAct(BigDecimal.valueOf(customerNum1.getTmCusNum()));
+
+        //上月实绩
+        CusQueryParam cusQueryParam2 = new CusQueryParam(7,lastY,lastM,0,0,0,0,lastStartDate,mon);
+        CustomerNum customerNum3 = orderService.selectCustomerNum(cusQueryParam2);
+
+        //前月保有客户台数
+        //过去两月
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(format.parse(endDate));
+        c2.add(Calendar.MONTH, -2);
+        Date m2 = c2.getTime();
+        String mon2 = format.format(m2);
+        Integer qYe = Integer.valueOf(mon2.split("/")[0]);
+        Integer qMon = Integer.valueOf(mon2.split("/")[1]);
+        String qStartDate = qYe.toString() + "/" + qMon.toString() + "/" + startDate.split("/")[2];
+
+        CusQueryParam lmCusQueryParam2 = new CusQueryParam(7,qYe,qMon,0,0,0,0,qStartDate,mon2);
+        CustomerNum customerNum4 = orderService.selectLm(lmCusQueryParam2);
+        rentAmtList1.setLastMonAct(BigDecimal.valueOf(customerNum3.getCreateNum()));
+        rentAmtList2.setLastMonAct(BigDecimal.valueOf(customerNum4.getLmCusNum()));
+        rentAmtList3.setLastMonAct(BigDecimal.valueOf(customerNum4.getEndNum()));
+        rentAmtList4.setLastMonAct(BigDecimal.valueOf(customerNum4.getBeforeEndNum()));
+        customerNum3.setTmCusNum(customerNum4.getLmCusNum() + customerNum3.getCreateNum() - customerNum4.getEndNum() - customerNum4.getBeforeEndNum());
+        rentAmtList5.setLastMonAct(BigDecimal.valueOf(customerNum3.getTmCusNum()));
+
+        NumberFormat nt = NumberFormat.getPercentInstance();//getPercentInstance()百分比
+        //设置百分数精确度2即保留两位小数
+//        nt.setMinimumFractionDigits(2);
+
+        //环比
+        rentAmtList2.setLink(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum4.getLmCusNum().doubleValue() - 1));
+        if (customerNum3.getCreateNum() == 0){
+            rentAmtList1.setLink("-");
+        }else {
+            rentAmtList1.setLink(nt.format(customerNum1.getCreateNum().doubleValue()/customerNum3.getCreateNum().doubleValue() - 1));
+        }
+
+        if (customerNum4.getEndNum() == 0){
+            rentAmtList3.setLink("-");
+        }else {
+            rentAmtList3.setLink(nt.format(customerNum2.getEndNum().doubleValue()/customerNum4.getEndNum().doubleValue() - 1));
+        }
+
+        if (customerNum4.getBeforeEndNum() == 0){
+            rentAmtList4.setLink("-");
+        }else {
+            rentAmtList4.setLink(nt.format(customerNum2.getBeforeEndNum().doubleValue()/customerNum4.getBeforeEndNum().doubleValue() - 1));
+        }
+
+        rentAmtList5.setLink(nt.format(customerNum1.getTmCusNum().doubleValue()/customerNum3.getTmCusNum().doubleValue() - 1));
+
+        //去年实绩
+        //过去一年
+        Calendar c3 = Calendar.getInstance();
+        c3.setTime(format.parse(endDate));
+        c3.add(Calendar.YEAR, -1);
+        Date y = c3.getTime();
+        String year = format.format(y);
+        Integer lYear = Integer.valueOf(year.split("/")[0]);
+        String lastSD = lYear.toString() + "/" + startMon + "/" + startDate.split("/")[2];
+        CusQueryParam cusQueryParam3 = new CusQueryParam(7,lYear,Integer.valueOf(startMon),0,0,0,0,lastSD,year);
+        CustomerNum customerNum6 = orderService.selectCustomerNum(cusQueryParam3);
+
+        //前月保有客户台数
+        //过去两年
+        Calendar c4 = Calendar.getInstance();
+        c4.setTime(format.parse(endDate));
+        c4.add(Calendar.YEAR, -2);
+        Date y2 = c4.getTime();
+        String year2 = format.format(y2);
+        Integer qY = Integer.valueOf(year2.split("/")[0]);
+        String qSD = qY.toString() + "/" + startMon + "/" + startDate.split("/")[2];
+        CusQueryParam lmCusQueryParam3 = new CusQueryParam(7,qY,Integer.valueOf(startMon),0,0,0,0,qSD,year2);
+        CustomerNum customerNum7 = orderService.selectLm(lmCusQueryParam3);
+        rentAmtList1.setLastYearAct(BigDecimal.valueOf(customerNum6.getCreateNum()));
+        rentAmtList2.setLastYearAct(BigDecimal.valueOf(customerNum7.getLmCusNum()));
+        rentAmtList3.setLastYearAct(BigDecimal.valueOf(customerNum7.getEndNum()));
+        rentAmtList4.setLastYearAct(BigDecimal.valueOf(customerNum7.getBeforeEndNum()));
+        customerNum6.setTmCusNum(customerNum7.getLmCusNum() + customerNum6.getCreateNum() - customerNum7.getEndNum() - customerNum7.getBeforeEndNum());
+        rentAmtList5.setLastYearAct(BigDecimal.valueOf(customerNum6.getTmCusNum()));
+
+        //同期对比
+        rentAmtList2.setComparison(nt.format(customerNum2.getLmCusNum().doubleValue()/customerNum7.getLmCusNum().doubleValue() - 1));
+        if (customerNum6.getCreateNum() == 0){
+            rentAmtList1.setComparison("-");
+        }else {
+            rentAmtList1.setComparison(nt.format(customerNum1.getCreateNum().doubleValue()/customerNum6.getCreateNum().doubleValue() - 1));
+        }
+
+        if (customerNum7.getEndNum() == 0){
+            rentAmtList3.setComparison("-");
+        }else {
+            rentAmtList3.setComparison(nt.format(customerNum2.getEndNum().doubleValue()/customerNum7.getEndNum().doubleValue() - 1));
+        }
+
+        if (customerNum7.getBeforeEndNum() == 0){
+            rentAmtList4.setComparison("-");
+        }else {
+            rentAmtList4.setComparison(nt.format(customerNum2.getBeforeEndNum().doubleValue()/customerNum7.getBeforeEndNum().doubleValue() - 1));
+        }
+        rentAmtList5.setComparison(nt.format(customerNum1.getTmCusNum().doubleValue()/customerNum6.getTmCusNum().doubleValue() - 1));
+
+        //将数据插入到集合中
+        list.add(rentAmtList2);
+        list.add(rentAmtList1);
+        list.add(rentAmtList3);
+        list.add(rentAmtList4);
+        list.add(rentAmtList5);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",list);
+    }
 }
