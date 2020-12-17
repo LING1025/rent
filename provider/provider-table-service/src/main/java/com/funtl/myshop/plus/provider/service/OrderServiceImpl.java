@@ -52,6 +52,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectLm(cusQueryParam);
     }
 
+    @Override
+    public List<YearList> selectYearList(String year) {
+        return orderMapper.selectYearList(year);
+    }
+
     /*@Override
     public PageInfo<CaseExecListDto> selectCaseExecListDto(CaseProQueryParam caseProQueryParam) {
         PageHelper.startPage(caseProQueryParam.getPageNum(),caseProQueryParam.getPageSize());

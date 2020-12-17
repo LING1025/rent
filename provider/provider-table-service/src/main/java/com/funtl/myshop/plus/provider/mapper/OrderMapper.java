@@ -22,6 +22,8 @@ public interface OrderMapper extends MyMapper<Order> {
 
     CustomerNum selectLm(@Param("param") CusQueryParam cusQueryParam);
 
+    List<YearList> selectYearList(@Param("param") String year);
+
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
 }
