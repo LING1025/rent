@@ -1465,7 +1465,7 @@ drop table #D
   </resultMap>
   <select id="selectYearList" resultMap="queryYearList">
     declare @years varchar(4)=#{year},
-    @week varchar(5)=#{week}
+    @week varchar(6)=#{week}
     BEGIN
     declare
     @year VARCHAR(10)=@years+'-'
