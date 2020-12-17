@@ -5,6 +5,7 @@ import com.funtl.myshop.plus.provider.api.OrderService;
 import com.funtl.myshop.plus.provider.domain.YearList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,17 @@ public class TableThreeController {
     private OrderService orderService;
 
     @ApiOperation(value = "新增呆账&回收")
-    @ApiImplicitParam(name = "year", value = "年度", required = true, dataType = "String", paramType = "path")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "year", value = "年度", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "week", value = "周", required = true, dataType = "String", paramType = "path")
+    })
     @GetMapping(value = "queryYearList")
-    public ResponseResult<List<YearList>> queryYearList(@RequestParam(name = "year") String year){
+    public ResponseResult<List<YearList>> queryYearList(@RequestParam(name = "year") String year,
+                                                        @RequestParam(name = "week",defaultValue = "") String week){
         if (year == null || year ==""){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请输入年份！！",null);
         }
-        List<YearList> lists = orderService.selectYearList(year);
+        List<YearList> lists = orderService.selectYearList(year,week);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
     }
 }

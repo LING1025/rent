@@ -1464,11 +1464,14 @@ drop table #D
     <result column="backAmt" jdbcType="DECIMAL" property="backAmt" />
   </resultMap>
   <select id="selectYearList" resultMap="queryYearList">
+    declare @years varchar(4)=#{year},
+    @week varchar(5)=#{week}
+    BEGIN
     declare
-    @year VARCHAR(10)=#{param}+'-'
+    @year VARCHAR(10)=@years+'-'
 
     --指定年份每个月的最后一天
-    declare @yearNum varchar(4)=#{param},
+    declare @yearNum varchar(4)=@years,
     @j varchar(2)='1'
     while(@j &lt;= 12)
     begin
@@ -1711,13 +1714,20 @@ drop table #D
     SET @i=@i+1
     END
 
-    select weekNo ,ruDaiCount ,ruDaiAmt,huiShouAmt as backAmt  from @DZ
+    select
+    weekNo ,ruDaiCount ,ruDaiAmt,huiShouAmt as backAmt
+    from @DZ
+    where
+    1 = 1
+    <if test="week != null and week != ''">
+      AND weekNo = #{week}
+    </if>
 
     drop table #a
     drop table #b
     drop table #c
     drop table #e
     drop table #f
-
+    END
   </select>
 </mapper>

@@ -22,7 +22,7 @@ public interface OrderMapper extends MyMapper<Order> {
 
     CustomerNum selectLm(@Param("param") CusQueryParam cusQueryParam);
 
-    List<YearList> selectYearList(@Param("param") String year);
+    List<YearList> selectYearList(@Param("year") String year,@Param("week") String week);
 
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);

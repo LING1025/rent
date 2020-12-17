@@ -53,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<YearList> selectYearList(String year) {
-        return orderMapper.selectYearList(year);
+    public List<YearList> selectYearList(String year,String week) {
+        return orderMapper.selectYearList(year,week);
     }
 
     /*@Override
