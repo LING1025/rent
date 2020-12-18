@@ -1456,4 +1456,278 @@ drop table #D
 	drop table #order_Law
 	drop table #ttt
   </select>
+
+  <resultMap id="queryYearList" type="com.funtl.myshop.plus.provider.domain.YearList">
+    <result column="weekNo" jdbcType="VARCHAR" property="weekNo" />
+    <result column="ruDaiCount" jdbcType="INTEGER" property="ruDaiCount" />
+    <result column="ruDaiAmt" jdbcType="DECIMAL" property="ruDaiAmt" />
+    <result column="backAmt" jdbcType="DECIMAL" property="backAmt" />
+  </resultMap>
+  <select id="selectYearList" resultMap="queryYearList">
+    declare @years varchar(4)=#{year},
+    @week varchar(5)=#{week}
+    BEGIN
+    declare
+    @year VARCHAR(10)=@years+'-'
+
+    --指定年份每个月的最后一天
+    declare @yearNum varchar(4)=@years,
+    @j varchar(2)='1'
+    while(@j &lt;= 12)
+    begin
+    declare @mLastday varchar(2),
+    @yearMonDay varchar(10),
+    @m varchar(2)--月
+    if(@j &lt;= 9)
+    set @m='0'+@j
+    else
+    set @m=@j
+    begin
+    set @mLastday=day(dateadd(month,1,@yearNum+@m+'01')-1)
+    set @yearMonDay=@yearNum+'-'+@m+'-'+@mLastday
+    declare @LMD TABLE(yearMonDay varchar(10))
+    INSERT @LMD(yearMonDay) VALUES(@yearMonDay)
+    set @j=@j+1
+    end
+    end
+    select ROW_NUMBER() OVER(ORDER BY yearMonDay) no,yearMonDay into #f from @LMD
+
+    --当月入呆
+    declare @countTable TABLE(FName varchar(50),Order_Auto bigint,ruDaiAmt decimal(18,2),ruDaiDt datetime,DepName varchar(50),salesName varchar(50))
+    --呆账当月回收
+    declare @amtTable TABLE(Order_Auto bigint,FName varchar(50),huiShouDt date,ruDaiDt date,InComeAmtSUM decimal(18,2))
+    declare @amtTable1 TABLE(Order_Auto bigint,huiShouDt date,InComeAmtSUM decimal(18,2))
+    declare @amtTable2 TABLE(Order_Auto bigint,FName varchar(50),huiShouDt date,ruDaiDt date,InComeAmtSUM decimal(18,2))
+
+    --循环查询每个月数据
+    DECLARE @count3 INT
+    SELECT @count3=COUNT(no) FROM #f
+    DECLARE @k INT=1
+    WHILE(@k &lt;= @count3)
+    BEGIN
+    declare @date date
+    set @date=(select convert(date,yearMonDay) from #f where no=@k )
+
+    begin
+    INSERT @countTable(FName,Order_Auto,ruDaiAmt,ruDaiDt,DepName,salesName)
+    select FName,Order_Auto,ruDaiAmt,ruDaiDt,DepName,salesName
+    --into #b
+    from (
+    select f.FName ,f.Order_Auto ,sum(case when isnull(DZAmt,0) = 0 and  EndDT > @date then PV_E else DZAmt end) - isnull(f.ChangesAmt,0) ruDaiAmt,convert(date,BlackDT,111) ruDaiDt,DepName,salesName
+    from(
+    select e.FName,e.Order_Auto,e.EndDT,e.ChangesAmt,DepName,salesName
+    ,max(case when e.MPV - isnull(e.incomeamt,0) > 0 and e.TaxAmT > isnull(e.incomeamt,0) then e.PV_S - isnull(e.incomeamt,0) else 0 end) DZAmt
+    ,min(e.PV_E) PV_E
+    ,sum(e.TaxAmT) TaxAmT
+    ,sum(isnull(e.incomeamt,0)) incomeamt
+    ,e.BlackDT
+    from (
+    select a1.FName,a.Order_Auto,b1.DepName,b1.FName salesName,c.OrderRent_Auto,c.TaxAmT,g.PV_S,g.PV_E,g.MPV,isnull(h.ChangesAmt,0) ChangesAmt,isnull(a.ResDT,a.EndDT) EndDT,sum(d.InComeAmt) InComeAmt,a.BlackDT
+    from [Order] a
+    left join v_emp b1 on b1.user_auto = a.sales_auto
+    left join TradeItem a1 on a1.TradeItem_Auto = a.TradeItem_Auto
+    left join OrderDptToRent b on b.Order_Auto = a.Order_Auto and b.[Status] = 1
+    left join OrderRent c on c.Order_Auto = a.Order_Auto
+    left join OrderRentAR d on d.OrderRent_Auto = c.OrderRent_Auto and CHARINDEX(','+convert(varchar(20),c.Nper)+',',','+isnull(b.OrderRentList,'')+',') = 0 and d.InComeDT  &lt;=  convert(varchar(10),a.BlackDT,120)
+    left join OrderPMT g on g.Order_Auto = c.Order_Auto and g.Nper = c.Nper  and g.[Status] = 0
+    left join OrderCallback h on h.Order_Auto = a.Order_Auto and (a.BlackDT is null or h.ChangesDT &lt; a.BlackDT) and h.ChangesDT  &lt;=  @date --and h.[Type] in(1,2) --and h.ChangesDT > a.BlackDT
+    where isnull(a.IsBlack,0) = 1 and  convert(varchar(7),a.BlackDT,120) = convert(varchar(7),@date,120) and a.OrderType in(1,5) and (a1.FName not like '%格上%' or a1.FName = '格上出行服务有限公司')
+    group by b1.DepName,b1.FName,a1.FName,a.Order_Auto,c.OrderRent_Auto,c.TaxAmT,g.PV_S,g.PV_E,g.MPV,isnull(a.ResDT,a.EndDT),isnull(h.ChangesAmt,0),a.BlackDT
+    )e
+    group by e.FName,e.Order_Auto,e.EndDT,e.ChangesAmt,DepName ,salesName ,e.BlackDT
+    )f
+    where isnull(TaxAmT,0)  !=  isnull(incomeamt,0)
+    group by f.FName,f.Order_Auto,isnull(f.ChangesAmt,0),DepName ,salesName  ,f.BlackDT
+    )i
+    where 	ruDaiAmt > 0
+    order by ruDaiDt,DepName
+    end
+
+    begin
+    INSERT @amtTable(Order_Auto,FName,huiShouDt,ruDaiDt,InComeAmtSUM )
+    select distinct a5.Order_Auto ,a5.FName ,isnull(a5.huiShouDt,convert(date,e.InComeDT,120)) huiShouDt, a5.ruDaiDt,a5.InComeAmtSUM
+    from(
+    select a3.Order_Auto ,a4.FName ,convert(date,isnull(a3.ChangesDT,d.InComeDT),120) huiShouDt,convert(date,a3.BlackDT,111) ruDaiDt,a3.InComeAmtSUM
+    from (
+    select a2.Order_Auto
+    ,a2.BlackDT
+    ,a2.TradeItem_Auto
+    ,case when convert(varchar(7),a2.ChangesDT,120) = convert(varchar(7),@date,120) then a2.ChangesDT end ChangesDT
+    ,isnull(case when isnull(ChangesAmt,0) > 0 and BlackDT  &lt; ChangesDT  then
+                                                             case when convert(varchar(7),ChangesDT,120) = convert(varchar(7),@date,120) then case when h.PV_E > ChangesAmt then ChangesAmt else h.PV_E end else 0 end
+    else
+    case when isnull(InComeAmt_End,0) > 0 and isnull(ARAmt_End,1) > 0 and a2.MM > i.Nper and a2.enddt = i.enddt then h.PV_E else 0 end
+    end,0) + isnull(InComeAmtSUM,0) InComeAmtSUM
+    from (
+    select Order_Auto,TradeItem_Auto ,enddt,MM,ChangesAmt,ChangesDT,BlackDT
+    ,max( Nper ) maxNper
+    ,sum(case when InComeAmt+ InComeAmt_Old > isnull(MPV,TaxAmT) then  case when InComeAmt_Old > MPV  then 0 else MPV - InComeAmt_Old end else InComeAmt end) InComeAmtSUM
+    ,sum(InComeAmt_End) InComeAmt_End
+    ,max(ARAmt_End) ARAmt_End
+    from(
+    select a.Order_Auto,a.TradeItem_Auto,isnull(a.resdt,a.enddt) enddt,a.MM,d.Nper,d.TaxAmT,b.ChangesAmt,g.MPV,a.BlackDT,b.ChangesDT
+    ,sum(case when convert(varchar(7),e.InComeDT,120) = convert(varchar(7),@date,120) and  e.InComeDT > a.BlackDT then InComeAmt else 0 end) InComeAmt
+    ,sum(case when convert(varchar(7),e.InComeDT,120)  &lt; convert(varchar(7),@date,120) then InComeAmt else 0 end) InComeAmt_Old
+    ,sum(case when convert(varchar(7),isnull(a.resdt,a.enddt),120) = convert(varchar(7),d.EndDT,120) and convert(varchar(7),e.InComeDT,120) = convert(varchar(7),@date,120) and  e.InComeDT > a.BlackDT then InComeAmt else 0 end) InComeAmt_End
+    ,max(case when convert(varchar(7),isnull(a.resdt,a.enddt),120) = convert(varchar(7),d.EndDT,120) and d.ARAmt = d.TaxAmT then d.ARAmt else 0 end) ARAmt_End
+    from [Order] a
+    left join OrderCallback b on b.Order_Auto = a.Order_Auto and b.ChangesDT  &lt;=  @date
+    left join OrderDptToRent c on c.Order_Auto = a.Order_Auto and c.[Status] = 1
+    left join OrderRent d on d.Order_Auto = a.Order_Auto and CHARINDEX(','+convert(varchar(20),d.Nper)+',',','+isnull(c.OrderRentList,'')+',') = 0 and d.InComeDT is not null
+    left join OrderRentAR e on e.OrderRent_Auto = d.OrderRent_Auto and  e.InComeDT &lt;= @date and (b.ChangesDT is null or e.InComeDT  &lt;=  b.ChangesDT)
+    left join OrderPMT g on g.Order_Auto = a.Order_Auto and g.Nper = d.Nper  and g.[Status] = 0
+    where isnull(a.IsBlack,0) = 1 and convert(varchar(7),a.BlackDT,120)  &lt;=  convert(varchar(7),@date,120) and a.OrderType in(1,5) and e.OrderRent_Auto is not null
+    group by a.Order_Auto,a.TradeItem_Auto,isnull(a.resdt,a.enddt),a.MM,d.Nper,d.TaxAmT,b.ChangesAmt,b.ChangesDT,g.MPV,a.BlackDT
+    ) a1
+    group by Order_Auto,TradeItem_Auto,enddt,MM,ChangesAmt,ChangesDT,BlackDT
+    ) a2
+    left join OrderPMT h on h.Order_Auto = a2.Order_Auto and h.Nper = a2.maxNper  and h.[Status] = 0
+    left join OrderRent i on i.Order_Auto = a2.Order_Auto and i.Nper = a2.maxNper
+
+    ) a3
+    left join [TradeItem] a4 on a4.TradeItem_Auto = a3.TradeItem_Auto
+    left join OrderDptToRent c on c.Order_Auto = a3.Order_Auto and c.[Status] = 1
+    left join OrderRent d on d.Order_Auto = a3.Order_Auto and CHARINDEX(','+convert(varchar(20),d.Nper)+',',','+isnull(c.OrderRentList,'')+',') = 0 and d.InComeDT is not null  and convert(varchar(7),d.InComeDT,120)=convert(varchar(7),@date,120)
+
+    )a5
+    left join OrderRent d on d.Order_Auto = a5.Order_Auto
+    left join OrderRentAR e on e.OrderRent_Auto = d.OrderRent_Auto and convert(varchar(7),e.InComeDT,120)=convert(varchar(7),@date,120)
+    where InComeAmtSUM > 0
+
+    INSERT @amtTable1(Order_Auto ,huiShouDt,InComeAmtSUM)
+    select distinct Order_Auto,max(huiShouDt) huiShouDt,InComeAmtSUM from @amtTable where convert(varchar(7),huiShouDt,120)=convert(varchar(7),@date,120) group by Order_Auto,InComeAmtSUM
+    INSERT @amtTable2(Order_Auto,FName,huiShouDt,ruDaiDt,InComeAmtSUM )
+    select
+    distinct t1.Order_Auto,t2.FName,t1.huiShouDt,t2.ruDaiDt,t1.InComeAmtSUM
+    from
+    @amtTable1 t1
+    left join @amtTable t2 on t2.Order_Auto = t1.Order_Auto
+    where convert(varchar(7),t1.huiShouDt,120)=convert(varchar(7),@date,120)
+    order by t2.FName,t1.Order_Auto
+    end
+
+    set @k=@k+1
+    END
+
+    select FName,Order_Auto,ruDaiAmt,ruDaiDt,DepName,salesName into #b from @countTable
+
+    select distinct Order_Auto ,FName ,huiShouDt,ruDaiDt,InComeAmtSUM into #c  from @amtTable
+    select distinct Order_Auto,FName,huiShouDt,ruDaiDt,InComeAmtSUM into #e from @amtTable2
+
+    --将一年分为周，周五为每周截止日
+    BEGIN
+    DECLARE @FirstDay date,
+    @LastDay date
+    SET @FirstDay = CONVERT(VARCHAR(5),@year,120)+'01-01'
+    SET @LastDay = CONVERT(VARCHAR(5),@year,120)+'12-31'
+    declare @begDate date = @FirstDay,
+    @endDate date = @LastDay,
+    @text varchar(max) = '',
+    @begDate2 date = @FirstDay,
+    @endDate2 date = @LastDay,
+    @text2 varchar(max) = ''
+
+    while(@begDate  &lt;=  @endDate)
+    begin
+    select @text = @text + case
+    when DATENAME(DW,@begDate) = '星期六'
+    then case
+    when convert(varchar(10),dateadd(dd,7,@begDate),120)  &lt;=  @endDate
+    then convert(varchar(10),@begDate,120) +','
+    else convert(varchar(10),@begDate,120) +','
+    end
+    when DATENAME(DW,@begDate) != '星期六'and DATEPART(DD,@begDate) = 1
+    then case
+    when DATEPART(MM,@begDate) = 1
+    then convert(varchar(10),@begDate,120) +','
+    else convert(varchar(10),dateadd(dd,6,@begDate),120) + CHAR(10)+','
+    end
+    else ''
+    end
+
+
+    select @begDate = DATEADD(DD,1,@begDate)
+    end
+    --去掉最后六个逗号
+    --select left(@text,len(@text)-1)
+
+    while(@begDate2  &lt;=  @endDate2)
+    begin
+    select @text2 = @text2 + case
+    when DATENAME(DW,@begDate2) = '星期六'
+    then case
+    when convert(varchar(10),dateadd(dd,7,@begDate2),120)  &lt;=  @endDate2
+    then convert(varchar(10),dateadd(dd,6,@begDate2),120) + CHAR(10)+','
+    else convert(varchar(10),@endDate2,120) + CHAR(10)+','
+    end
+    when DATENAME(DW,@begDate2) != '星期六' and DATEPART(DD,@begDate2) = 1
+    then convert(varchar(10),dateadd(dd,case when 8 - DATEPART(dw,@begDate2)-2  &lt; 7
+    then 8 - DATEPART(dw,@begDate2)-2
+    else 0 end,@begDate2),120) + CHAR(10) +','
+    else ''
+    end
+
+
+    select @begDate2 = DATEADD(DD,1,@begDate2)
+    end
+
+    --去掉最后一个逗号
+    --select left(@text2,len(@text2)-1)
+
+    --select @text=left(@text,len(@text)-1)--每个月分为多少周，（周一到周日）
+    declare
+    @s VARCHAR(max)=left(@text,len(@text)-1),   --待分拆的字符串
+    @s2 VARCHAR(max)=left(@text2,len(@text2)-1),
+    @split VARCHAR(10)=','    --数据分隔符
+    declare @re TABLE(col varchar(100),col2 varchar(100))
+    begin
+    DECLARE @splitlen int
+    SET @splitlen=LEN(@split+'a')-2
+    WHILE CHARINDEX(@split,@s)>0
+    BEGIN
+    INSERT @re(col,col2) VALUES(LEFT(@s,CHARINDEX(@split,@s)-1),LEFT(@s2,CHARINDEX(@split,@s2)-1))
+    SET @s=STUFF(@s,1,CHARINDEX(@split,@s)+@splitlen,'')
+    SET @s2=STUFF(@s2,1,CHARINDEX(@split,@s2)+@splitlen,'')
+    END
+    INSERT @re(col,col2) VALUES(@s,@s2)
+    SELECT ROW_NUMBER() OVER(ORDER BY col) no,col,col2 into #a from @re  where col2>=col
+    end
+    END
+
+    DECLARE @count INT
+    SELECT @count=COUNT(no) FROM #a
+    DECLARE @i INT=1
+    WHILE(@i &lt;= @count)
+    BEGIN
+    DECLARE @wStart varchar(10),@wEnd varchar(10),@weekNo varchar(10)
+    SELECT @weekNo=no,@wStart=col,@wEnd=col2 FROM #a  WHERE no=@i
+
+    declare @ruDaiCount int,@ruDaiAmt decimal(18,2),@huiShouAmt decimal(18,2)
+    set @weekNo='第'+ (SELECT @weekNo) +'周'
+    set @ruDaiCount = (select count(*) from #b where  ruDaiDt between @wStart and @wEnd)
+    set @ruDaiAmt = (select sum(isnull(ruDaiAmt,0)) from #b where  ruDaiDt between @wStart and @wEnd )
+    set @huiShouAmt = (select sum(isnull(InComeAmtSUM,0)) from #e where  huiShouDt between @wStart and @wEnd)
+
+    declare @DZ TABLE(weekNo varchar(10),ruDaiCount int,ruDaiAmt decimal(18,2),huiShouAmt decimal(18,2))
+    INSERT @DZ(weekNo,ruDaiCount,ruDaiAmt,huiShouAmt) VALUES(@weekNo,@ruDaiCount,@ruDaiAmt,@huiShouAmt)
+
+    SET @i=@i+1
+    END
+
+    select
+    weekNo ,ruDaiCount ,ruDaiAmt,huiShouAmt as backAmt
+    from @DZ
+    where
+    1 = 1
+    <if test="week != null and week != ''">
+      AND weekNo = #{week}
+    </if>
+
+    drop table #a
+    drop table #b
+    drop table #c
+    drop table #e
+    drop table #f
+    END
+  </select>
 </mapper>

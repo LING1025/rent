@@ -59,4 +59,11 @@ public interface OrderService{
      * @return
      */
     CustomerNum selectLm(CusQueryParam cusQueryParam);
+
+    /**
+     * 年度新增呆账&回收数据
+     * @param year
+     * @return
+     */
+    List<YearList> selectYearList(String year,String week);
 }
