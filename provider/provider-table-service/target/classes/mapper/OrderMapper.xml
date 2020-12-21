@@ -1105,10 +1105,16 @@ drop table #D
     @southOldCar decimal(18,2),
     @totalNumAmt decimal(18,2)
 
-    select @eastNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华东%'  or depAuto in (45,139,170,134,156,168,169,206) and YJCDT between @StartDT and @EndDT
+    <!--select @eastNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华东%'  or depAuto in (45,139,170,134,156,168,169,206) and YJCDT between @StartDT and @EndDT
     select @eastOldCar=count(carSource)  from #E where carSource in ('','调度中心','原车续租','外购二手车') and depName like '%华东%'  or depAuto in (45,139,170,134,156,168,169,206) and YJCDT between @StartDT and @EndDT
-    select @southNewCar=count(carSource)  from #E where carSource = '新车'and depAuto in (69,146,147,171,172,20,151,149,59,63,150,135,141,223,19,54,136) and YJCDT between @StartDT and @EndDT --华南
-    select @southOldCar=count(carSource)  from #E where carSource in ('','调度中心','原车续租','外购二手车') and depAuto in (69,146,147,171,172,20,151,149,59,63,150,135,141,223,19,54,136) and YJCDT between @StartDT and @EndDT --华南
+    select @southNewCar=count(carSource)  from #E where carSource = '新车'and depAuto in (69,146,147,171,172,20,151,149,59,63,150,135,141,223,19,54,136) and YJCDT between @StartDT and @EndDT &#45;&#45;华南
+    select @southOldCar=count(carSource)  from #E where carSource in ('','调度中心','原车续租','外购二手车') and depAuto in (69,146,147,171,172,20,151,149,59,63,150,135,141,223,19,54,136) and YJCDT between @StartDT and @EndDT &#45;&#45;华南
+    select @totalNumAmt=count(carSource)  from #E where YJCDT between @StartDT and @EndDT-->
+
+    select @eastNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华东%' and YJCDT between @StartDT and @EndDT
+    select @eastOldCar=count(carSource)  from #E where carSource in ('','调度中心','原车续租','外购二手车') and depName like '%华东%' and YJCDT between @StartDT and @EndDT
+    select @southNewCar=count(carSource)  from #E where carSource = '新车'and depName like '%华南%' and YJCDT between @StartDT and @EndDT --华南
+    select @southOldCar=count(carSource)  from #E where carSource in ('','调度中心','原车续租','外购二手车') and depName like '%华南%' and YJCDT between @StartDT and @EndDT --华南
     select @totalNumAmt=count(carSource)  from #E where YJCDT between @StartDT and @EndDT
     select @eastNewCar eastNewCar,@eastOldCar eastOldCar,@southNewCar southNewCar,@southOldCar southOldCar,@totalNumAmt totalNumAmt
     end
@@ -1465,7 +1471,7 @@ drop table #D
   </resultMap>
   <select id="selectYearList" resultMap="queryYearList">
     declare @years varchar(4)=#{year},
-    @week varchar(5)=#{week}
+    @week varchar(6)=#{week}
     BEGIN
     declare
     @year VARCHAR(10)=@years+'-'
