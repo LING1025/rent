@@ -2,6 +2,7 @@ package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
 import com.funtl.myshop.plus.provider.api.OrderService;
+import com.funtl.myshop.plus.provider.domain.WeekList;
 import com.funtl.myshop.plus.provider.domain.YearList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,7 +23,19 @@ public class TableThreeController {
     @Reference(version = "1.0.0")
     private OrderService orderService;
 
-    @ApiOperation(value = "新增呆账&回收")
+    @ApiOperation(value = "呆账：周期下拉选")
+    @ApiImplicitParam(name = "year", value = "年度", required = true, dataType = "String", paramType = "path")
+    @GetMapping(value = "queryWeekList")
+    public ResponseResult<List<WeekList>> queryWeekList(@RequestParam(name = "year") String year,
+                                                        @RequestParam(name = "week",defaultValue = "") String week){
+        if (year == null || year ==""){
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请选择年份！！",null);
+        }
+        List<WeekList> lists = orderService.selectWeekList(year);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
+    }
+
+    @ApiOperation(value = "呆账：新增呆账&回收")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year", value = "年度", required = true, dataType = "String", paramType = "path"),
             @ApiImplicitParam(name = "week", value = "周", required = true, dataType = "String", paramType = "path")
@@ -31,7 +44,7 @@ public class TableThreeController {
     public ResponseResult<List<YearList>> queryYearList(@RequestParam(name = "year") String year,
                                                         @RequestParam(name = "week",defaultValue = "") String week){
         if (year == null || year ==""){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请输入年份！！",null);
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请选择年份！！",null);
         }
         List<YearList> lists = orderService.selectYearList(year,week);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
