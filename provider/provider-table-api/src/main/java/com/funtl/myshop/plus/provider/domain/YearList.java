@@ -17,9 +17,9 @@ public class YearList implements Serializable {
     private Integer ruDaiCount;
 
     @ApiModelProperty(value = "新增呆账(金额)")
-    private BigDecimal ruDaiAmt;
+    private BigDecimal ruDaiAmt = BigDecimal.valueOf(0);
 
     @ApiModelProperty(value = "呆账回收(金额)")
-    private BigDecimal backAmt;
+    private BigDecimal backAmt = BigDecimal.valueOf(0);
 
 }
