@@ -26,11 +26,7 @@ public class TableThreeController {
     @ApiOperation(value = "呆账：周期下拉选")
     @ApiImplicitParam(name = "year", value = "年度", required = true, dataType = "String", paramType = "path")
     @GetMapping(value = "queryWeekList")
-    public ResponseResult<List<WeekList>> queryWeekList(@RequestParam(name = "year") String year,
-                                                        @RequestParam(name = "week",defaultValue = "") String week){
-        if (year == null || year ==""){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请选择年份！！",null);
-        }
+    public ResponseResult<List<WeekList>> queryWeekList(@RequestParam(name = "year") String year){
         List<WeekList> lists = orderService.selectWeekList(year);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
     }
