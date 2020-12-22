@@ -23,13 +23,13 @@ public class TableThreeController {
     @Reference(version = "1.0.0")
     private OrderService orderService;
 
-    @ApiOperation(value = "呆账：周期下拉选")
+    /*@ApiOperation(value = "呆账：周期下拉选")
     @ApiImplicitParam(name = "year", value = "年度", required = true, dataType = "String", paramType = "path")
     @GetMapping(value = "queryWeekList")
     public ResponseResult<List<WeekList>> queryWeekList(@RequestParam(name = "year") String year){
         List<WeekList> lists = orderService.selectWeekList(year);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
-    }
+    }*/
 
     @ApiOperation(value = "呆账：新增呆账&回收")
     @ApiImplicitParams({
