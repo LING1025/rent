@@ -57,11 +57,6 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectYearList(year,week);
     }
 
-    @Override
-    public List<WeekList> selectWeekList(String year) {
-        return orderMapper.selectWeekList(year);
-    }
-
     /*@Override
     public PageInfo<CaseExecListDto> selectCaseExecListDto(CaseProQueryParam caseProQueryParam) {
         PageHelper.startPage(caseProQueryParam.getPageNum(),caseProQueryParam.getPageSize());

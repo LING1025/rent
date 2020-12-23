@@ -24,7 +24,6 @@ public interface OrderMapper extends MyMapper<Order> {
 
     List<YearList> selectYearList(@Param("year") String year,@Param("week") String week);
 
-    List<WeekList> selectWeekList(@Param("year") String year);
 
 
 //    List<CaseExecList> selectCaseExecListDto(@Param("param")CaseProQueryParam caseProQueryParam);
