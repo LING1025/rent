@@ -67,10 +67,4 @@ public interface OrderService{
      */
     List<YearList> selectYearList(String year,String week);
 
-    /**
-     * 呆账中周下拉选
-     * @param year
-     * @return
-     */
-    List<WeekList> selectWeekList(String year);
 }

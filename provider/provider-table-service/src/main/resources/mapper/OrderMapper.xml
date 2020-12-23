@@ -1721,14 +1721,10 @@ drop table #D
     SET @i=@i+1
     END
 
-    select
-    weekNo ,ruDaiCount ,ruDaiAmt,huiShouAmt as backAmt
-    from @DZ
-    where
-    1 = 1
-    <if test="week != null and week != ''">
-      AND weekNo = #{week}
-    </if>
+    if(@week)='全部'
+    select weekNo ,ruDaiCount ,ruDaiAmt,huiShouAmt backAmt  from @DZ
+    else
+    select weekNo ,ruDaiCount ,ruDaiAmt,huiShouAmt backAmt  from @DZ where weekNo=@week
 
     drop table #a
     drop table #b
@@ -1738,88 +1734,4 @@ drop table #D
     END
   </select>
 
-  <!--呆账中周下拉选-->
-  <resultMap id="queryWeekList" type="com.funtl.myshop.plus.provider.domain.WeekList">
-    <result column="weekNo" jdbcType="VARCHAR" property="weekNo" />
-  </resultMap>
-  <select id="selectWeekList" resultMap="queryWeekList">
-declare
- @year VARCHAR(10)=#{year}+'-'
-BEGIN
-    DECLARE @FirstDay date,
-	 @LastDay date
-    SET @FirstDay = CONVERT(VARCHAR(5),@year,120)+'01-01'
-    SET @LastDay = CONVERT(VARCHAR(5),@year,120)+'12-31'
-
-	declare @begDate date = @FirstDay,
-	 @endDate date = @LastDay,
-	 @text varchar(max) = '',
-	 @begDate2 date = @FirstDay,
-	 @endDate2 date = @LastDay,
-	 @text2 varchar(max) = ''
-
-while(@begDate  &lt;=  @endDate)
-begin
-    select @text = @text + case
-                               when DATENAME(DW,@begDate) = '星期六'
-                               then case
-                                        when convert(varchar(10),dateadd(dd,7,@begDate),120)  &lt;=  @endDate
-                                        then convert(varchar(10),@begDate,120) +','
-                                        else convert(varchar(10),@begDate,120) +','
-                                    end
-                               when DATENAME(DW,@begDate) != '星期六'and DATEPART(DD,@begDate) = 1
-                               then case
-							            when DATEPART(MM,@begDate) = 1
-										then convert(varchar(10),@begDate,120) +','
-										else convert(varchar(10),dateadd(dd,6,@begDate),120) + CHAR(10)+','
-									end
-                               else ''
-                            end
-
-
-    select @begDate = DATEADD(DD,1,@begDate)
-end
-
-while(@begDate2  &lt;=  @endDate2)
-begin
-    select @text2 = @text2 + case
-                               when DATENAME(DW,@begDate2) = '星期六'
-                               then case
-                                        when convert(varchar(10),dateadd(dd,7,@begDate2),120)  &lt;=  @endDate2
-                                        then convert(varchar(10),dateadd(dd,6,@begDate2),120) + CHAR(10)+','
-                                        else convert(varchar(10),@endDate2,120) + CHAR(10)+','
-                                    end
-                               when DATENAME(DW,@begDate2) != '星期六' and DATEPART(DD,@begDate2) = 1
-                               then convert(varchar(10),dateadd(dd,case when 8 - DATEPART(dw,@begDate2)-2  &lt;  7
-                               then 8 - DATEPART(dw,@begDate2)-2
-                               else 0 end,@begDate2),120) + CHAR(10) +','
-                               else ''
-                            end
-
-
-    select @begDate2 = DATEADD(DD,1,@begDate2)
-end
-
-declare
-@s VARCHAR(5000)=left(@text,len(@text)-1),   --待分拆的字符串
-@s2 VARCHAR(5000)=left(@text2,len(@text2)-1),
-@split VARCHAR(10)=','    --数据分隔符
-declare @re TABLE(col varchar(100),col2 varchar(100))
-begin
-    DECLARE @splitlen int
- SET @splitlen=LEN(@split+'a')-2
- WHILE CHARINDEX(@split,@s)>0
- BEGIN
-  INSERT @re(col,col2) VALUES(LEFT(@s,CHARINDEX(@split,@s)-1),LEFT(@s2,CHARINDEX(@split,@s2)-1))
-  SET @s=STUFF(@s,1,CHARINDEX(@split,@s)+@splitlen,'')
-  SET @s2=STUFF(@s2,1,CHARINDEX(@split,@s2)+@splitlen,'')
- END
- INSERT @re(col,col2) VALUES(@s,@s2)
- SELECT ROW_NUMBER() OVER(ORDER BY col) no,col,col2 into #a from @re where col2>=col --指定月份分为周
- select '第'+convert(varchar(2),no)+'周' weekNo from #a
- --select '第'+convert(varchar(2),no)+'周' 周期,col 开始区间,col2 结束区间 from #a
- drop table #a
-end
-END
-  </select>
 </mapper>
