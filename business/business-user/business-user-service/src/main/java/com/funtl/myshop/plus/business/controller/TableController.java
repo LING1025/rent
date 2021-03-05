@@ -78,12 +78,13 @@ public class TableController {
             rs.setPLv(nt.format(reportForms.getPaperLv()));
             rs.setCLv(nt.format(reportForms.getCountLv()));
             rs.setVLv(nt.format(reportForms.getVolumeLv()));
+            rs.setCheckRate(reportForms.getCheckRate()*100 + "%");
             reportFormsList.add(rs);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",reportFormsList);
     }
 
-    @ApiOperation(value = "获取试算营业报表信息")
+    @ApiOperation(value = "获取试算营业报表信息(业绩台数、金额)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userAuto", value = "用户id", required = false, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "startDate", value = "开始日期", required = false, dataType = "string", paramType = "path"),

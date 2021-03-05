@@ -74,4 +74,25 @@ public class ReportForms implements Serializable {
     @ApiModelProperty(value = "营业额达成率")
     private Double volumeLv;
 
+    @ApiModelProperty(value = "送件数")
+    private Integer deliveryNum;
+
+    @ApiModelProperty(value = "核准数")
+    private Integer checkNum;
+
+    @ApiModelProperty(value = "核准率")
+    private Integer checkRate;
+
+    @ApiModelProperty(value = "驳回")
+    private Integer rejectNum;
+
+    @ApiModelProperty(value = "核准")
+    private Integer approveNum;
+
+    @ApiModelProperty(value = "条件核准")
+    private Integer conditionNum;
+
+    @ApiModelProperty(value = "附条件")
+    private Integer subNum;
+
 }
