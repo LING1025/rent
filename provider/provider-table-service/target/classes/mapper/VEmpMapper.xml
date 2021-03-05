@@ -207,13 +207,13 @@
 
     --综和明细
     select t1.*
-    ,t3.deliveryNum
-    ,t3.checkNum
-    ,t3.checkRate
-    ,t3.rejectNum
-    ,t3.approveNum
-    ,t3.conditionNum
-    ,t3.subNum
+    ,isnull(t3.deliveryNum,0)deliveryNum--送件数
+    ,isnull(t3.checkNum,0) checkNum--核准数
+    ,checkRate=convert(varchar(10),cast(isnull(t3.checkRate,0)*100 as decimal(18,0)))+'%' --核准率
+    ,isnull(t3.rejectNum,0)rejectNum--驳回
+    ,isnull(t3.approveNum,0)approveNum--核准
+    ,isnull(t3.conditionNum,0)conditionNum--条件核准
+    ,isnull(t3.subNum,0)subNum--附条件
     from #a t1
     left join #c t3 on t3.Org_Auto=t1.Org_Auto
     order by replace (replace (replace (replace (replace (replace (replace (replace (replace (t1.orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
@@ -281,13 +281,13 @@
 
     --综和明细
     select t1.*
-    ,t3.deliveryNum--送件数
-    ,t3.checkNum--核准数
-    ,t3.checkRate--核准率
-    ,t3.rejectNum--驳回
-    ,t3.approveNum--核准
-    ,t3.conditionNum--条件核准
-    ,t3.subNum--附条件
+    ,isnull(t3.deliveryNum,0)deliveryNum--送件数
+    ,isnull(t3.checkNum,0) checkNum--核准数
+    ,checkRate=convert(varchar(10),cast(isnull(t3.checkRate,0)*100 as decimal(18,0)))+'%' --核准率
+    ,isnull(t3.rejectNum,0)rejectNum--驳回
+    ,isnull(t3.approveNum,0)approveNum--核准
+    ,isnull(t3.conditionNum,0)conditionNum--条件核准
+    ,isnull(t3.subNum,0)subNum--附条件
     from #d t1
     left join #b t3 on t3.Sales_Auto=t1.Sales_Auto
     order by t1.fName

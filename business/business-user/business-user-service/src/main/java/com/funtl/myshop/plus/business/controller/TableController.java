@@ -78,7 +78,6 @@ public class TableController {
             rs.setPLv(nt.format(reportForms.getPaperLv()));
             rs.setCLv(nt.format(reportForms.getCountLv()));
             rs.setVLv(nt.format(reportForms.getVolumeLv()));
-            rs.setCheckRate(reportForms.getCheckRate()*100 + "%");
             reportFormsList.add(rs);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",reportFormsList);

@@ -81,7 +81,7 @@ public class ReportForms implements Serializable {
     private Integer checkNum;
 
     @ApiModelProperty(value = "核准率")
-    private Integer checkRate;
+    private String checkRate;
 
     @ApiModelProperty(value = "驳回")
     private Integer rejectNum;
