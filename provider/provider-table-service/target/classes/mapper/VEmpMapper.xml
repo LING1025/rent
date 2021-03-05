@@ -48,6 +48,13 @@
     <result column="paperLv" jdbcType="DOUBLE" property="paperLv" />
     <result column="countLv" jdbcType="DOUBLE" property="countLv" />
     <result column="volumeLv" jdbcType="DOUBLE" property="volumeLv" />
+    <result column="deliveryNum" jdbcType="INTEGER" property="deliveryNum" />
+    <result column="checkNum" jdbcType="INTEGER" property="checkNum" />
+    <result column="checkRate" jdbcType="INTEGER" property="checkRate" />
+    <result column="rejectNum" jdbcType="INTEGER" property="rejectNum" />
+    <result column="approveNum" jdbcType="INTEGER" property="approveNum" />
+    <result column="conditionNum" jdbcType="INTEGER" property="conditionNum" />
+    <result column="subNum" jdbcType="INTEGER" property="subNum" />
   </resultMap>
   <select id="selectMode" resultMap="queryByMode">
     declare @Amt decimal(16,2),@Mode int,@User_Auto int,@StartDT datetime,@EndDT datetime,@Org_auto int,@OrgUp int
@@ -134,11 +141,11 @@
     ,case when isnull(targetPaperNum,0) > 0 then isnull(proPaperNum,0) *1.0 / targetPaperNum  else 0 end paperLv
     ,case when isnull(targetNum,0) > 0 then isnull(realNum,0) *1.0 / targetNum  else 0 end countLv
     ,case when isnull(targetVolume,0) > 0 then isnull(realVolume,0) *1.0 / targetVolume  else 0 end volumeLv
+    into #a
     from (
     select @Mode Mode,case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end Org_Auto
     ,case when @Mode = 1 then a4.DepName else f.DepName end orgName
     ,convert(int,round(sum(p_Count * 3.33),0)) targetPaperNum,sum(CustNum) proPaperNum,sum(p_Count) targetNum,sum(p_RealCount) realNum,sum(p_Count * @Amt) targetVolume,sum(RealAmt) realVolume
-
     from (
     select a3.Org_Auto,a3.DepName,p_Count,CustNum,count(e.order_auto) p_RealCount,sum(e.MM*e.MAmt) RealAmt
     from (
@@ -164,8 +171,55 @@
     left join AspNet.dbo.Org f on f.Org_Auto = g.UpUnit
     group by case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end,case when @Mode = 1 then a4.DepName else f.DepName end
     ) a5
-    order by replace (replace (replace (replace (replace (replace (replace (replace (replace (orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
+    --order by replace (replace (replace (replace (replace (replace (replace (replace (replace (orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
+    --首核状态
+    select Mode,Org_Auto,orgName
+    ,deliveryNum,checkNum
+    ,case when deliveryNum>0 then cast(checkNum*1./deliveryNum as decimal(18,2)) else 0 end checkRate
+    ,rejectNum,approveNum,conditionNum,subNum
+    into #c
+    from (
+    select @Mode Mode,case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end Org_Auto
+    ,case when @Mode = 1 then a4.DepName else f.DepName end orgName
+    ,deliveryNum=sum(a4.deliveryNum),checkNum=sum(a4.checkNum)
+    ,rejectNum=sum(a4.rejectNum),approveNum=sum(a4.approveNum),conditionNum=sum(a4.conditionNum),subNum=sum(a4.subNum)
+    from (
+    select a1.Org_Auto,a1.DepName,a1.Sales_Auto
+    ,sum(case when a1.CreditStatus>0 then 1 else 0 end)'deliveryNum'
+    ,sum(case when a1.CreditStatus=20 or a1.CreditStatus=21 then 1 else 0 end)'checkNum'
+    ,sum(case when a1.FirstStatus=5 then 1 else 0 end)'rejectNum'
+    ,sum(case when a1.FirstStatus=20 then 1 else 0 end)'approveNum'
+    ,sum(case when a1.FirstStatus=21 then 1 else 0 end)'conditionNum'
+    ,sum(case when a1.FirstStatus=25 then 1 else 0 end)'subNum'
+    from(
+    select a.Org_Auto,b.DepName
+    ,b.user_auto Sales_Auto,cmi.FirstStatus,cmi.CreditStatus
+    from @Org a
+    left join v_Emp b on b.Org_Auto = a.Org_Auto
+    left join CreditMainInfo cmi on cmi.Sales_Auto=b.User_Auto and cmi.CreditStatus > 0 and (cmi.CDT between @StartDT and @EndDT)
+    ) a1
+    group by a1.Org_Auto,a1.DepName,a1.Sales_Auto
+    ) a4
+    left join AspNet.dbo.Org g on g.Org_Auto = a4.Org_Auto
+    left join AspNet.dbo.Org f on f.Org_Auto = g.UpUnit
+    group by case when @Mode = 1 then a4.Org_Auto else f.Org_Auto end,case when @Mode = 1 then a4.DepName else f.DepName end
+    ) a5
 
+    --综和明细
+    select t1.*
+    ,isnull(t3.deliveryNum,0)deliveryNum--送件数
+    ,isnull(t3.checkNum,0) checkNum--核准数
+    ,checkRate=convert(varchar(10),cast(isnull(t3.checkRate,0)*100 as decimal(18,0)))+'%' --核准率
+    ,isnull(t3.rejectNum,0)rejectNum--驳回
+    ,isnull(t3.approveNum,0)approveNum--核准
+    ,isnull(t3.conditionNum,0)conditionNum--条件核准
+    ,isnull(t3.subNum,0)subNum--附条件
+    from #a t1
+    left join #c t3 on t3.Org_Auto=t1.Org_Auto
+    order by replace (replace (replace (replace (replace (replace (replace (replace (replace (t1.orgName,'一','1'),'二','2'),'三','3'),'四','4'),'五','5'),'六','6'),'七','7'),'八','8'),'九','9')
+
+    drop table #a
+    drop table #c
     end
     else
     begin
@@ -174,6 +228,7 @@
     ,case when isnull(targetPaperNum,0) > 0 then isnull(proPaperNum,0) *1.0 / targetPaperNum  else 0 end paperLv
     ,case when isnull(targetNum,0) > 0 then isnull(realNum,0) *1.0 / targetNum  else 0 end countLv
     ,case when isnull(targetVolume,0) > 0 then isnull(realVolume,0) *1.0 / targetVolume  else 0 end volumeLv
+    into #d
     from (
     select @Mode Mode,a2.Sales_Auto,a2.SalesName fName,convert(int,round(a2.p_Count * 3.33,0)) targetPaperNum,a2.CustNum proPaperNum,a2.p_Count targetNum,count(e.order_auto) realNum,a2.p_Count * @Amt targetVolume,sum(e.MM*e.MAmt) realVolume
     from (
@@ -192,14 +247,53 @@
     where isnull(a2.CustNum,0) + a2.ison + isnull(e.order_auto,0) > 0
     group by a2.Sales_Auto,a2.SalesName,a2.p_Count,a2.CustNum
     ) a3
-    end
 
-    select convert(varchar(7),b.YJCDT,120) yearMon,day(b.YJCDT) days,count(*) pCount,sum(b.MM*b.MAmt) pMoney
+    --首核状态
+    select Mode,Sales_Auto,fName
+    ,deliveryNum,checkNum
+    ,case when deliveryNum>0 then cast(checkNum*1./deliveryNum as decimal(18,2)) else 0 end checkRate
+    ,rejectNum,approveNum,conditionNum,subNum
+    into #b
+    from (
+    select @Mode Mode,a4.Sales_Auto,a4.SalesName fName
+    ,deliveryNum=sum(a4.deliveryNum),checkNum=sum(a4.checkNum)
+    ,rejectNum=sum(a4.rejectNum),approveNum=sum(a4.approveNum),conditionNum=sum(a4.conditionNum),subNum=sum(a4.subNum)
+    from (
+    select a1.Org_Auto,a1.DepName,a1.Sales_Auto,a1.SalesName
+    ,sum(case when a1.CreditStatus>0 then 1 else 0 end)'deliveryNum'
+    ,sum(case when a1.CreditStatus=20 or a1.CreditStatus=21 then 1 else 0 end)'checkNum'
+    ,sum(case when a1.FirstStatus=5 then 1 else 0 end)'rejectNum'
+    ,sum(case when a1.FirstStatus=20 then 1 else 0 end)'approveNum'
+    ,sum(case when a1.FirstStatus=21 then 1 else 0 end)'conditionNum'
+    ,sum(case when a1.FirstStatus=25 then 1 else 0 end)'subNum'
+    from(
+    select a.Org_Auto,b.DepName
+    ,b.user_auto Sales_Auto,b.FName SalesName,cmi.FirstStatus,b.IsOn,cmi.CreditStatus
     from @Org a
-    left join [order] b on b.YJOrg = a.Org_Auto and b.YJCDT between DATEADD(mm, DATEDIFF(mm,0,@StartDT)-1, 0) and @EndDT
-    where b.YJCDT is not null
-    group by convert(varchar(7),b.YJCDT,120),day(b.YJCDT)
-    order by  convert(varchar(7),b.YJCDT,120),day(b.YJCDT)
+    left join v_Emp b on b.Org_Auto = a.Org_Auto
+    left join CreditMainInfo cmi on cmi.Sales_Auto=b.User_Auto and cmi.CreditStatus > 0 and (cmi.CDT between @StartDT and @EndDT)
+    ) a1
+    where a1.ison = 1
+    group by a1.Org_Auto,a1.DepName,a1.Sales_Auto,a1.SalesName
+    ) a4
+    group by a4.Org_Auto,a4.DepName,a4.Sales_Auto,a4.SalesName
+    ) a5
+
+    --综和明细
+    select t1.*
+    ,isnull(t3.deliveryNum,0)deliveryNum--送件数
+    ,isnull(t3.checkNum,0) checkNum--核准数
+    ,checkRate=convert(varchar(10),cast(isnull(t3.checkRate,0)*100 as decimal(18,0)))+'%' --核准率
+    ,isnull(t3.rejectNum,0)rejectNum--驳回
+    ,isnull(t3.approveNum,0)approveNum--核准
+    ,isnull(t3.conditionNum,0)conditionNum--条件核准
+    ,isnull(t3.subNum,0)subNum--附条件
+    from #d t1
+    left join #b t3 on t3.Sales_Auto=t1.Sales_Auto
+    order by t1.fName
+    drop table #d
+    drop table #b
+    end
 
     drop table #Roles
   </select>
