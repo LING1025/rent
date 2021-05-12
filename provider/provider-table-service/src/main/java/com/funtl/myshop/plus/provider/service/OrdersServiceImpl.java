@@ -2,6 +2,7 @@ package com.funtl.myshop.plus.provider.service;
 
 import javax.annotation.Resource;
 
+import com.funtl.myshop.plus.provider.domain.ProNameList;
 import com.funtl.myshop.plus.provider.domain.ProjectList;
 import com.funtl.myshop.plus.provider.dto.ProjectQueryParam;
 import com.funtl.myshop.plus.provider.mapper.OrdersMapper;
@@ -19,5 +20,10 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public List<ProjectList> selectProList(ProjectQueryParam projectQueryParam) {
         return ordersMapper.selectProList(projectQueryParam);
+    }
+
+    @Override
+    public List<ProNameList> selectProNameList(String projectName) {
+        return ordersMapper.selectProNameList(projectName);
     }
 }

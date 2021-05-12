@@ -319,4 +319,21 @@
 
 
   </select>
+
+  <!--专案名称下拉选-->
+  <resultMap id="queryProNameList" type="com.funtl.myshop.plus.provider.domain.ProNameList">
+    <result column="Project_Auto" jdbcType="BIGINT" property="projectAuto" />
+    <result column="Project_Name" jdbcType="VARCHAR" property="projectName" />
+  </resultMap>
+  <select id="selectProNameList" resultMap="queryProNameList">
+    declare
+    @Project_Name varchar(50)=#{projectName}
+    begin
+    select 0 Project_Auto,'' Project_Name,'2099-01-01' Project_Date
+    union all
+    select Project_Auto,Project_Name,Project_Date from Orders_Project
+    where Project_Name like '%'+@Project_Name+'%'
+    order by Project_Date desc
+    end
+  </select>
 </mapper>
