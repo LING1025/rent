@@ -21,3 +21,4 @@ provider/provider-table-service/target/
 commons/commons-provider/target/classes/
 commons/commons-dto/target/classes/
 commons/commons-utils/target/classes/
+business/business-table/target/classes/

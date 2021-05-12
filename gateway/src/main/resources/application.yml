@@ -47,7 +47,43 @@ spring:
         - id: BUSINESS-USER
           uri: lb://business-user
           predicates:
-            - Path=/api/**
+            - Path=/api/agent/**
+          filters:
+            - StripPrefix=1
+        - id: BUSINESS-USER
+          uri: lb://business-user
+          predicates:
+            - Path=/api/query/**
+          filters:
+            - StripPrefix=1
+        - id: BUSINESS-USER
+          uri: lb://business-user
+          predicates:
+            - Path=/api/emp/**
+          filters:
+            - StripPrefix=1
+        - id: BUSINESS-USER
+          uri: lb://business-user
+          predicates:
+            - Path=/api/empQuery/**
+          filters:
+            - StripPrefix=1
+        - id: BUSINESS-TABLE
+          uri: lb://business-table
+          predicates:
+            - Path=/api/table/**
+          filters:
+            - StripPrefix=1
+        - id: BUSINESS-TABLE
+          uri: lb://business-table
+          predicates:
+            - Path=/api/tableTwo/**
+          filters:
+            - StripPrefix=1
+        - id: BUSINESS-TABLE
+          uri: lb://business-table
+          predicates:
+            - Path=/api/tableThree/**
           filters:
             - StripPrefix=1
         - id: BUSINESS-TABLE
