@@ -195,10 +195,10 @@
   </resultMap>
   <select id="selectProList" resultMap="queryProList">
     declare
-    @StartDT NvarChar(20)='2021/03/24',
-    @EndDT NvarChar(20)='2021/05/07',
+    @StartDT NvarChar(20)=#{projectQueryParam.startDT},
+    @EndDT NvarChar(20)=#{projectQueryParam.endDT},
     @Type int = -1,--默认
-    @Project_Name varchar(50)='格上通路优选专案'--以后做成功的时候，自选专案名查询
+    @Project_Name varchar(50)=#{projectQueryParam.projectName}
 
     --s_Orders_R2 283,1,'' ,''
     Declare @Orders Table

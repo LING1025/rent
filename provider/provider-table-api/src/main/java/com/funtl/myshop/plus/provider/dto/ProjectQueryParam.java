@@ -23,4 +23,10 @@ public class ProjectQueryParam implements Serializable {
      * 专案名称
      */
     private String projectName;
+
+    public ProjectQueryParam(String startDT, String endDT, String projectName) {
+        this.startDT = startDT;
+        this.endDT = endDT;
+        this.projectName = projectName;
+    }
 }

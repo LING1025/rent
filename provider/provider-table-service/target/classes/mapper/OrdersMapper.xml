@@ -158,4 +158,165 @@
     FinanceFee, UrgentFee, MortgageAddr, CommissionRate, RateTaxY, A6, A7, InsureAnomalyType,
     CarPriceRef, IsBigTradeItem, CarExtensionAmt, Discount
   </sql>
+
+  <!--获取专案明细-->
+  <resultMap id="queryProList" extends="BaseResultMap" type="com.funtl.myshop.plus.provider.domain.ProjectList">
+    <result column="customer" jdbcType="VARCHAR" property="customer" />
+    <result column="depName" jdbcType="VARCHAR" property="depName" />
+    <result column="ydName" jdbcType="VARCHAR" property="ydName" />
+    <result column="orderStatusN" jdbcType="VARCHAR" property="orderStatusN" />
+    <result column="incName" jdbcType="VARCHAR" property="incName" />
+    <result column="BrandName" jdbcType="VARCHAR" property="brandName" />
+    <result column="ClasenName" jdbcType="VARCHAR" property="clasenName" />
+    <result column="postTypeN" jdbcType="VARCHAR" property="postTypeN" />
+    <result column="CarSourceN" jdbcType="VARCHAR" property="carSourceN" />
+    <result column="OrderTypeN" jdbcType="VARCHAR" property="orderTypeN" />
+    <result column="CustSourceN" jdbcType="VARCHAR" property="custSourceN" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Project_Name" jdbcType="VARCHAR" property="projectName" />
+    <result column="bzjRate" jdbcType="VARCHAR" property="bzjRate" />
+    <result column="rentRate" jdbcType="VARCHAR" property="rentRate" />
+    <result column="incLev" jdbcType="VARCHAR" property="incLev" />
+    <result column="cusTypeN" jdbcType="VARCHAR" property="cusTypeN" />
+    <result column="ComEstDate" jdbcType="TIMESTAMP" property="comEstDate" />
+    <result column="comMoney" jdbcType="VARCHAR" property="comMoney" />
+    <result column="industryCodeN" jdbcType="VARCHAR" property="industryCodeN" />
+    <result column="createAddress" jdbcType="VARCHAR" property="createAddress" />
+    <result column="BossName" jdbcType="VARCHAR" property="bossName" />
+    <result column="BossAge" jdbcType="INTEGER" property="bossAge" />
+    <result column="BossNativePlace" jdbcType="VARCHAR" property="bossNativePlace" />
+    <result column="bossEducationN" jdbcType="VARCHAR" property="bossEducationN" />
+    <result column="bossMaritalStatusN" jdbcType="VARCHAR" property="bossMaritalStatusN" />
+    <result column="bossWorkingYearsN" jdbcType="VARCHAR" property="bossWorkingYearsN" />
+    <result column="isGuarantor" jdbcType="VARCHAR" property="isGuarantor" />
+    <result column="carUser" jdbcType="VARCHAR" property="carUser" />
+    <result column="RealIncomeDT" jdbcType="TIMESTAMP" property="realIncomeDT" />
+    <result column="goldNum" jdbcType="INTEGER" property="goldNum" />
+  </resultMap>
+  <select id="selectProList" resultMap="queryProList">
+    declare
+    @StartDT NvarChar(20)=#{projectQueryParam.startDT},
+    @EndDT NvarChar(20)=#{projectQueryParam.endDT},
+    @Type int = -1,--默认
+    @Project_Name varchar(50)=#{projectQueryParam.projectName}
+
+    --s_Orders_R2 283,1,'' ,''
+    Declare @Orders Table
+    (
+    Orders_Auto Bigint
+    )
+
+
+    Begin
+    Insert Into @Orders
+    Select a.Orders_Auto
+    From [Orders] a  (NoLock)
+    Where a.CDT between @StartDT And  @EndDT and (@Type = -1 or (@Type = 0 and a.OrderType != 8) or (@Type = 8 and a.OrderType = 8))
+    End
+
+
+
+    begin
+    Select  a.Orders_Auto ,c.SName customer,f.depName ,ydName=isnull(v.fname,17),orderStatusN=dbo.f_GetItemName(327,a.OrderStatus)
+    ,t1.SName incName,d1.BrandName,d2.ClasenName,postTypeN=dbo.f_GetItemName(413,a.PostType)
+    ,CarSourceN=dbo.f_GetItemName(503,a.CarSource) ,OrderTypeN=dbo.f_GetItemName(326,a.OrderType)
+    ,CustSourceN=dbo.f_GetItemName(313,a.CustSource)
+    ,a.MAmt ,a.MM
+    ,a.CDT createDate
+    ,b2.Project_Name
+    ,bzjRate=convert(varchar(10),convert(decimal(18,2),(a.DptAmt*1.0/a.RentAmt*100)))+'%'
+    ,rentRate=convert(varchar(10),a.RentRate)+'%'
+    ,dbo.f_GetItemName(115,i.IncLev) incLev
+    ,cusTypeN=dbo.f_GetItemName(111,c2.CusType)
+    ,c2.ComEstDate
+    ,comMoney=isnull(c2.ComMoney,0)+case when c2.MoneyType=0 then '元'when c2.MoneyType=1 then '美元' end
+    ,industryCodeN=dbo.f_GetItemName(140,c.IndustryCode)
+    ,createAddress=h.name+j.name+k.name+c2.LicenseAddr
+    ,i.BossName,i.BossAge,i.BossNativePlace
+    ,bossEducationN=dbo.f_GetItemName(1427,i.BossEducation),bossMaritalStatusN=dbo.f_GetItemName(1432,i.BossMaritalStatus)
+    ,bossWorkingYearsN=dbo.f_GetItemName(1433,i.BossWorkingYears)
+    ,isGuarantor=case when c2.AQOtherNum=1 then '是' when c2.AQOtherNum=0 then '否' end
+    ,carUser=case when (CHARINDEX('1',c2.CarUser)!=0 or CHARINDEX('2',c2.CarUser)!=0 or CHARINDEX('3',c2.CarUser)!=0 or CHARINDEX('4',c2.CarUser)!=0)
+    then LEFT(replace(replace(replace(replace(c2.CarUser,'1','主管用车'),'2','休闲用车'),'3','员工用车'),'4','业务用车'),LEN(replace(replace(replace(replace(c2.CarUser,'1','主管用车'),'2','休闲用车'),'3','员工用车'),'4','业务用车'))-1)
+    else '' end
+    into #a
+    from [Orders] a (NoLock)
+    inner join @Orders b on a.Orders_Auto=b.Orders_Auto
+    inner Join Brand d1 on a.Brand_Auto=d1.Brand_Auto
+    inner Join Clasen d2 On a.Clasen_Auto=d2.Clasen_Auto
+    inner join v_emp v on v.User_auto=a.Sales_Auto
+    left Join TradeItem c on a.TradeItem_Auto=c.TradeItem_Auto
+    left join Inc t1 on a.Inc_Auto=t1.Inc_Auto
+    left join Orders_Project b2 on b2.Project_Auto = a.Project_Auto
+    left join AspNet.dbo.Org g on g.Org_Auto = v.Org_Auto
+    left join AspNet.dbo.Org f on f.Org_Auto = g.UpUnit
+    left Join Customer i on i.TradeItem_Auto=c.TradeItem_Auto
+    left join Credit_Order c1 on c1.Orders_Auto=a.Orders_Auto
+    left join CreditMainInfo c2 on c2.CreditMain_Auto=c1.CreditMain_Auto
+    left join CreditProvince h on c2.LProvince=h.code --设立省
+    left join CreditCity j on c2.LCity=j.code --设立市
+    left join CreditArea k on c2.LStreet=k.code --设立区
+    where
+    c.SName is not null
+    and f.IsSalesDep = 1 and f.Lev = 4  and f.iszf = 1  and (f.depName like '%华东%' or f.depName like '%华南%')
+    and b2.Project_Name=@Project_Name--专案名
+    Order by c.CDT desc
+
+
+    --goldNum(在a表资料及基础上判断是否有入账)
+    select
+    aa.Orders_Auto,aa.RealIncomeDT,sum(isnull(aa.goldNum,0)) goldNum
+    into #b
+    from
+    (select
+    c.Orders_Auto,min(b.RealIncomeDT) RealIncomeDT,count(*) goldNum
+    from
+    #a c
+    left join Credit_Order d on c.Orders_Auto=d.Orders_Auto
+    left join CreditMainInfo a on d.CreditMain_Auto=a.CreditMain_Auto
+    inner join BookCarIncome b on b.CreditMain_Auto=a.CreditMain_Auto
+    where b.Status = 1 --0是未确认orderStatusN 1是确认后的orderStatusN
+    group by c.Orders_Auto
+    )aa
+    group by aa.Orders_Auto,aa.RealIncomeDT
+
+    --专案概括明细
+    select
+    t1.*,t2.RealIncomeDT,isnull(t2.goldNum,0)goldNum
+    from
+    #a t1
+    left join #b t2 on t2.Orders_Auto=t1.Orders_Auto
+    order by t1.Orders_Auto
+
+
+
+
+    --最终合成表
+    --select
+    --aa.depName,aa.offerNum,aa.intoNum,aa.checkNum,aa.goldNum,aa.carNum
+    --,offerRate=case when aa.offerNum=0 then '0%' else convert(varchar(10),convert(decimal(18,0),(cast(aa.intoNum as decimal)/cast(aa.offerNum as decimal))*100))+'%' end
+    --,intoRate=case when aa.intoNum=0 then '0%' else convert(varchar(10),convert(decimal(18,0),(cast(aa.checkNum as decimal)/cast(aa.intoNum as decimal))*100))+'%' end
+    --,checkRate=case when aa.checkNum=0 then '0%' else convert(varchar(10),convert(decimal(18,0),(cast(aa.goldNum as decimal)/cast(aa.checkNum as decimal))*100))+'%' end
+    --,goldRate=case when aa.goldNum=0 then '0%' else convert(varchar(10),convert(decimal(18,0),(cast(aa.carNum as decimal)/cast(aa.goldNum as decimal))*100))+'%'end
+    --,carRate='-'
+    --from
+    --(select
+    --t1.depName
+    --,offerNum=sum(case when t1.customer is not null then 1 else 0 end)
+    --,intoNum=sum(case when (t1.orderStatusN='送件' or t1.orderStatusN='试算核准' or t1.orderStatusN='授信核准' ) then 1 else 0 end)
+    --,checkNum=sum(case when t1.orderStatusN='授信核准' then 1 else 0 end)
+    --,goldNum=sum(isnull(t2.goldNum,0))
+    --,carNum=sum(isnull(t2.goldNum,0))
+    --from
+    --#a t1
+    --left join #b t2 on t2.Orders_Auto=t1.Orders_Auto
+    --group by t1.depName
+    --)aa
+    --order by aa.depName
+    drop table #a
+    drop table #b
+    end
+
+
+  </select>
 </mapper>
