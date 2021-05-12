@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/business/business-profile/business-profile.iml" filepath="$PROJECT_DIR$/business/business-profile/business-profile.iml" />
       <module fileurl="file://$PROJECT_DIR$/business/business-profile/business-profile-feign/business-profile-feign.iml" filepath="$PROJECT_DIR$/business/business-profile/business-profile-feign/business-profile-feign.iml" />
       <module fileurl="file://$PROJECT_DIR$/business/business-profile/business-profile-service/business-profile-service.iml" filepath="$PROJECT_DIR$/business/business-profile/business-profile-service/business-profile-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/business/business-table/business-table.iml" filepath="$PROJECT_DIR$/business/business-table/business-table.iml" />
       <module fileurl="file://$PROJECT_DIR$/business/business-user/business-user.iml" filepath="$PROJECT_DIR$/business/business-user/business-user.iml" />
       <module fileurl="file://$PROJECT_DIR$/business/business-user/business-user-feign/business-user-feign.iml" filepath="$PROJECT_DIR$/business/business-user/business-user-feign/business-user-feign.iml" />
       <module fileurl="file://$PROJECT_DIR$/business/business-user/business-user-service/business-user-service.iml" filepath="$PROJECT_DIR$/business/business-user/business-user-service/business-user-service.iml" />

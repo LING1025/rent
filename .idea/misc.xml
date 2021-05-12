@@ -28,6 +28,7 @@
         <option value="$PROJECT_DIR$/provider/provider-rental-service/pom.xml" />
         <option value="$PROJECT_DIR$/provider/provider-table-api/pom.xml" />
         <option value="$PROJECT_DIR$/provider/provider-table-service/pom.xml" />
+        <option value="$PROJECT_DIR$/business/business-table/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
