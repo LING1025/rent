@@ -7,24 +7,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="provider-user-api" />
+        <module name="business-oauth2" />
         <module name="business-user-feign" />
         <module name="commons-provider" />
         <module name="gateway" />
         <module name="commons-dto" />
         <module name="provider-rental-api" />
-        <module name="provider-table-service" />
         <module name="configuration-feign" />
+        <module name="business-table" />
         <module name="business-profile-feign" />
         <module name="provider-user-service" />
         <module name="commons-utils" />
+        <module name="provider-table-api" />
         <module name="ums-admin-provider-api (1)" />
         <module name="ums-admin-provider-service (1)" />
-        <module name="provider-rental-service" />
-        <module name="provider-table-api" />
-        <module name="business-oauth2" />
         <module name="business-profile-service" />
         <module name="business-user-service" />
+        <module name="provider-rental-service" />
+        <module name="provider-table-service" />
+        <module name="provider-user-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -35,6 +36,7 @@
       <module name="business-profile-service" target="1.8" />
       <module name="business-reg" target="1.8" />
       <module name="business-rental" target="1.8" />
+      <module name="business-table" target="1.8" />
       <module name="business-user" target="1.8" />
       <module name="business-user-feign" target="1.8" />
       <module name="business-user-service" target="1.8" />
@@ -71,6 +73,7 @@
       <module name="business-profile-service" options="-parameters" />
       <module name="business-reg" options="-parameters" />
       <module name="business-rental" options="-parameters" />
+      <module name="business-table" options="-parameters" />
       <module name="business-user-feign" options="-parameters" />
       <module name="business-user-service" options="-parameters" />
       <module name="commons-dto" options="-parameters" />
