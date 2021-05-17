@@ -75,7 +75,7 @@ public class ProjectList implements Serializable {
 
     @ApiModelProperty(value = "成立日期")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date ComEstDate;
+    private Date comEstDate;
 
     @ApiModelProperty(value = "注册资本额")
     private String comMoney;
