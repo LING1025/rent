@@ -62,7 +62,7 @@ public class ProjectController {
         ProjectQueryParam projectQueryParam = new ProjectQueryParam(startDT,endDT,projectName);
         List<ProjectList> lists = ordersService.selectProList(projectQueryParam);
         if (lists.size() == 0){
-            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"查无资料",lists);
+            return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"查无资料",null);
         }
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
     }
