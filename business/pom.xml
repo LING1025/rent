@@ -26,5 +26,6 @@
         <module>business-profile/business-profile-service</module>
         <module>business-user/business-user-feign</module>
         <module>business-user/business-user-service</module>
+        <module>business-table</module>
     </modules>
 </project>
