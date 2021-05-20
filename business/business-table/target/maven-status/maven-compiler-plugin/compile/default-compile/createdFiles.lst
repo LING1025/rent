@@ -1,0 +1,6 @@
+com\funtl\myshop\plus\business\controller\ProjectController.class
+com\funtl\myshop\plus\business\controller\TableController.class
+com\funtl\myshop\plus\business\controller\TableThreeController.class
+com\funtl\myshop\plus\business\configure\TableResourceServerConfiguration.class
+com\funtl\myshop\plus\business\BusinessTableApplication.class
+com\funtl\myshop\plus\business\controller\TableTwoController.class
