@@ -1,7 +1,9 @@
 package com.funtl.myshop.plus.business.controller;
 
 import com.funtl.myshop.plus.commons.dto.ResponseResult;
+import com.funtl.myshop.plus.provider.api.ItemCodeService;
 import com.funtl.myshop.plus.provider.api.OrdersService;
+import com.funtl.myshop.plus.provider.domain.CusNameList;
 import com.funtl.myshop.plus.provider.domain.ProNameList;
 import com.funtl.myshop.plus.provider.domain.ProjectList;
 import com.funtl.myshop.plus.provider.dto.ProjectQueryParam;
@@ -27,11 +29,22 @@ public class ProjectController {
     @Reference(version = "1.0.0")
     private OrdersService ordersService;
 
+    @Reference(version = "1.0.0")
+    private ItemCodeService itemCodeService;
+
     @ApiOperation(value = "专案名称下拉选")
     @ApiImplicitParam(name = "projectName",value = "专案名称",required = true,dataType = "String",paramType = "path")
     @GetMapping(value = "queryProNameList")
     public ResponseResult<List<ProNameList>> queryProNameList(@RequestParam(name = "projectName") String projectName){
         List<ProNameList> lists = ordersService.selectProNameList(projectName);
+        return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
+    }
+
+    @ApiOperation(value = "客户来源名称下拉选")
+    @ApiImplicitParam(name = "customerName",value = "客户来源名称",required = true,dataType = "String",paramType = "path")
+    @GetMapping(value = "queryCusNameList")
+    public ResponseResult<List<CusNameList>> queryCusNameList(@RequestParam(name = "customerName") String customerName){
+        List<CusNameList> lists = itemCodeService.selectCusNameList(customerName);
         return new ResponseResult<>(ResponseResult.CodeStatus.OK,"查询成功",lists);
     }
 
