@@ -19,4 +19,21 @@
     <!--@mbg.generated-->
     ItemCode_Auto, ItemType, Num, ItemName, Memo, IsActive, Seq, V1, V2, A1
   </sql>
+  <!--客户来源名称下拉选-->
+  <resultMap id="queryCusNameList" type="com.funtl.myshop.plus.provider.domain.CusNameList">
+    <result column="Num" jdbcType="BIGINT" property="num" />
+    <result column="ItemName" jdbcType="VARCHAR" property="customerName" />
+  </resultMap>
+    <select id="selectCusNameList" resultMap="queryCusNameList">
+    select
+    num
+    ,ItemName
+    from ItemCode
+    where
+    1=1
+    <if test="customerName != null and customerName != ''">
+      and ItemName=#{customerName}
+    </if>
+    and ItemType =313
+    </select>
 </mapper>

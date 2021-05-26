@@ -24,9 +24,15 @@ public class ProjectQueryParam implements Serializable {
      */
     private String projectName;
 
-    public ProjectQueryParam(String startDT, String endDT, String projectName) {
+    /**
+     * 客户来源
+     */
+    private String customerName;
+
+    public ProjectQueryParam(String startDT, String endDT, String projectName, String customerName) {
         this.startDT = startDT;
         this.endDT = endDT;
         this.projectName = projectName;
+        this.customerName = customerName;
     }
 }
