@@ -39,12 +39,14 @@ public class ProjectController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startDT",value = "开始时间",required = false,dataType = "String",paramType = "path"),
             @ApiImplicitParam(name = "endDT",value = "结束时间",required = false,dataType = "String",paramType = "path"),
-            @ApiImplicitParam(name = "projectName",value = "专案名称",required = false,dataType = "String",paramType = "path")
+            @ApiImplicitParam(name = "projectName",value = "专案名称",required = false,dataType = "String",paramType = "path"),
+            @ApiImplicitParam(name = "customerName",value = "客户来源",required = false,dataType = "String",paramType = "path")
     })
     @GetMapping(value = "queryProList")
     public ResponseResult<List<ProjectList>> queryProList(@RequestParam(name = "startDT",required = false) String startDT,
                                                           @RequestParam(name = "endDT",required = false) String endDT,
-                                                          @RequestParam(name = "projectName",required = false) String projectName) throws ParseException {
+                                                          @RequestParam(name = "projectName",required = false) String projectName,
+                                                          @RequestParam(name = "customerName",required = false) String customerName) throws ParseException {
         if(startDT == "" || endDT == ""){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请选择查询区间！！！",null);
         }
@@ -59,7 +61,7 @@ public class ProjectController {
         if(projectName == null || projectName == ""){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"提示：请选择专案名称！！！",null);
         }
-        ProjectQueryParam projectQueryParam = new ProjectQueryParam(startDT,endDT,projectName);
+        ProjectQueryParam projectQueryParam = new ProjectQueryParam(startDT,endDT,projectName,customerName);
         List<ProjectList> lists = ordersService.selectProList(projectQueryParam);
         if (lists.size() == 0){
             return new ResponseResult<>(ResponseResult.CodeStatus.FAIL,"查无资料",null);

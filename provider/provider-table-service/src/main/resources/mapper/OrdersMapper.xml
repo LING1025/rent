@@ -198,7 +198,8 @@
     @StartDT NvarChar(20)=#{projectQueryParam.startDT},
     @EndDT NvarChar(20)=#{projectQueryParam.endDT},
     @Type int = -1,--默认
-    @Project_Name varchar(50)=#{projectQueryParam.projectName}
+    @Project_Name varchar(50)=#{projectQueryParam.projectName},
+    @CustSourceN varchar(50)=#{projectQueryParam.customerName}
 
     --s_Orders_R2 283,1,'' ,''
     Declare @Orders Table
@@ -217,24 +218,25 @@
 
 
     begin
-    Select  a.Orders_Auto ,c.SName customer,f.depName ,ydName=isnull(v.fname,17),orderStatusN=dbo.f_GetItemName(327,a.OrderStatus)
-    ,t1.SName incName,d1.BrandName,d2.ClasenName,postTypeN=dbo.f_GetItemName(413,a.PostType)
-    ,CarSourceN=dbo.f_GetItemName(503,a.CarSource) ,OrderTypeN=dbo.f_GetItemName(326,a.OrderType)
-    ,CustSourceN=dbo.f_GetItemName(313,a.CustSource)
+    Select  a.Orders_Auto ,c.SName customer,f.depName ,ydName=isnull(v.fname,17),orderStatusN=i1.ItemName
+    ,t1.SName incName,d1.BrandName,d2.ClasenName,postTypeN=i2.ItemName
+    ,CarSourceN=i3.ItemName ,OrderTypeN=i4.ItemName
+    ,CustSourceN=i5.ItemName
     ,a.MAmt ,a.MM
     ,a.CDT createDate
     ,b2.Project_Name
     ,bzjRate=convert(varchar(10),convert(decimal(18,2),(a.DptAmt*1.0/a.RentAmt*100)))+'%'
     ,rentRate=convert(varchar(10),a.RentRate)+'%'
-    ,dbo.f_GetItemName(115,i.IncLev) incLev
-    ,cusTypeN=dbo.f_GetItemName(111,c2.CusType)
+    ,incLev=i6.ItemName
+    ,cusTypeN=i7.ItemName
     ,c2.ComEstDate
     ,comMoney=isnull(c2.ComMoney,0)+case when c2.MoneyType=0 then '元'when c2.MoneyType=1 then '美元' end
-    ,industryCodeN=dbo.f_GetItemName(140,c.IndustryCode)
+    ,industryCodeN=i8.ItemName
     ,createAddress=h.name+j.name+k.name+c2.LicenseAddr
     ,i.BossName,i.BossAge,i.BossNativePlace
-    ,bossEducationN=dbo.f_GetItemName(1427,i.BossEducation),bossMaritalStatusN=dbo.f_GetItemName(1432,i.BossMaritalStatus)
-    ,bossWorkingYearsN=dbo.f_GetItemName(1433,i.BossWorkingYears)
+    ,bossEducationN=i9.ItemName
+    ,bossMaritalStatusN=j1.ItemName
+    ,bossWorkingYearsN=j2.ItemName
     ,isGuarantor=case when c2.AQOtherNum=1 then '是' when c2.AQOtherNum=0 then '否' end
     ,carUser=case when (CHARINDEX('1',c2.CarUser)!=0 or CHARINDEX('2',c2.CarUser)!=0 or CHARINDEX('3',c2.CarUser)!=0 or CHARINDEX('4',c2.CarUser)!=0)
     then LEFT(replace(replace(replace(replace(c2.CarUser,'1','主管用车'),'2','休闲用车'),'3','员工用车'),'4','业务用车'),LEN(replace(replace(replace(replace(c2.CarUser,'1','主管用车'),'2','休闲用车'),'3','员工用车'),'4','业务用车'))-1)
@@ -256,6 +258,17 @@
     left join CreditProvince h on c2.LProvince=h.code --设立省
     left join CreditCity j on c2.LCity=j.code --设立市
     left join CreditArea k on c2.LStreet=k.code --设立区
+    left join ItemCode i1 on i1.Num=a.OrderStatus and i1.ItemType=327
+    left join ItemCode i2 on i2.Num=a.PostType and i2.ItemType=413
+    left join ItemCode i3 on i3.Num=a.CarSource and i3.ItemType=503
+    left join ItemCode i4 on i4.Num=a.OrderType and i4.ItemType=326
+    left join ItemCode i5 on i5.Num=a.CustSource and i5.ItemType=313
+    left join ItemCode i6 on i6.Num=i.IncLev and i6.ItemType=115
+    left join ItemCode i7 on i7.Num=c2.CusType and i7.ItemType=111
+    left join ItemCode i8 on i8.Num=c.IndustryCode and i8.ItemType=140
+    left join ItemCode i9 on i9.Num=i.BossEducation and i9.ItemType=1427
+    left join ItemCode j1 on j1.Num=i.BossMaritalStatus and j1.ItemType=1432
+    left join ItemCode j2 on j2.Num=i.BossWorkingYears and j2.ItemType=1433
     where
     c.SName is not null
     and f.IsSalesDep = 1 and f.Lev = 4  and f.iszf = 1  and (f.depName like '%华东%' or f.depName like '%华南%')
@@ -286,6 +299,7 @@
     from
     #a t1
     left join #b t2 on t2.Orders_Auto=t1.Orders_Auto
+    where t1.CustSourceN=@CustSourceN
     order by t1.Orders_Auto
 
 
